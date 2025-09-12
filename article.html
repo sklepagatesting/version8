@@ -6,26 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update</title>
 
-  <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Preload the font -->
   <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2"
     crossorigin="anonymous">
-  <!-- Load the font -->
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
     rel="stylesheet">
-  <!-- FontFaceObserver Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-
-
-
-
   <link rel="prefetch" href="home.html" as="document">
-
-
-  <!-- Styles -->
   <link rel="stylesheet" href="navbar\navbar.css">
   <link rel="stylesheet" href="font\font.css">
   <link rel="stylesheet" href="animations/global.css">
@@ -45,135 +34,140 @@
     }
   </style>
 
+  <style>
+    /*
+     * The `background-attachment: fixed` property is likely
+     * the cause of the issue on mobile. This media query
+     * overrides that behavior for smaller screens.
+     */
+    @media (max-width: 768px) {
+      .zoom.parallax {
+        background-attachment: scroll !important;
+        background-position: center !important;
+      }
+    }
+  </style>
+
 </head>
 
 <body class="preload">
   <main id="swup" class="transition-fade">
     <div class="main-content text-container">
 
-<!-- 🌐 NAVIGATION BAR (Smaller) -->
-<nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
-  <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
-    <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
-      <a href="index.html" class="flex items-center space-x-2" data-transition rel="nofollow noopener">
-        <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
-        <span class="font-theme font-medium">SK Lepaga</span>
-      </a>
-      <button id="menu-toggle-btn" type="button"
-        class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
-        aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
-  </div>
-</nav>
-
-
-
-  <!-- 🧭 SIDEBAR -->
-  <aside id="sidebar-multi-level-sidebar"
-    class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
-    style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
-
-    <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
-      <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
-
-        <!-- Menu Item 1 -->
-        <div class="sidebar-menu-item flex flex-col items-center">
-          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-            <h2 class="subtext-title">CALENDAR</h2>
-            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-
-          <div
-            class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-            <a href="#" class="subtext submenu-link inline-block">Happening Now</a>
-            <a href="#" class="subtext submenu-link inline-block">Upcoming Activities</a>
-            <br>
+      <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
+        <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
+          <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
+            <a href="index.html" class="flex items-center space-x-2" data-transition rel="nofollow noopener">
+              <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
+              <span class="font-theme font-medium">SK Lepaga</span>
+            </a>
+            <button id="menu-toggle-btn" type="button"
+              class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
+              aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
+      </nav>
 
-        <!-- Menu Item 2 -->
-        <div class="sidebar-menu-item flex flex-col items-center">
-          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-            <h2 class="font-theme subtext-title">NEWS</h2>
-            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+      <aside id="sidebar-multi-level-sidebar"
+        class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
+        style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
 
-          <div
-            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">Featured News</a>
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">All Articles</a>
-            <br>
+        <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
+          <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
+
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="subtext-title">CALENDAR</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div
+                class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="#" class="subtext submenu-link inline-block">Happening Now</a>
+                <a href="#" class="subtext submenu-link inline-block">Upcoming Activities</a>
+                <br>
+              </div>
+            </div>
+
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="font-theme subtext-title">NEWS</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div
+                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Featured News</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">All Articles</a>
+                <br>
+              </div>
+            </div>
+
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="subtext-title">ABOUT</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div
+                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">What is SK</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">SK Officials</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">About Developers</a>
+                <br>
+              </div>
+            </div>
+
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="subtext-title">CONTACT</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div
+                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="pages/article1.html" class="subtext submenu-link block text-[#FFFFF]">Send a message</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Send a feedback</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Schedule a meetup</a>
+                <br>
+              </div>
+            </div>
+
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div
+                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <br>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <!-- Menu Item 3 -->
-        <div class="sidebar-menu-item flex flex-col items-center">
-          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-            <h2 class="subtext-title">ABOUT</h2>
-            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-
-          <div
-            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">What is SK</a>
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">SK Officials</a>
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">About Developers</a>
-            <br>
-          </div>
-        </div>
-
-        <!-- Menu Item 4 -->
-        <div class="sidebar-menu-item flex flex-col items-center">
-          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-            <h2 class="subtext-title">CONTACT</h2>
-            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-
-          <div
-            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-            <a href="pages/article1.html" class="subtext submenu-link block text-[#FFFFF]">Send a message</a>
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">Send a feedback</a>
-            <a href="#" class="subtext submenu-link block text-[#FFFFF]">Schedule a meetup</a>
-            <br>
-          </div>
-        </div>
-
-        <!-- Menu Item 5 -->
-        <div class="sidebar-menu-item flex flex-col items-center">
-          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-            <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
-            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-
-          <div
-            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-            <br>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </aside>
+      </aside>
 
       <section class="font-theme px-4 py-8 sm:py-16 bg-white dark:bg-[#242424]">
         <div class="max-w-screen-xl mx-auto px-4 pb-6 sm:pb-8 pt-10 sm:pt-24">
@@ -193,10 +187,8 @@
               <div class="zoom parallax flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing"
                 data-dark-border="#242424">
                 <picture>
-                  <!-- Mobile image -->
                   <source media="(max-width: 767px)"
                     srcset="https://sklepagatesting.github.io/resources/Images/galanight.jpg">
-                  <!-- Default / desktop image -->
                   <img src="https://sklepagatesting.github.io/resources/Images/galanight.jpg" alt="Torch Parade"
                     class="w-full h-auto object-cover">
                 </picture>
@@ -208,7 +200,6 @@
           <div class="container max-w-5xl py-6 sm:py-12">
             <div class="grid gap-2 sm:grid-cols-2 text-left">
 
-              <!-- Left Column -->
               <div>
                 <div
                   class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400">
@@ -225,12 +216,10 @@
                 </div>
               </div>
 
-              <!-- Right Column: Timeline -->
               <div class="relative px-4 space-y-6">
                 <div
                   class="space-y-10 sm:space-y-8 relative px-4 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300 dark:before:bg-gray-700">
 
-                  <!-- Item 1 -->
                   <div
                     class="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-violet-600 dark:before:bg-violet-400">
                     <h3 class="rise subtext font-bold">BARANGAY LEPAGA | Rampahan & Awardings</h3>
@@ -255,57 +244,35 @@
         </div>
       </section>
 
-
-
-
-
-
     </div>
 
-
-
-
-
-    <!-- Script to wait for the font to load before showing the page -->
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
-
-
-  <script src="navbar\navbar.js"></script>
-
-      <script src="pages/index.js"></script>
-            <script src="pages/home.js"></script>
-  <script src="animations\global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
+    <script src="navbar\navbar.js"></script>
+    <script src="pages/index.js"></script>
+    <script src="pages/home.js"></script>
+    <script src="animations\global.js"></script>
     <script src="font\font.js"></script>
     <script src="loader\loaders.js"></script>
-        <script src="loader\others.js"></script>
-                <script src="animations/scroll.js"></script>
-
-
-
-
+    <script src="loader\others.js"></script>
+    <script src="animations/scroll.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
-
-<script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
-
-
-
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
     <script>
       // On DOM load
       window.addEventListener("DOMContentLoaded", () => {
@@ -317,12 +284,8 @@
           });
         });
       });
-
-
-
       document.addEventListener("DOMContentLoaded", () => {
         const target = document.querySelector(".zoom.parallax");
-
         gsap.fromTo(
           target,
           { scale: 0, transformOrigin: "bottom left" },
@@ -334,9 +297,6 @@
         );
       });
     </script>
-
-
   </main>
 </body>
-
 </html>
