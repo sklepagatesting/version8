@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Lepaga - About Us</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+
+  <link rel="prefetch" href="home.html" as="document">
+  <link rel="stylesheet" href="navbar/navbar.css">
+  <link rel="stylesheet" href="font/font.css">
+  <link rel="stylesheet" href="animations/global.css">
+  <link rel="stylesheet" href="pages/index.css">
+  <link rel="stylesheet" href="controlers/scroll.css">
+  <link rel="stylesheet" href="sections/hero.css">
+  <link rel="stylesheet" href="sections/carousel.css">
+  <style>
+    body.preload {
+      visibility: hidden;
+      opacity: 0;
+    }
+    body {
+      transition: opacity 0.2s ease-in;
+    }
+
+    :root {
+      --start-color: #007aff; /* Bright Blue */
+      --mid-color: #a453e0;   /* Purple */
+      --end-color: #fe3c30;   /* Red/Orange */
+    }
+
+    /* Gradient text with subtle glow */
+    .header-glowing-text {
+      background: linear-gradient(90deg, var(--start-color), var(--mid-color), var(--end-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      
+      text-shadow: 0 0 12px rgba(164, 83, 224, 0.5);
+      animation: header-glow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes header-glow {
+      0% { text-shadow: 0 0 6px rgba(164, 83, 224, 0.3); }
+      100% { text-shadow: 0 0 18px rgba(164, 83, 224, 0.8); }
+    }
+
+    /* Button core style */
+    .elegant-glowing-button {
+      background: linear-gradient(135deg, var(--start-color), var(--end-color));
+      box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Soft ambient halo */
+    .elegant-glowing-button::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle, rgba(164,83,224,0.25) 0%, transparent 70%);
+      transform: scale(0.8);
+      opacity: 0;
+      transition: opacity .5s ease, transform .5s ease;
+    }
+
+    .elegant-glowing-button:hover::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* On hover: stronger glow + smoother motion */
+    .elegant-glowing-button:hover {
+      box-shadow: 0 0 30px rgba(164, 83, 224, 0.6),
+                  0 0 50px rgba(254, 60, 48, 0.4);
+    }
+
+    /* Add map container styles */
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+  </style>
+  
+  <script async defer src="https://api.maptiler.com/maps/topo-v2/style.json?key=8tiOVSEcoMYwPVzvDaBQ"></script>
+</head>
+<body class="preload">
+  <main id="swup" class="transition-fade">
+    <div class="main-content text-container">
+
+      <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
+        <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
+          <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
+            <a href="index.html" class="relative z-60 pointer-events-auto flex items-center space-x-2">
+              <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
+              <span class="font-theme font-medium">SK Lepaga</span>
+            </a>
+            <button id="menu-toggle-btn" type="button" class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none" aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <aside id="sidebar-multi-level-sidebar" class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]" style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
+        <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
+          <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="subtext-title">CALENDAR</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="#" class="subtext submenu-link inline-block">Happening Now</a>
+                <a href="#" class="subtext submenu-link inline-block">Upcoming Activities</a>
+                <br>
+              </div>
+            </div>
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="font-theme subtext-title">NEWS</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Featured News</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">All Articles</a>
+                <br>
+              </div>
+            </div>
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="subtext-title">ABOUT</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">What is SK</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">SK Officials</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">About Developers</a>
+                <br>
+              </div>
+            </div>
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 class="subtext-title">CONTACT</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <a href="pages/article1.html" class="subtext submenu-link block text-[#FFFFF]">Send a message</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Send a feedback</a>
+                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Schedule a meetup</a>
+                <br>
+              </div>
+            </div>
+            <div class="sidebar-menu-item flex flex-col items-center">
+              <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+                <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
+                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      
+      <section id="about" class="font-theme px-4 py-16 sm:py-24 bg-gray-100 dark:bg-[#1a1a1a]">
+        <div class="max-w-screen-xl mx-auto">
+          <div class="text-left mb-12">
+            <h2 class="subtext-title font-extrabold text-[#333] dark:text-[#FFF]">ABOUT US</h2>
+            <p class="subtext mt-4 text-gray-600 dark:text-gray-400 max-w-2xl text-left">
+              The Sangguniang Kabataan (SK) of Barangay Lepaga is dedicated to empowering the youth and fostering a vibrant, engaged community. We strive to create opportunities, promote active participation, and champion the interests of young people in our barangay.
+            </p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div class="space-y-8">
+              <div>
+                <h3 class="subtext font-semibold text-[#333] dark:text-[#FFF]">OUR MISSION</h3>
+                <p class="context mt-2 text-gray-600 dark:text-gray-400">
+                  To serve as the voice of the youth, to lead with integrity, and to implement programs that drive positive change and sustainable development in Barangay Lepaga.
+                </p>
+              </div>
+              <div>
+                <h3 class="subtext font-semibold text-[#333] dark:text-[#FFF]">OUR VISION</h3>
+                <p class="context mt-2 text-gray-600 dark:text-gray-400">
+                  A united and progressive youth sector that is actively involved in nation-building, equipped with the skills and values to be future leaders.
+                </p>
+              </div>
+              <div class="space-y-6">
+                <div class="flex items-start space-x-4">
+                  <svg class="flex-shrink-0 w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  <div>
+                    <h4 class="subtext font-medium text-[#333] dark:text-[#FFF]">VALUES</h4>
+                    <p class="context text-gray-600 dark:text-gray-400">
+                      Integrity, Service, Innovation, and Unity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="w-full h-[400px] rounded-lg shadow-lg overflow-hidden relative">
+              <div id="map" class="w-full h-full absolute top-0 left-0"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="chat-cta" class="min-h-[50vh] flex items-center justify-center font-theme text-center bg-white dark:bg-[#242424] px-4 py-16 sm:py-24">
+        <div class="flex flex-col items-center">
+          <div class="text-container">
+            <h3 class="text-line hero-heading font-extrabold mt-16 header-glowing-text">
+              INTRODUCING
+            </h3>
+          </div>
+          <div class="text-container">
+            <h3 class="text-line hero-heading font-extrabold header-glowing-text">
+              REAL-TIME
+            </h3>
+          </div>
+          <div class="text-container">
+            <h3 class="text-line hero-heading font-extrabold mb-16 header-glowing-text">CONVERSATIONS
+            </h3>
+          </div>
+          <a href="authentication.html"
+            class="subtext-title elegant-glowing-button inline-flex items-center justify-center px-12 py-6 rounded-full shadow-lg text-white focus:ring-4 focus:ring-blue-300 active:scale-95 transition-all duration-300 ease-in-out group relative overflow-hidden">
+            <span class="relative z-10 flex items-center gap-3">
+              Chat with Us
+              <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform duration-300"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <section id="contact" class="font-theme px-4 py-16 sm:py-24 bg-white dark:bg-[#242424]">
+        <div class="max-w-screen-xl mx-auto">
+          <div class="text-left mb-12">
+            <h2 class="subtext-title font-extrabold text-[#333] dark:text-[#FFF]">GET IN TOUCH</h2>
+            <p class="subtext mt-4 text-gray-600 dark:text-gray-400 max-w-2xl text-left">
+              We'd love to hear from you! Whether you have questions, feedback, or a message for us, we're here to help.
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="bg-gray-50 dark:bg-[#303030] p-8 rounded-lg shadow-md max-w-md w-full">
+              <form id="contact-form" class="space-y-6">
+                <div class="relative">
+                  <input type="text" id="name" name="name" autocomplete="name" required class="peer w-full bg-transparent border-b border-gray-400 dark:border-gray-500 py-3 outline-none focus:border-blue-600 dark:focus:border-blue-400 transition-colors duration-300 text-gray-900 dark:text-white placeholder-transparent context" placeholder=" ">
+                  <label for="name" class="absolute left-0 top-10 text-gray-500 dark:text-gray-400 transition-all duration-300 pointer-events-none peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:-top-1 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400 peer-[:not(:placeholder-shown)]:-top-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-600 dark:peer-[:not(:placeholder-shown)]:text-blue-400 context">Your Name</label>
+                </div>
+
+                <div class="relative">
+                  <input type="email" id="email" name="email" autocomplete="email" required class="peer w-full bg-transparent border-b border-gray-400 dark:border-gray-500 py-3 outline-none focus:border-blue-600 dark:focus:border-blue-400 transition-colors duration-300 text-gray-900 dark:text-white placeholder-transparent context" placeholder=" ">
+                  <label for="email" class="absolute left-0 top-10 text-gray-500 dark:text-gray-400 transition-all duration-300 pointer-events-none peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:-top-1 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400 peer-[:not(:placeholder-shown)]:-top-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-600 dark:peer-[:not(:placeholder-shown)]:text-blue-400 context">Email Address</label>
+                </div>
+
+                <div class="relative">
+                  <textarea id="message" name="message" rows="4" required class="peer w-full bg-transparent border-b border-gray-400 dark:border-gray-500 py-3 outline-none focus:border-blue-600 dark:focus:border-blue-400 transition-colors duration-300 text-gray-900 dark:text-white placeholder-transparent resize-none context" placeholder=" "></textarea>
+                  <label for="message" class="absolute left-0 top-10 text-gray-500 dark:text-gray-400 transition-all duration-300 pointer-events-none peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:-top-1 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400 peer-[:not(:placeholder-shown)]:-top-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:not(:placeholder-shown)]:text-blue-400 context">Your Message</label>
+                </div>
+
+                <div>
+                  <button type="submit" class="w-full inline-flex items-center justify-center px-6 py-3 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ease-in-out context">Send Message</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="space-y-8">
+              <div>
+                <h3 class="subtext font-semibold text-[#333] dark:text-[#FFF]">CONNECT WITH US</h3>
+                <p class="context mt-2 text-gray-600 dark:text-gray-400">
+                  Find us on social media or reach out directly with the information below.
+                </p>
+              </div>
+              <div class="space-y-6">
+                <div class="flex items-start space-x-4">
+                  <svg class="flex-shrink-0 w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <div>
+                    <h4 class="subtext font-medium text-[#333] dark:text-[#FFF]">LOCATION</h4>
+                    <p class="context text-gray-600 dark:text-gray-400">
+                      Barangay Lepaga, M'lang, Cotabato, Philippines
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                  <svg class="flex-shrink-0 w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <h4 class="subtext font-medium text-[#333] dark:text-[#FFF]">EMAIL ADDRESS</h4>
+                    <a href="mailto:sklepaga@example.com" class="context text-blue-600 dark:text-blue-400 hover:underline">sklepaga@example.com</a>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                  <svg class="flex-shrink-0 w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <div>
+                    <h4 class="subtext font-medium text-[#333] dark:text-[#FFF]">PHONE NUMBER</h4>
+                    <a href="tel:+639123456789" class="context text-blue-600 dark:text-blue-400 hover:underline">+63 912 345 6789</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    
+    <div id="custom-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
+      <div class="bg-white dark:bg-[#303030] rounded-lg p-6 shadow-2xl w-full max-w-sm mx-4 transform transition-transform duration-300 scale-95">
+        <div class="flex justify-between items-center mb-4">
+          <h4 id="modal-title" class="subtext-title font-bold text-[#333] dark:text-[#FFF]"></h4>
+          <button id="modal-close-btn" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none transition-colors duration-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <p id="modal-message" class="context text-gray-600 dark:text-gray-400 mb-6"></p>
+        <button id="modal-ok-btn" class="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">OK</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
+
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script>
+
+    <script src="navbar/navbar.js"></script>
+    <script src="pages/index.js"></script>
+    <script src="animations/index.js"></script>
+    <script src="font/font.js"></script>
+    <script src="loader/loader.js"></script>
+    <script src="animations/global.js"></script>
+    <script src="animations/scroll.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/EasePack.min.js"></script>
+
+    <script>
+      function initMap() {
+        const lepagaLocation = { lat: 7.0833, lng: 124.9667 };
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 15,
+          center: lepagaLocation,
+          mapId: "DEMO_MAP_ID", // Optional: Use a custom map style
+        });
+
+        new google.maps.Marker({
+          position: lepagaLocation,
+          map: map,
+          title: "Barangay Lepaga, M'lang, Cotabato",
+        });
+      }
+    </script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+        authDomain: "sklepaga-8790e.firebaseapp.com",
+        projectId: "sklepaga-8790e",
+        storageBucket: "sklepaga-8790e.appspot.com",
+        messagingSenderId: "815409129057",
+        appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+        measurementId: "G-9GH707G2WZ"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+      const contactForm = document.getElementById("contact-form");
+      const nameInput = document.getElementById("name");
+      const emailInput = document.getElementById("email");
+      const messageInput = document.getElementById("message");
+      const modal = document.getElementById("custom-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const modalMessage = document.getElementById("modal-message");
+      const modalCloseBtn = document.getElementById("modal-close-btn");
+      const modalOkBtn = document.getElementById("modal-ok-btn");
+
+      function showModal(title, message) {
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+          modal.querySelector("div").classList.add("scale-100");
+          modal.querySelector("div").classList.remove("scale-95");
+        }, 10);
+      }
+
+      function hideModal() {
+        modal.querySelector("div").classList.add("scale-95");
+        modal.querySelector("div").classList.remove("scale-100");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 300);
+      }
+
+      modalCloseBtn.addEventListener("click", hideModal);
+      modalOkBtn.addEventListener("click", hideModal);
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          hideModal();
+        }
+      });
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          nameInput.value = user.displayName || "";
+          emailInput.value = user.email || "";
+        }
+      });
+
+      contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = nameInput.value;
+        const email = emailInput.value;
+        const message = messageInput.value;
+
+        if (!name || !email || !message) {
+          showModal("Error", "Please fill out all fields.");
+          return;
+        }
+
+        try {
+          await addDoc(collection(db, "letters"), {
+            name: name,
+            email: email,
+            message: message,
+            timestamp: serverTimestamp(),
+            userId: auth.currentUser ? auth.currentUser.uid : null,
+          });
+
+          showModal("Success!", "Thank you for your message!");
+          nameInput.value = "";
+          emailInput.value = "";
+          messageInput.value = "";
+          
+          if (auth.currentUser) {
+            nameInput.value = auth.currentUser.displayName || "";
+            emailInput.value = auth.currentUser.email || "";
+          }
+
+        } catch (error) {
+          console.error("Error adding document: ", error);
+          showModal("Error", "Something went wrong. Please try again later.");
+        }
+      });
+    </script>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        gsap.utils.toArray(".clipp-section").forEach((section, index) => {
+          gsap.to(section, {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 0.7,
+            ease: "power2.out",
+          });
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const target = document.querySelector(".zoom.parallax");
+        gsap.fromTo(
+          target,
+          { scale: 0, transformOrigin: "bottom left" },
+          {
+            scale: 1,
+            duration: 2,
+            ease: "power2.inOut"
+          }
+        );
+      });
+    </script>
+  </main>
+</body>
+</html>

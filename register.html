@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register User | SK Lepaga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+      authDomain: "sklepaga-8790e.firebaseapp.com",
+      projectId: "sklepaga-8790e",
+      storageBucket: "sklepaga-8790e.firebasestorage.app",
+      messagingSenderId: "815409129057",
+      appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+      measurementId: "G-9GH707G2WZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // form handling
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("register-form");
+      const statusMsg = document.getElementById("status-msg");
+      const submitBtn = document.getElementById("submit-btn");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        statusMsg.textContent = "";
+        submitBtn.disabled = true;
+
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+
+        if (!name || !email) {
+          statusMsg.textContent = "Please fill in all fields.";
+          submitBtn.disabled = false;
+          return;
+        }
+
+        try {
+          // create a new docRef so we can include its id in the document
+          const newDocRef = doc(collection(db, "user"));
+          const idToUse = newDocRef.id;
+          const now = new Date().toISOString();
+
+          await setDoc(newDocRef, {
+            id: idToUse,
+            name: name,
+            "e-mail": email,
+            date: now
+          });
+
+          // save user id locally so contact.html knows which user to load
+          localStorage.setItem("userId", idToUse);
+
+          // success
+          alert("User registered successfully!");
+          window.location.href = "contact.html";
+        } catch (err) {
+          console.error("Error saving user:", err);
+          statusMsg.textContent = "Failed to save user. See console.";
+          submitBtn.disabled = false;
+        }
+      });
+    });
+  </script>
+</head>
+<body class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 font-sans">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+    <h1 id="form-heading" class="text-2xl font-semibold mb-6 text-gray-800">Register User</h1>
+    <form id="register-form" class="space-y-5">
+      <div>
+        <label for="name" class="block text-gray-700 font-medium mb-1">Name</label>
+        <input type="text" id="name" name="name" required
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="Your full name" />
+      </div>
+      <div>
+        <label for="email" class="block text-gray-700 font-medium mb-1">E-mail</label>
+        <input type="email" id="email" name="email" required
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="you@example.com" />
+      </div>
+      <p id="status-msg" class="text-red-600 text-sm min-h-[1.25rem]"></p>
+      <div class="flex items-center justify-between space-x-4">
+        <button id="submit-btn" type="submit"
+          class="flex-grow bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-2 text-white font-semibold py-2 rounded-md transition duration-150">
+          Submit
+        </button>
+        <button type="button"
+          class="bg-gray-300 hover:bg-gray-400 focus:ring-gray-400 focus:ring-2 font-semibold py-2 px-5 rounded-md transition duration-150"
+          onclick="window.location.href='contact.html'">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

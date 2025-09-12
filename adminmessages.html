@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Messages | SK Lepaga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { 
+      getFirestore, collection, onSnapshot, doc, updateDoc, arrayUnion, deleteDoc 
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+      authDomain: "sklepaga-8790e.firebaseapp.com",
+      projectId: "sklepaga-8790e",
+      storageBucket: "sklepaga-8790e.firebasestorage.app",
+      messagingSenderId: "815409129057",
+      appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+      measurementId: "G-9GH707G2WZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function escapeHtml(text) {
+      return text ? text.replace(/[&<>"']/g, match => {
+        const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+        return map[match];
+      }) : "";
+    }
+
+    // Modal elements and variables
+    let currentMessageId = null;
+    let unsubscribeModalListener = null;
+
+    const modalOverlay = document.createElement("div");
+    modalOverlay.className = "fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50";
+    modalOverlay.innerHTML = `
+      <div class="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-lg shadow-lg p-6 relative">
+        <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
+        <h2 class="text-2xl font-bold mb-4" id="modalMessageText"></h2>
+        <p class="text-gray-600 mb-6" id="modalMessageTime"></p>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Conversation</h3>
+          <div id="repliesContainer" class="space-y-4 max-h-64 overflow-y-auto border border-gray-300 rounded p-4 bg-gray-50 mb-6"></div>
+        </div>
+        <form id="replyForm" class="flex space-x-3">
+          <input id="replyInput" type="text" placeholder="Type your reply..." required
+            class="flex-grow border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+          <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded font-semibold transition duration-150">
+            Send
+          </button>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(modalOverlay);
+
+    const closeModalBtn = modalOverlay.querySelector("#closeModalBtn");
+    const modalMessageText = modalOverlay.querySelector("#modalMessageText");
+    const modalMessageTime = modalOverlay.querySelector("#modalMessageTime");
+    const repliesContainer = modalOverlay.querySelector("#repliesContainer");
+    const replyForm = modalOverlay.querySelector("#replyForm");
+    const replyInput = modalOverlay.querySelector("#replyInput");
+
+    closeModalBtn.addEventListener("click", () => {
+      modalOverlay.classList.add("hidden");
+      modalOverlay.classList.remove("flex");
+      currentMessageId = null;
+      if (unsubscribeModalListener) {
+        unsubscribeModalListener();
+        unsubscribeModalListener = null;
+      }
+    });
+
+    function renderReplies(data) {
+      repliesContainer.innerHTML = "";
+
+      // Original message as first
+      repliesContainer.innerHTML = `
+        <div class="p-2 border border-indigo-400 rounded bg-indigo-50 shadow-sm">
+          <p><strong>${escapeHtml(data.name)}</strong> <span class="text-xs text-gray-500 ml-2">${escapeHtml(data.time)}</span></p>
+          <p>${escapeHtml(data.message)}</p>
+        </div>
+      `;
+
+      const replies = data.replies || [];
+      if (replies.length === 0) {
+        repliesContainer.innerHTML += '<p class="text-gray-500 italic">No replies yet.</p>';
+        return;
+      }
+
+      replies.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+      replies.forEach(reply => {
+        repliesContainer.innerHTML += `
+          <div class="p-2 border border-gray-300 rounded bg-white shadow-sm">
+            <p><strong>${escapeHtml(reply.author)}</strong> <span class="text-xs text-gray-500 ml-2">${escapeHtml(reply.time)}</span></p>
+            <p>${escapeHtml(reply.text)}</p>
+          </div>
+        `;
+      });
+    }
+
+    async function openModal(messageId) {
+      currentMessageId = messageId;
+
+      if (unsubscribeModalListener) unsubscribeModalListener();
+      unsubscribeModalListener = onSnapshot(doc(db, "message", messageId), (docSnap) => {
+        if (!docSnap.exists()) return;
+
+        const data = docSnap.data();
+
+        modalMessageText.textContent = data.message;
+        modalMessageTime.textContent = data.time;
+        renderReplies(data);
+
+        modalOverlay.classList.remove("hidden");
+        modalOverlay.classList.add("flex");
+        replyInput.focus();
+      });
+    }
+
+    replyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentMessageId) return;
+
+      const replyText = replyInput.value.trim();
+      if (!replyText) return;
+
+      const nowString = new Date().toISOString().replace("T", " ").split(".")[0];
+
+      const newReply = {
+        author: "Admin",
+        text: replyText,
+        time: nowString,
+        status: "unread"
+      };
+
+      try {
+        await updateDoc(doc(db, "message", currentMessageId), {
+          replies: arrayUnion(newReply)
+        });
+
+        replyInput.value = "";
+      } catch (err) {
+        alert("Failed to send reply: " + err.message);
+      }
+    });
+
+    async function markRead(messageId) {
+      try {
+        await updateDoc(doc(db, "message", messageId), { status: "read" });
+        alert("Marked as read.");
+      } catch (err) {
+        alert("Failed to mark as read: " + err.message);
+      }
+    }
+
+    async function deleteMessage(messageId) {
+      if (confirm("Are you sure you want to delete this message?")) {
+        try {
+          await deleteDoc(doc(db, "message", messageId));
+        } catch (err) {
+          alert("Failed to delete message: " + err.message);
+        }
+      }
+    }
+
+    // Setup main table container
+    const tableBody = document.createElement("tbody");
+    tableBody.id = "messages-tbody";
+
+    // Insert table with thead into body
+    document.body.innerHTML = `
+      <div class="min-h-screen bg-gray-50 flex flex-col items-center p-6 font-sans">
+        <div class="w-full max-w-7xl bg-white rounded-lg shadow-lg p-6">
+          <header class="mb-6">
+            <h1 class="text-3xl font-extrabold text-gray-800 select-none">Admin Messages</h1>
+          </header>
+          <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-300 rounded-md overflow-hidden">
+              <thead class="bg-gray-100 text-gray-700 font-semibold">
+                <tr>
+                  <th class="p-3 text-left">Name</th>
+                  <th class="p-3 text-left">E-mail</th>
+                  <th class="p-3 text-left">Message</th>
+                  <th class="p-3 text-left">Time</th>
+                  <th class="p-3 text-left">Status</th>
+                  <th class="p-3 text-left">Replies</th>
+                  <th class="p-3 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="messages-tbody" class="bg-white"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalOverlay);
+
+    const messagesTbody = document.getElementById("messages-tbody");
+
+    onSnapshot(collection(db, "message"), (snapshot) => {
+      messagesTbody.innerHTML = "";
+      if (snapshot.empty) {
+        messagesTbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-500 select-none">No messages found.</td></tr>`;
+        return;
+      }
+
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const id = docSnap.id;
+        const repliesCount = Array.isArray(data.replies) ? data.replies.length : 0;
+
+        const tr = document.createElement("tr");
+        tr.className = "border-b hover:bg-gray-50 cursor-pointer";
+
+        tr.innerHTML = `
+          <td class="p-3">${escapeHtml(data.name)}</td>
+          <td class="p-3">${escapeHtml(data["e-mail"])}</td>
+          <td class="p-3 max-w-xs truncate" title="${escapeHtml(data.message)}">${escapeHtml(data.message)}</td>
+          <td class="p-3 whitespace-nowrap">${escapeHtml(data.time)}</td>
+          <td class="p-3 whitespace-nowrap">${escapeHtml(data.status || "unread")}</td>
+          <td class="p-3 whitespace-nowrap">${repliesCount > 0 ? repliesCount + (repliesCount === 1 ? " reply" : " replies") : ""}</td>
+          <td class="p-3 space-x-2">
+            <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm" data-id="${id}" data-action="read">Mark Read</button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm" data-id="${id}" data-action="reply">Reply</button>
+            <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm" data-id="${id}" data-action="delete">Delete</button>
+          </td>
+        `;
+
+        // Clicking row (except buttons) opens modal
+        tr.addEventListener("click", (e) => {
+          if (!e.target.closest("button")) {
+            openModal(id);
+          }
+        });
+
+        // Button handlers
+        tr.querySelector("button[data-action='read']").onclick = (e) => {
+          e.stopPropagation();
+          markRead(id);
+        };
+        tr.querySelector("button[data-action='reply']").onclick = (e) => {
+          e.stopPropagation();
+          openModal(id);
+        };
+        tr.querySelector("button[data-action='delete']").onclick = (e) => {
+          e.stopPropagation();
+          deleteMessage(id);
+        };
+
+        messagesTbody.appendChild(tr);
+      });
+    }, (err) => {
+      messagesTbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-red-600 select-none">Failed to load messages: ${escapeHtml(err.message)}</td></tr>`;
+      console.error(err);
+    });
+
+  </script>
+</head>
+<body></body>
+</html>

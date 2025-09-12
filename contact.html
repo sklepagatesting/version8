@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Lepaga - Modernized</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #E0E0E0;
+      overflow-x: hidden;
+    }
+
+    /* Grid lines and focus lines */
+    .grid-bg {
+      background-image:
+        /* Horizontal lines */
+        linear-gradient(to right, #333 1px, transparent 1px),
+        /* Vertical lines */
+        linear-gradient(to bottom, #333 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.2;
+    }
+
+    .focus-line {
+      position: absolute;
+      background-color: #007aff;
+      opacity: 0.6;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .focus-line.horizontal {
+      height: 2px;
+      width: 0%;
+      animation: expandH 2s ease-out forwards;
+      animation-delay: 0.5s;
+    }
+
+    .focus-line.vertical {
+      width: 2px;
+      height: 0%;
+      animation: expandV 2s ease-out forwards;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes expandH {
+      to { width: 100%; }
+    }
+
+    @keyframes expandV {
+      to { height: 100%; }
+    }
+
+    .glowing-text {
+      background: linear-gradient(90deg, #007aff, #a453e0, #fe3c30);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 10px rgba(164, 83, 224, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <!-- Header Section with Grid Lines -->
+  <header class="relative min-h-screen flex items-center justify-center p-4">
+    <div class="absolute inset-0">
+      <div class="focus-line horizontal top-1/2 left-0 transform -translate-y-1/2"></div>
+      <div class="focus-line vertical left-1/2 top-0 transform -translate-x-1/2"></div>
+    </div>
+    
+    <div class="text-center relative z-10">
+      <h1 class="text-5xl md:text-7xl font-bold mb-4 glowing-text animate-pulse">
+        REAL-TIME CONVERSATIONS
+      </h1>
+      <p class="text-lg md:text-xl text-gray-400">
+        Discover, Connect, and Engage with SK Lepaga
+      </p>
+      <a href="#" class="mt-8 inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        Chat with Us
+      </a>
+    </div>
+  </header>
+
+  <!-- Contact Section with Grid Lines -->
+  <section class="relative min-h-[50vh] p-4 py-20 overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="focus-line horizontal top-1/2 left-0 transform -translate-y-1/2" style="animation-delay: 2.5s;"></div>
+      <div class="focus-line vertical left-1/2 top-0 transform -translate-x-1/2" style="animation-delay: 2.5s;"></div>
+    </div>
+    <div class="max-w-screen-xl mx-auto z-10 relative">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold glowing-text">GET IN TOUCH</h2>
+        <p class="mt-4 text-gray-400">We'd love to hear from you!</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+        <!-- Contact Form -->
+        <div class="bg-[#1C1C1E] p-8 rounded-lg shadow-xl border border-gray-700">
+          <form id="contact-form" class="space-y-6">
+            <div class="relative">
+              <input type="text" id="name" name="name" required class="peer w-full bg-transparent border-b border-gray-600 py-3 outline-none focus:border-blue-500 transition-colors text-white placeholder-transparent" placeholder=" ">
+              <label for="name" class="absolute left-0 -top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-blue-500 peer-focus:text-sm">Your Name</label>
+            </div>
+            <div class="relative">
+              <input type="email" id="email" name="email" required class="peer w-full bg-transparent border-b border-gray-600 py-3 outline-none focus:border-blue-500 transition-colors text-white placeholder-transparent" placeholder=" ">
+              <label for="email" class="absolute left-0 -top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-blue-500 peer-focus:text-sm">Email Address</label>
+            </div>
+            <div class="relative">
+              <textarea id="message" name="message" rows="4" required class="peer w-full bg-transparent border-b border-gray-600 py-3 outline-none focus:border-blue-500 transition-colors text-white placeholder-transparent resize-none" placeholder=" "></textarea>
+              <label for="message" class="absolute left-0 -top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-blue-500 peer-focus:text-sm">Your Message</label>
+            </div>
+            <div>
+              <button type="submit" class="w-full px-6 py-3 font-semibold rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="space-y-6 md:space-y-8 text-gray-400">
+          <div>
+            <h3 class="text-xl font-semibold text-white">CONNECT WITH US</h3>
+            <p class="mt-2 text-sm">Find us on social media or reach out directly.</p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-4">
+              <svg class="flex-shrink-0 w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+              </svg>
+              <div>
+                <h4 class="font-medium text-white">LOCATION</h4>
+                <p class="text-sm">Barangay Lepaga, M'lang, Cotabato, Philippines</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <svg class="flex-shrink-0 w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+              <div>
+                <h4 class="font-medium text-white">EMAIL ADDRESS</h4>
+                <a href="mailto:sklepaga@example.com" class="text-blue-400 hover:underline text-sm">sklepaga@example.com</a>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <svg class="flex-shrink-0 w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.46.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+              </svg>
+              <div>
+                <h4 class="font-medium text-white">PHONE NUMBER</h4>
+                <a href="tel:+639123456789" class="text-blue-400 hover:underline text-sm">+63 912 345 6789</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Custom Modal -->
+  <div id="custom-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
+    <div class="bg-[#1C1C1E] rounded-lg p-6 shadow-2xl w-full max-w-sm mx-4 transform transition-transform duration-300 scale-95 border border-gray-700">
+      <div class="flex justify-between items-center mb-4">
+        <h4 id="modal-title" class="text-lg font-bold text-white"></h4>
+        <button id="modal-close-btn" class="text-gray-400 hover:text-gray-200 focus:outline-none transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <p id="modal-message" class="text-gray-400 mb-6 text-sm"></p>
+      <button id="modal-ok-btn" class="w-full px-4 py-2 font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-full hover:from-blue-600 hover:to-purple-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        OK
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+      authDomain: "sklepaga-8790e.firebaseapp.com",
+      projectId: "sklepaga-8790e",
+      storageBucket: "sklepaga-8790e.appspot.com",
+      messagingSenderId: "815409129057",
+      appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+      measurementId: "G-9GH707G2WZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const contactForm = document.getElementById("contact-form");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const messageInput = document.getElementById("message");
+
+    const modal = document.getElementById("custom-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMessage = document.getElementById("modal-message");
+    const modalCloseBtn = document.getElementById("modal-close-btn");
+    const modalOkBtn = document.getElementById("modal-ok-btn");
+
+    function showModal(title, message) {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modal.classList.remove("hidden");
+      setTimeout(() => {
+        modal.querySelector("div").classList.add("scale-100");
+        modal.querySelector("div").classList.remove("scale-95");
+      }, 10);
+    }
+
+    function hideModal() {
+      modal.querySelector("div").classList.add("scale-95");
+      modal.querySelector("div").classList.remove("scale-100");
+      setTimeout(() => {
+        modal.classList.add("hidden");
+      }, 300);
+    }
+
+    modalCloseBtn.addEventListener("click", hideModal);
+    modalOkBtn.addEventListener("click", hideModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        hideModal();
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        nameInput.value = user.displayName || "";
+        emailInput.value = user.email || "";
+      }
+    });
+
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = nameInput.value;
+      const email = emailInput.value;
+      const message = messageInput.value;
+
+      if (!name || !email || !message) {
+        showModal("Error", "Please fill out all fields.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "letters"), {
+          name: name,
+          email: email,
+          message: message,
+          timestamp: serverTimestamp(),
+          userId: auth.currentUser ? auth.currentUser.uid : null,
+        });
+
+        showModal("Success!", "Thank you for your message! We have received your letter.");
+        nameInput.value = "";
+        emailInput.value = "";
+        messageInput.value = "";
+        if (auth.currentUser) {
+          nameInput.value = auth.currentUser.displayName || "";
+          emailInput.value = auth.currentUser.email || "";
+        }
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        showModal("Error", "Something went wrong. Please try again later.");
+      }
+    });
+  </script>
+</body>
+</html>
