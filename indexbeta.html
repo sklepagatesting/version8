@@ -10,9 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
-
-
-<link rel="prefetch" href="home.html" as="document">
+  <link rel="prefetch" href="home.html" as="document">
 
   <link rel="stylesheet" href="navbar\navbar.css">
   <link rel="stylesheet" href="font\font.css">
@@ -21,17 +19,40 @@
   <link rel="stylesheet" href="controlers\scroll.css">
   <link rel="stylesheet" href="sections/hero.css">
   <link rel="stylesheet" href="sections\carousel.css">
-  <style>body.preload {
-        visibility: hidden;
-        opacity: 0;
- }
-    body { transition: opacity 0.2s ease-in; }
-    .media-container {
-        height: 25vh; /* Each media container takes up 25% of the viewport height */
-        aspect-ratio: 16/9; /* Maintain a 16:9 aspect ratio */
+  <style>
+    body.preload {
+      visibility: hidden;
+      opacity: 0;
     }
-    .media-container img, .media-container video {
-        height: 100%; /* The media element fills its container vertically */
+
+    body {
+      transition: opacity 0.2s ease-in;
+    }
+
+    /* Original mobile sizes */
+    .image-container, .video-container {
+      height: 150px;
+    }
+
+    /* For screens larger than 640px (sm: breakpoint) */
+    @media (min-width: 640px) {
+      .image-container, .video-container {
+        height: 250px;
+      }
+    }
+
+    /* For screens larger than 1024px (lg: breakpoint) */
+    @media (min-width: 1024px) {
+      .image-container {
+        height: 25vh; /* Each image container takes up 25% of the viewport height */
+        aspect-ratio: 16/9; /* Maintain a 16:9 aspect ratio */
+      }
+      .image-container img {
+        height: 100%; /* The image fills its container vertically */
+      }
+      .video-container {
+        height: 100vh; /* The video takes up the full viewport height on desktop */
+      }
     }
   </style>
 </head>
@@ -158,7 +179,7 @@
       <div id="scroller" class="flex w-max will-change-transform" >
 
         <a href="home.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative media-container">
+          <div class="overflow-hidden relative image-container">
             <picture>
               <source media="(max-width: 767px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
               <source media="(max-width: 1023px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
@@ -175,7 +196,7 @@
 
 
         <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative media-container">
+          <div class="overflow-hidden relative image-container">
             <img
               src="https://sklepagatesting.github.io/resources/Images/scoring.webp"
               alt="Image 1"
@@ -194,7 +215,7 @@
 
 
         <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative media-container">
+          <div class="overflow-hidden relative image-container">
             <img
               src="https://sklepagatesting.github.io/resources/Images/celebrating.webp"
               alt="Image 1" class="w-full h-full object-cover"/>
@@ -209,7 +230,7 @@
 
 
         <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative media-container">
+          <div class="overflow-hidden relative image-container">
             <img
               src="https://sklepagatesting.github.io/resources/Images/planting.webp"
               alt="Image 1"
@@ -240,7 +261,7 @@
             loop
             muted
             playsinline
-            class="shadow-lg object-cover media-container cursor-pointer"
+            class="shadow-lg object-cover video-container cursor-pointer"
           ></video>
         </div>
       </div>
