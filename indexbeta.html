@@ -22,7 +22,7 @@
     :root {
       --carousel-image-height: clamp(150px, 25vw, 389px);
       --video-reel-width: clamp(160px, 40vw, 480px);
-      --clipp-section-height: 250px; /* Approximate height for padding */
+      --fixed-bottom-height: 250px; /* Approximate height for padding */
     }
 
     /* For laptops (13-inch screens around 1366px width) */
@@ -30,7 +30,7 @@
       :root {
         --carousel-image-height: clamp(150px, 20vw, 150px);
         --video-reel-width: clamp(160px, 25vw, 250px);
-        --clipp-section-height: 250px;
+        --fixed-bottom-height: 250px;
       }
     }
 
@@ -39,7 +39,7 @@
       :root {
         --carousel-image-height: clamp(150px, 25vw, 250px);
         --video-reel-width: clamp(160px, 30vw, 250px);
-        --clipp-section-height: 500px; /* Adjust for stacked layout */
+        --fixed-bottom-height: 500px; /* Adjust for stacked layout */
       }
     }
 
@@ -50,9 +50,8 @@
 
     body {
       transition: opacity 0.2s ease-in;
-      overflow: hidden; /* Prevent scrolling */
-      padding-bottom: var(--clipp-section-height);
-      padding-top: 3rem; /* Height of the fixed navbar */
+      overflow: hidden; /* Prevents scrolling */
+      padding-bottom: var(--fixed-bottom-height);
     }
 
     /* Styles using the new clamp variables */
@@ -65,16 +64,24 @@
       width: var(--video-reel-width);
     }
     
-    /* New styles for the fixed section */
-    .clipp-section {
+    /* New styles for the fixed section container */
+    #bottom-fixed-section {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 99; /* Ensure it sits on top of other content */
-      height: var(--clipp-section-height); /* Keep the height variable for padding */
-      flex-direction: column-reverse; /* Reorder for mobile, if desired by user */
-      /* Note: Flex properties here might be overridden by tailwind */
+      z-index: 10; /* Lower than navbar's z-index */
+      background: white; /* Match the body background to prevent transparency issues */
+      display: flex; /* Maintain flex layout */
+      flex-direction: column-reverse; /* Reorder for mobile */
+      padding: 0 2rem 3rem 2rem; /* Re-apply padding since it's now a new container */
+      gap: 2rem; /* Add gap back */
+    }
+    
+    /* Ensure the main content section has its own spacing */
+    .clipp-section {
+        padding-top: 3rem; /* Height of the navbar */
+        padding-bottom: 0; /* Remove old padding */
     }
 
     #videoOverlayBg {
@@ -86,6 +93,11 @@
       pointer-events: none;
       opacity: 0;
       z-index: 9998;
+    }
+
+    /* Ensure the navbar and sidebar are on top of the new fixed section */
+    #navbar, #sidebar-multi-level-sidebar {
+      z-index: 100; /* Higher than the new fixed section's z-index */
     }
   </style>
 </head>
@@ -229,7 +241,8 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-8 pb-12 gap-8 flex flex-col-reverse md:flex-row">
+      </section>
+      <div id="bottom-fixed-section" class="w-full gap-8 flex flex-col-reverse md:flex-row">
           <div class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative">
             <div class="flex flex-col justify-end">
               <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
@@ -239,18 +252,6 @@
             </div>
           </div>
           <div id="videoOverlayBg" class="video-overlay-bg"></div>
-          <style>
-            #videoOverlayBg {
-              position: fixed;
-              inset: 0;
-              background: rgba(0, 0, 0, 0.3);
-              backdrop-filter: blur(50px);
-              -webkit-backdrop-filter: blur(50px);
-              pointer-events: none;
-              opacity: 0;
-              z-index: 9998;
-            }
-          </style>
           <div class="w-full md:w-5/8 flex flex-col justify-end sm:text-left md:text-left">
             <div>
               <div class="text-container">
@@ -276,7 +277,7 @@
             </div>
           </div>
         </div>
-      </section>
+
     </div>
   </main>
   <script src="https://cdn.tailwindcss.com"></script>
