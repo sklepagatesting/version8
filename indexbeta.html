@@ -40,8 +40,16 @@
       /* For laptops (13-inch screens around 1366px width) */
       @media (max-width: 1366px) {
         :root {
-          --carousel-image-height: clamp(150px, 20vw, 150px); /* Set max height to 150px */
-          --video-reel-width: clamp(160px, 25vw, 250px); /* Adjust smaller */
+          --carousel-image-height: clamp(
+            150px,
+            20vw,
+            150px
+          ); /* Set max height to 150px */
+          --video-reel-width: clamp(
+            160px,
+            25vw,
+            250px
+          ); /* Adjust smaller */
         }
       }
 
@@ -62,7 +70,7 @@
         transition: opacity 0.2s ease-in;
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
+        overflow-x: hidden; /* Fix: Hides horizontal overflow */
       }
 
       /* Base layout for all devices */
@@ -71,6 +79,7 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        overflow-x: hidden; /* Fix: Hides horizontal overflow */
       }
 
       /* Styles using the new clamp variables */
@@ -90,6 +99,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        overflow: hidden; /* Fix: Ensures the container clips its content */
       }
 
       .video-titles-container {
@@ -592,7 +602,6 @@
           </div>
         </section>
       </div>
-
     </main>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
