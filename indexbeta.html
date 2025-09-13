@@ -85,7 +85,7 @@
 
       /* Mobile-first approach - normal flow */
       .images-container {
-        padding-top: var(--nav-height);
+        padding-top: calc(var(--nav-height) + 2rem);
         min-height: calc(100vh - var(--nav-height));
         display: flex;
         flex-direction: column;
@@ -95,6 +95,48 @@
       .video-titles-container {
         width: 100%;
         padding: 2rem 0;
+      }
+
+      /* Tablet specific positioning */
+      @media (min-width: 640px) and (max-width: 767px) {
+        body {
+          height: 100vh;
+          overflow: hidden;
+        }
+
+        .main-content {
+          height: 100vh;
+          position: relative;
+        }
+
+        .images-container {
+          position: fixed;
+          top: var(--nav-height);
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 10;
+          padding-top: 2rem;
+          min-height: calc(100vh - var(--nav-height));
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+        }
+
+        .video-titles-container {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 20;
+          background: transparent;
+          padding: 2rem 0;
+        }
+
+        /* Ensure proper spacing from nav */
+        .images-container .overflow-hidden {
+          margin-top: 1rem;
+        }
       }
 
       /* Desktop/Laptop specific positioning */
