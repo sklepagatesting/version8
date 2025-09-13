@@ -4,15 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2"
-    crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-    rel="stylesheet">
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-
   <link rel="prefetch" href="home.html" as="document">
   <link rel="stylesheet" href="navbar\navbar.css">
   <link rel="stylesheet" href="font\font.css">
@@ -27,17 +23,13 @@
       --carousel-image-height: clamp(150px, 25vw, 389px);
       --video-reel-width: clamp(160px, 40vw, 480px);
     }
-
     /* For laptops (13-inch screens around 1366px width) */
     @media (max-width: 1366px) {
       :root {
         --carousel-image-height: clamp(150px, 20vw, 150px);
-        /* Set max height to 150px */
         --video-reel-width: clamp(160px, 25vw, 250px);
-        /* Adjust smaller */
       }
     }
-
     /* For mobile devices (smaller than 767px width) */
     @media (max-width: 767px) {
       :root {
@@ -45,84 +37,113 @@
         --video-reel-width: clamp(160px, 30vw, 250px);
       }
     }
-
     body.preload {
       visibility: hidden;
       opacity: 0;
     }
-
     body {
       transition: opacity 0.2s ease-in;
     }
-
     /* Styles using the new clamp variables */
     .carousel-image {
       height: var(--carousel-image-height);
       aspect-ratio: 16 / 9;
     }
-
     .video-reel {
       width: var(--video-reel-width);
     }
-
-    /* New styles for fixed positioning */
-    .hero-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
+    /* New styles for the 100vh layout */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
       width: 100%;
-      z-index: 100; /* A high z-index to ensure it's on top */
-      background: #ffffff; /* Or a color that matches your design */
     }
-
-    #carousel-section {
-      padding-bottom: 250px; /* Add padding to prevent content overlap */
+    /* The image section should take up the remaining space */
+    .image-section {
+      flex: 1;
+      padding-top: 3rem; /* Height of the navbar to prevent overlap */
+      overflow-y: auto; /* Allow scrolling within this section */
+      position: relative;
+    }
+    /* The video/title section has a fixed height */
+    .video-hero-section {
+      height: 40vh; /* Adjust as needed */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 2rem 2rem;
+      background-color: transparent; /* Or a color that matches your design */
+    }
+    /* Media query to handle the "cramped" state */
+    @media (max-width: 767px) {
+      .main-content {
+        position: relative;
+        overflow: hidden; /* Prevent body scrollbar */
+      }
+      .image-section,
+      .video-hero-section {
+        position: absolute;
+        top: 3rem; /* Below the fixed navbar */
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 3rem);
+      }
+      .image-section {
+        z-index: 1;
+        overflow-y: scroll; /* Scroll images within this contained section */
+      }
+      .video-hero-section {
+        z-index: 2; /* Sits on top */
+        height: 100%;
+        top: auto;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.9); /* A semi-transparent background to see through */
+      }
+      .video-hero-section .hero,
+      .video-hero-section .w-full {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding-left: 2rem;
+        padding-bottom: 2rem;
+      }
     }
   </style>
 </head>
-
 <body class="preload">
   <main id="swup">
+    <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
+      <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
+        <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
+          <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
+            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
+            <span class="font-theme font-medium">SK Lepaga</span>
+          </a>
+          <button id="menu-toggle-btn" type="button" class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none" aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <aside id="sidebar-multi-level-sidebar" class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]" style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
+      </aside>
+
     <div class="main-content text-container">
 
-      <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
-        <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
-          <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
-            <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
-              <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
-              <span class="font-theme font-medium">SK Lepaga</span>
-            </a>
-            <button id="menu-toggle-btn" type="button"
-              class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
-              aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <aside id="sidebar-multi-level-sidebar"
-        class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
-        style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
-        </aside>
-
-      <section id="carousel-section"
-        class="clipp-section h-full w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424] pt-28">
+      <section id="carousel-section" class="clipp-section image-section">
         <div class="w-full pb-6 px-0 z-10">
           <div class="overflow-hidden relative w-full">
             <div id="scroller" class="flex w-max will-change-transform">
               <a href="home.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                 <div class="overflow-hidden relative carousel-image">
                   <picture>
-                    <source media="(max-width: 767px)"
-                      srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
-                    <source media="(max-width: 1023px)"
-                      srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
-                    <img src="https://sklepagatesting.github.io/resources/Images/feeding.webp" alt="Image 1"
-                      class="w-full h-full object-cover" />
+                    <source media="(max-width: 767px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
+                    <source media="(max-width: 1023px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
+                    <img src="https://sklepagatesting.github.io/resources/Images/feeding.webp" alt="Image 1" class="w-full h-full object-cover" />
                   </picture>
                 </div>
                 <div class="w-full pt-2 overflow-hidden">
@@ -133,8 +154,7 @@
               </a>
               <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                 <div class="overflow-hidden relative carousel-image">
-                  <img src="https://sklepagatesting.github.io/resources/Images/scoring.webp" alt="Image 1"
-                    class="w-full h-full object-cover" />
+                  <img src="https://sklepagatesting.github.io/resources/Images/scoring.webp" alt="Image 1" class="w-full h-full object-cover" />
                 </div>
                 <div class="w-full pt-2 overflow-hidden">
                   <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
@@ -144,8 +164,7 @@
               </a>
               <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                 <div class="overflow-hidden relative carousel-image">
-                  <img src="https://sklepagatesting.github.io/resources/Images/celebrating.webp" alt="Image 1"
-                    class="w-full h-full object-cover" />
+                  <img src="https://sklepagatesting.github.io/resources/Images/celebrating.webp" alt="Image 1" class="w-full h-full object-cover" />
                 </div>
                 <div class="w-full pt-2 overflow-hidden">
                   <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
@@ -155,8 +174,7 @@
               </a>
               <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                 <div class="overflow-hidden relative carousel-image">
-                  <img src="https://sklepagatesting.github.io/resources/Images/planting.webp" alt="Image 1"
-                    class="w-full h-full object-cover" />
+                  <img src="https://sklepagatesting.github.io/resources/Images/planting.webp" alt="Image 1" class="w-full h-full object-cover" />
                 </div>
                 <div class="w-full pt-2 overflow-hidden">
                   <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
@@ -169,14 +187,13 @@
         </div>
       </section>
 
-      <section class="clipp-section hero-container">
+      <section class="clipp-section video-hero-section">
         <div class="w-full px-8 pb-12 gap-8 flex flex-col-reverse md:flex-row">
           <div class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative">
             <div class="flex flex-col justify-end">
               <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
               <div class="w-full max-w-sm">
-                <video id="playReel" src="https://sklepagatesting.github.io/resources/Images/reel.mp4" autoplay loop muted
-                  playsinline class="video-reel shadow-lg object-cover aspect-video cursor-pointer"></video>
+                <video id="playReel" src="https://sklepagatesting.github.io/resources/Images/reel.mp4" autoplay loop muted playsinline class="video-reel shadow-lg object-cover aspect-video cursor-pointer"></video>
               </div>
             </div>
           </div>
@@ -193,7 +210,6 @@
               z-index: 9998;
             }
           </style>
-
           <div class="w-full md:w-5/8 flex flex-col justify-end sm:text-left md:text-left">
             <div>
               <div class="text-container">
@@ -212,9 +228,7 @@
                 <p class="text-line subtext font-theme"></p>
               </div>
               <div class="text-container">
-                <a href="home.html"
-                  class="text-line context inline-block w-fit font-theme border-b border-black hover:opacity-75 transition"
-                  data-transition rel="nofollow noopener">
+                <a href="home.html" class="text-line context inline-block w-fit font-theme border-b border-black hover:opacity-75 transition" data-transition rel="nofollow noopener">
                   Explore All Work
                 </a>
               </div>
@@ -222,9 +236,9 @@
           </div>
         </div>
       </section>
+
     </div>
   </main>
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
   <script src="navbar\navbar.js"></script>
@@ -255,7 +269,7 @@
     window.addEventListener("DOMContentLoaded", () => {
       gsap.utils.toArray(".clipp-section").forEach((section, index) => {
         gsap.to(section, {
-          clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
+          clipPath: "inset(0% 0% 0% 0%)",
           duration: 0.7,
           ease: "power2.out",
         });
