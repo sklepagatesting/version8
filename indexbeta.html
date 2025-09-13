@@ -28,15 +28,13 @@
     body {
       transition: opacity 0.2s ease-in;
     }
-
-    /* --- Core Fix: Prevent Unwanted Scrollbars --- */
-    html, body {
-      height: 100%;
-      overflow: hidden; /* This is the key change */
-      margin: 0;
-      padding: 0;
+    
+    /* We only need to control overflow on the specific section */
+    .clipp-section {
+        /* The main fix: Subtract the nav height from the viewport height */
+        height: calc(100vh - 3rem); 
+        overflow: hidden; /* Hide overflow on this section only */
     }
-    /* ------------------------------------------- */
 
     /* Original mobile sizes */
     .media-container {
