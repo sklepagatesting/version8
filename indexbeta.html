@@ -29,27 +29,28 @@
   <link rel="stylesheet" href="sections\carousel.css">
 
   <style>
+/* Default sizes for larger screens */
 :root {
-  /* For desktop monitors: Keep original size */
   --carousel-image-height: clamp(150px, 25vw, 389px);
   --video-reel-width: clamp(160px, 40vw, 480px);
 }
 
-/* For laptops: Use a max size of 250px */
+/* For laptops (13-inch screens around 1366px width) */
 @media (max-width: 1366px) {
   :root {
-    --carousel-image-height: clamp(150px, 20vw, 250px);
-    --video-reel-width: clamp(160px, 25vw, 250px);
+    --carousel-image-height: clamp(150px, 20vw, 250px); /* Adjust smaller for laptop */
+    --video-reel-width: clamp(160px, 25vw, 250px);      /* Adjust smaller */
   }
 }
 
-/* For mobile devices: Use smaller sizes */
+/* For mobile devices (smaller than 767px width) */
 @media (max-width: 767px) {
   :root {
     --carousel-image-height: clamp(150px, 25vw, 250px);
     --video-reel-width: clamp(160px, 30vw, 250px);
   }
 }
+
 
     body.preload {
       visibility: hidden;
