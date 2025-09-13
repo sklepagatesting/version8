@@ -26,12 +26,12 @@
         opacity: 0;
  }
     body { transition: opacity 0.2s ease-in; }
-    .image-container {
-        height: 25vh; /* Each image container takes up 25% of the viewport height */
+    .media-container {
+        height: 25vh; /* Each media container takes up 25% of the viewport height */
         aspect-ratio: 16/9; /* Maintain a 16:9 aspect ratio */
     }
-    .image-container img {
-        height: 100%; /* The image fills its container vertically */
+    .media-container img, .media-container video {
+        height: 100%; /* The media element fills its container vertically */
     }
   </style>
 </head>
@@ -158,7 +158,7 @@
       <div id="scroller" class="flex w-max will-change-transform" >
 
         <a href="home.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative image-container">
+          <div class="overflow-hidden relative media-container">
             <picture>
               <source media="(max-width: 767px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
               <source media="(max-width: 1023px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
@@ -175,7 +175,7 @@
 
 
         <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative image-container">
+          <div class="overflow-hidden relative media-container">
             <img
               src="https://sklepagatesting.github.io/resources/Images/scoring.webp"
               alt="Image 1"
@@ -194,7 +194,7 @@
 
 
         <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative image-container">
+          <div class="overflow-hidden relative media-container">
             <img
               src="https://sklepagatesting.github.io/resources/Images/celebrating.webp"
               alt="Image 1" class="w-full h-full object-cover"/>
@@ -209,7 +209,7 @@
 
 
         <a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-          <div class="overflow-hidden relative image-container">
+          <div class="overflow-hidden relative media-container">
             <img
               src="https://sklepagatesting.github.io/resources/Images/planting.webp"
               alt="Image 1"
@@ -240,7 +240,7 @@
             loop
             muted
             playsinline
-            class="shadow-lg object-cover aspect-video w-[160px] sm:w-[320px] lg:w-[480px] cursor-pointer"
+            class="shadow-lg object-cover media-container cursor-pointer"
           ></video>
         </div>
       </div>
