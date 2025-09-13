@@ -13,576 +13,462 @@
   <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <!-- Load the font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <!-- FontFaceObserver Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+
+<link rel="prefetch" href="home.html" as="document">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="navbar\navbar.css">
+  <link rel="stylesheet" href="font\font.css">
+  <link rel="stylesheet" href="animations/global.css">
+  <link rel="stylesheet" href="pages\index.css">
+  <link rel="stylesheet" href="controlers\scroll.css">
+  <link rel="stylesheet" href="sections/hero.css">
+  <link rel="stylesheet" href="sections\carousel.css">
 
   <style>
-    /* Reset and base styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+body.preload {
+        visibility: hidden;
+        opacity: 0; }
+
+    body { 
+        transition: opacity 0.2s ease-in;
+        overflow-x: hidden;
+        max-width: 100vw;
     }
 
-    html, body {
-      overflow-x: hidden;
-      width: 100%;
-      max-width: 100vw;
+    html {
+        overflow-x: hidden;
+        max-width: 100vw;
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      transition: opacity 0.2s ease-in;
-    }
-
-    body.preload {
-      visibility: hidden;
-      opacity: 0;
-    }
-
-    /* Custom properties for consistent spacing */
-    :root {
-      --vh: 1vh;
-    }
-
-    /* Typography classes */
-    .font-theme {
-      font-family: 'Inter', sans-serif;
-    }
-
-    .subtext-title {
-      font-size: clamp(1.5rem, 4vw, 3rem);
-      font-weight: 600;
-      line-height: 1.1;
-    }
-
-    .context {
-      font-size: clamp(0.875rem, 2vw, 1rem);
-      font-weight: 400;
-      line-height: 1.4;
-    }
-
-    .subtext {
-      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-      font-weight: 400;
-      line-height: 1.5;
-    }
-
-    /* Navigation styles */
-    #navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      height: 3rem;
-      background: white;
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    #navbar .nav-content {
-      width: 100%;
-      height: 100%;
-      padding: 0 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    #navbar .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    #navbar .logo img {
-      height: 1.25rem;
-      width: auto;
-    }
-
-    #menu-toggle-btn {
-      padding: 0.25rem;
-      border-radius: 0.375rem;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    #menu-toggle-btn:hover {
-      background-color: #f3f4f6;
-    }
-
-    #menu-toggle-btn svg {
-      width: 1.75rem;
-      height: 1.75rem;
-    }
-
-    /* Sidebar styles */
-    #sidebar-multi-level-sidebar {
-      position: fixed;
-      top: 3rem;
-      left: 0;
-      width: 100vw;
-      height: calc(100vh - 3rem);
-      background: white;
-      z-index: 30;
-      display: none;
-      transition: all 0.3s ease;
-      overflow-y: auto;
-    }
-
-    #sidebar-multi-level-sidebar.show {
-      display: block;
-    }
-
-    .sidebar-menu-item {
-      margin-bottom: 1.5rem;
-    }
-
-    .sidebar-menu-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-    }
-
-    .sidebar-menu-body {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: all 0.5s ease-in-out;
-      margin-top: 0.75rem;
-      text-align: center;
-    }
-
-    .sidebar-menu-body.open {
-      max-height: 200px;
-      opacity: 1;
-    }
-
-    .submenu-link {
-      display: block;
-      padding: 0.25rem 0;
-      text-decoration: none;
-      color: inherit;
-      transition: opacity 0.2s;
-    }
-
-    .submenu-link:hover {
-      opacity: 0.7;
-    }
-
-    /* Main section styles */
+    /* Size adjustments only */
     .clipp-section {
-      height: 100vh;
-      height: calc(var(--vh) * 100);
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: white;
-      overflow: hidden;
+        height: calc(var(--vh) * 100);
+        width: 100vw;
     }
 
-    /* Carousel container */
-    .carousel-container {
-      width: 100%;
-      padding-top: clamp(6rem, 15vh, 10rem);
-      padding-bottom: 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .scroller-wrapper {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
+    .overflow-hidden {
+        width: calc(100vw - 2rem);
+        max-width: calc(100vw - 2rem);
+        margin: 0 1rem;
     }
 
     #scroller {
-      display: flex;
-      width: max-content;
-      transition: transform 0.3s ease;
-      will-change: transform;
+        width: max-content;
+        max-width: none;
     }
 
-    .carousel-item {
-      flex-shrink: 0;
-      margin-right: clamp(1rem, 3vw, 2rem);
-      position: relative;
+    .group {
+        width: clamp(200px, 25vw, 400px);
+        margin-right: clamp(1rem, 2vw, 2rem);
     }
 
-    .carousel-item:last-child {
-      margin-right: 2rem;
+    .h-\[150px\] {
+        height: clamp(120px, 20vh, 200px);
     }
 
-    .image-container {
-      position: relative;
-      overflow: hidden;
-      height: clamp(120px, 25vh, 300px);
-      aspect-ratio: 16/9;
-      border-radius: 0.5rem;
+    .sm\:h-\[250px\] {
+        height: clamp(150px, 25vh, 280px);
     }
 
-    .carousel-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
+    .lg\:h-\[389px\] {
+        height: clamp(200px, 30vh, 389px);
     }
 
-    .carousel-item:hover img {
-      transform: scale(1.05);
+    .hero .w-\[160px\] {
+        width: clamp(120px, 25vw, 160px);
     }
 
-    .image-caption {
-      width: 100%;
-      padding-top: 0.5rem;
-      overflow: hidden;
+    .hero .sm\:w-\[320px\] {
+        width: clamp(200px, 40vw, 320px);
     }
 
-    .image-caption p {
-      transition: transform 0.5s ease-in-out;
+    .hero .lg\:w-\[480px\] {
+        width: clamp(280px, 50vw, 480px);
     }
 
-    @media (min-width: 640px) {
-      .carousel-item:hover .image-caption p {
-        transform: translateY(0);
-      }
-      
-      .image-caption p {
-        transform: translateY(100%);
-      }
+    .pt-24 {
+        padding-top: clamp(4rem, 15vh, 6rem);
     }
 
-    /* Bottom content styles */
-    .bottom-content {
-      width: 100%;
-      padding: 0 clamp(1rem, 4vw, 2rem);
-      padding-bottom: clamp(2rem, 6vh, 3rem);
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 2rem;
+    .sm\:pt-32 {
+        padding-top: clamp(5rem, 18vh, 8rem);
     }
 
-    @media (min-width: 768px) {
-      .bottom-content {
-        flex-direction: row;
-        align-items: end;
-      }
+    .md\:pt-36 {
+        padding-top: clamp(6rem, 20vh, 9rem);
     }
 
-    .video-section {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: flex-end;
-      position: relative;
+    .lg\:pt-40 {
+        padding-top: clamp(7rem, 22vh, 10rem);
     }
 
-    .video-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+    .px-8 {
+        padding-left: clamp(1rem, 4vw, 2rem);
+        padding-right: clamp(1rem, 4vw, 2rem);
     }
 
-    .play-label {
-      margin-bottom: 1rem;
-      font-size: 0.875rem;
+    .pb-12 {
+        padding-bottom: clamp(2rem, 8vh, 3rem);
     }
 
-    .video-container {
-      width: 100%;
-      max-width: clamp(160px, 40vw, 480px);
+    .subtext-title {
+        font-size: clamp(1.5rem, 5vw, 3.5rem);
     }
 
-    #playReel {
-      width: 100%;
-      aspect-ratio: 16/9;
-      object-fit: cover;
-      cursor: pointer;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    .context {
+        font-size: clamp(0.875rem, 2.5vw, 1.125rem);
     }
 
-    .text-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+    .subtext {
+        font-size: clamp(0.75rem, 2vw, 1rem);
     }
 
-    .text-container {
-      overflow: hidden;
+    /* Ensure carousel doesn't cause overflow */
+    .overflow-hidden.relative.w-full {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
-    .text-line {
-      display: block;
+    .overflow-hidden.relative.w-full::-webkit-scrollbar {
+        display: none;
     }
 
-    .cta-link {
-      display: inline-block;
-      width: fit-content;
-      text-decoration: none;
-      color: inherit;
-      border-bottom: 1px solid currentColor;
-      transition: opacity 0.3s ease;
-      margin-top: 1rem;
-    }
-
-    .cta-link:hover {
-      opacity: 0.75;
-    }
-
-    /* Video overlay */
-    #videoOverlayBg {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(50px);
-      -webkit-backdrop-filter: blur(50px);
-      pointer-events: none;
-      opacity: 0;
-      z-index: 9998;
-    }
-
-    /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-      body, #navbar, #sidebar-multi-level-sidebar {
-        background: #242424;
-        color: white;
-      }
-      
-      #navbar {
-        border-bottom-color: #404040;
-      }
-      
-      #menu-toggle-btn:hover {
-        background-color: #404040;
-      }
-      
-      .clipp-section {
-        background: #242424;
-      }
-    }
-
-    /* Mobile optimizations */
+    /* Mobile responsive adjustments */
     @media (max-width: 640px) {
-      .carousel-container {
-        padding-top: 5rem;
-      }
-      
-      .carousel-item {
-        margin-right: 1rem;
-      }
-      
-      .bottom-content {
-        padding-bottom: 2rem;
-      }
+        .group {
+            width: clamp(160px, 40vw, 250px);
+            margin-right: 1rem;
+        }
+        
+        .px-8 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
     }
 
-    /* Ensure no horizontal scroll */
-    body, html {
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
-
-    * {
-      max-width: 100%;
+    @media (max-width: 480px) {
+        .group {
+            width: clamp(140px, 45vw, 220px);
+            margin-right: 0.75rem;
+        }
     }
   </style>
+
 </head>
 
 <body class="preload">
   <main id="swup">
-    <div class="main-content">
 
-      <!-- Navigation Bar -->
-      <nav id="navbar">
-        <div class="nav-content">
-          <a href="" class="logo">
-            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" />
-            <span class="font-theme font-medium">SK Lepaga</span>
-          </a>
-          <button id="menu-toggle-btn" type="button" aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+  <div class="main-content text-container">
+
+<!-- 🌐 NAVIGATION BAR (Smaller) -->
+<nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
+  <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
+    <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
+      <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
+        <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
+        <span class="font-theme font-medium">SK Lepaga</span>
+      </a>
+      <button id="menu-toggle-btn" type="button"
+        class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
+        aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+  <!-- 🧭 SIDEBAR -->
+  <aside id="sidebar-multi-level-sidebar"
+    class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
+    style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
+
+    <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
+      <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
+
+        <!-- Menu Item 1 -->
+        <div class="sidebar-menu-item flex flex-col items-center">
+          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+            <h2 class="subtext-title">CALENDAR</h2>
+            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-        </div>
-      </nav>
 
-      <!-- Sidebar -->
-      <aside id="sidebar-multi-level-sidebar" aria-label="Sidebar">
-        <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
-          <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
-
-            <!-- Menu Items -->
-            <div class="sidebar-menu-item flex flex-col items-center">
-              <button class="sidebar-menu-header focus:outline-none">
-                <h2 class="subtext-title">CALENDAR</h2>
-                <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="sidebar-menu-body">
-                <a href="#" class="subtext submenu-link">Happening Now</a>
-                <a href="#" class="subtext submenu-link">Upcoming Activities</a>
-              </div>
-            </div>
-
-            <div class="sidebar-menu-item flex flex-col items-center">
-              <button class="sidebar-menu-header focus:outline-none">
-                <h2 class="subtext-title">NEWS</h2>
-                <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="sidebar-menu-body">
-                <a href="#" class="subtext submenu-link">Featured News</a>
-                <a href="#" class="subtext submenu-link">All Articles</a>
-              </div>
-            </div>
-
-            <div class="sidebar-menu-item flex flex-col items-center">
-              <button class="sidebar-menu-header focus:outline-none">
-                <h2 class="subtext-title">ABOUT</h2>
-                <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="sidebar-menu-body">
-                <a href="#" class="subtext submenu-link">What is SK</a>
-                <a href="#" class="subtext submenu-link">SK Officials</a>
-                <a href="#" class="subtext submenu-link">About Developers</a>
-              </div>
-            </div>
-
-            <div class="sidebar-menu-item flex flex-col items-center">
-              <button class="sidebar-menu-header focus:outline-none">
-                <h2 class="subtext-title">CONTACT</h2>
-                <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="sidebar-menu-body">
-                <a href="authentication.html" class="subtext submenu-link">Real-time Chat</a>
-                <a href="contactbeta.html" class="subtext submenu-link">Send a message</a>
-                <a href="#" class="subtext submenu-link">Schedule a meetup</a>
-              </div>
-            </div>
-
-            <div class="sidebar-menu-item flex flex-col items-center">
-              <button class="sidebar-menu-header focus:outline-none">
-                <h2 class="subtext-title">SITE MAP</h2>
-                <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="sidebar-menu-body">
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Section -->
-      <section class="clipp-section">
-        <div class="carousel-container">
-          <div class="scroller-wrapper">
-            <div id="scroller">
-
-              <a href="home.html" class="carousel-item" data-transition rel="nofollow noopener">
-                <div class="image-container">
-                  <img src="https://sklepagatesting.github.io/resources/Images/feeding.webp" alt="Outreach program" />
-                </div>
-                <div class="image-caption">
-                  <p class="context font-theme">Outreach program</p>
-                </div>
-              </a>
-
-              <a href="home2.html" class="carousel-item" data-transition rel="nofollow noopener">
-                <div class="image-container">
-                  <img src="https://sklepagatesting.github.io/resources/Images/scoring.webp" alt="Scoring board" />
-                </div>
-                <div class="image-caption">
-                  <p class="context font-theme">Scoring board</p>
-                </div>
-              </a>
-
-              <a href="home2.html" class="carousel-item" data-transition rel="nofollow noopener">
-                <div class="image-container">
-                  <img src="https://sklepagatesting.github.io/resources/Images/celebrating.webp" alt="Linggo Ng Kabataan" />
-                </div>
-                <div class="image-caption">
-                  <p class="context font-theme">Linggo Ng Kabataan</p>
-                </div>
-              </a>
-
-              <a href="home2.html" class="carousel-item" data-transition rel="nofollow noopener">
-                <div class="image-container">
-                  <img src="https://sklepagatesting.github.io/resources/Images/planting.webp" alt="Tree Planting Activity" />
-                </div>
-                <div class="image-caption">
-                  <p class="context font-theme">Tree Planting Activity</p>
-                </div>
-              </a>
-
-            </div>
+          <div
+            class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+            <a href="#" class="subtext submenu-link inline-block">Happening Now</a>
+            <a href="#" class="subtext submenu-link inline-block">Upcoming Activities</a>
+            <br>
           </div>
         </div>
 
-        <div class="bottom-content">
-          
-          <div class="video-section">
-            <div class="video-content">
-              <p class="play-label font-theme">Play Reel ▶</p>
-              <div class="video-container">
-                <video id="playReel" src="https://sklepagatesting.github.io/resources/Images/reel.mp4" autoplay loop muted playsinline></video>
-              </div>
-            </div>
-          </div>
+        <!-- Menu Item 2 -->
+        <div class="sidebar-menu-item flex flex-col items-center">
+          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+            <h2 class="font-theme subtext-title">NEWS</h2>
+            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
-          <div class="text-section">
-            <div class="text-container">
-              <h2 class="text-line context font-theme mb-2"></h2>
-            </div>
-            <div class="text-container">
-              <h1 class="text-line subtext-title font-theme">BARANGAY LEPAGA</h1>
-            </div>
-            <div class="text-container">
-              <h1 class="text-line subtext-title font-theme">SK INITIATIVES</h1>
-            </div>
-            <div class="text-container mb-4">
-              <h1 class="text-line subtext-title font-theme">AND PROJECTS</h1>
-            </div>
-            <div class="text-container mb-4">
-              <p class="text-line subtext font-theme"></p>
-            </div>
-            <div class="text-container">
-              <a href="home.html" class="cta-link context font-theme" data-transition rel="nofollow noopener">
-                Explore All Work
-              </a>
-            </div>
+          <div
+            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+            <a href="#" class="subtext submenu-link block text-[#FFFFF]">Featured News</a>
+            <a href="#" class="subtext submenu-link block text-[#FFFFF]">All Articles</a>
+            <br>
           </div>
-          
         </div>
-      </section>
 
+        <!-- Menu Item 3 -->
+        <div class="sidebar-menu-item flex flex-col items-center">
+          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+            <h2 class="subtext-title">ABOUT</h2>
+            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div
+            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+            <a href="#" class="subtext submenu-link block text-[#FFFFF]">What is SK</a>
+            <a href="#" class="subtext submenu-link block text-[#FFFFF]">SK Officials</a>
+            <a href="#" class="subtext submenu-link block text-[#FFFFF]">About Developers</a>
+            <br>
+          </div>
+        </div>
+
+        <!-- Menu Item 4 -->
+        <div class="sidebar-menu-item flex flex-col items-center">
+          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+            <h2 class="subtext-title">CONTACT</h2>
+            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div
+            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+            <a href="authentication.html" class="subtext submenu-link block text-[#FFFFF]">Real-time Chat</a>
+            <a href="contactbeta.html" class="subtext submenu-link block text-[#FFFFF]">Send a message</a>
+            <a href="#" class="subtext submenu-link block text-[#FFFFF]">Schedule a meetup</a>
+            <br>
+          </div>
+        </div>
+
+        <!-- Menu Item 5 -->
+        <div class="sidebar-menu-item flex flex-col items-center">
+          <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
+            <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
+            <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div
+            class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
+            <br>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+<section class="clipp-section h-[calc(var(--vh)_*_100)] w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424]">
+<div class="w-full pt-24 sm:pt-32 md:pt-36 lg:pt-40 pb-6 px-0 z-10">
+      
+<div class="overflow-hidden relative w-full">
+<div id="scroller" class="flex w-max will-change-transform" >
+
+<a href="home.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+  <div class="overflow-hidden relative h-[150px] aspect-[16/9] sm:h-[250px] sm:aspect-[16/9] lg:h-[389px] lg:aspect-[16/9]">
+    <picture>
+      <source media="(max-width: 767px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
+      <source media="(max-width: 1023px)" srcset="https://sklepagatesting.github.io/resources/Images/feeding.webp" />
+      <img src="https://sklepagatesting.github.io/resources/Images/feeding.webp" alt="Image 1" class="w-full h-full object-cover" />
+    </picture>
+  </div>
+  <div class="w-full pt-2 overflow-hidden">
+    <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+     Outreach program
+    </p>
+  </div>
+</a>
+
+<a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+  <div class="overflow-hidden relative h-[150px] aspect-[16/9] sm:h-[250px] sm:aspect-[16/9] lg:h-[389px] lg:aspect-[16/9]">
+    <img
+      src="https://sklepagatesting.github.io/resources/Images/scoring.webp"
+      alt="Image 1"
+      class="w-full h-full object-cover"
+    />
+  </div>
+  <div class="w-full pt-2 overflow-hidden">
+    <p class="context font-theme 
+      sm:translate-y-full sm:group-hover:translate-y-0 
+      transition-transform duration-500 ease-in-out">
+      Scoring board
+    </p>
+  </div>
+</a>
+
+<a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+  <div class="overflow-hidden relative h-[150px] aspect-[16/9] sm:h-[250px] sm:aspect-[16/9] lg:h-[389px] lg:aspect-[16/9]">
+    <img
+      src="https://sklepagatesting.github.io/resources/Images/celebrating.webp"
+      alt="Image 1" class="w-full h-full object-cover"/>
+  </div>
+  <div class="w-full pt-2 overflow-hidden">
+    <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+      Linggo Ng Kabataan
+    </p>
+  </div>
+</a>
+
+<a href="home2.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+  <div class="overflow-hidden relative h-[150px] aspect-[16/9] sm:h-[250px] sm:aspect-[16/9] lg:h-[389px] lg:aspect-[16/9]">
+    <img
+      src="https://sklepagatesting.github.io/resources/Images/planting.webp"
+      alt="Image 1"
+      class="w-full h-full object-cover"
+    />
+  </div>
+  <div class="w-full pt-2 overflow-hidden">
+    <p class="context font-theme 
+      sm:translate-y-full sm:group-hover:translate-y-0 
+      transition-transform duration-500 ease-in-out">
+      Tree Planting Activity
+    </p>
+  </div>
+</a>
+   
+    </div>
+  </div>
     </div>
 
-    <div id="videoOverlayBg"></div>
+  <div class="w-full px-8 pb-12 gap-8 flex flex-col-reverse md:flex-row">
+    
+<div class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative">
+  <div class="flex flex-col justify-end">
+    <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
+    <div class="w-full max-w-sm">
+      <video
+        id="playReel"
+        src="https://sklepagatesting.github.io/resources/Images/reel.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        class="shadow-lg object-cover aspect-video w-[160px] sm:w-[320px] lg:w-[480px] cursor-pointer"
+      ></video>
+    </div>
+  </div>
+</div>
 
-  </main>
+<div id="videoOverlayBg" class="video-overlay-bg"></div>
 
-  <script>
-    // Initialize viewport height
+<style>
+#videoOverlayBg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9998;
+}
+</style>
+
+        <div class="w-full md:w-5/8 flex flex-col justify-end sm:text-left md:text-left">
+          <div>
+            <div class="text-container">
+            <h2 class="text-line context font-theme mb-2"></h2>
+            </div>
+            <div class="text-container">
+            <h1 class="text-line subtext-title font-theme">BRANGAY LEPAGA</h1>
+            </div>
+            <div class="text-container">
+            <h1 class="text-line subtext-title font-theme">SK INITIATIVES</h1>
+            </div>
+                        <div class="text-container mb-4">
+            <h1 class="text-line subtext-title font-theme">AND PROJETS</h1>
+            </div>
+            <div class="text-container mb-4">
+            <p class="text-line subtext font-theme"></p>
+            </div>
+            <div class="text-container">
+            <a href="home.html" class="text-line context inline-block w-fit font-theme border-b border-black hover:opacity-75 transition" data-transition rel="nofollow noopener">
+              Explore All Work
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+</section>
+
+  </div>
+
+</main>
+
+  <!-- Script to wait for the font to load before showing the page -->
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
+
+  <script src="navbar\navbar.js"></script>
+  <script src="pages/index.js"></script>
+  <script src="animations\globalindex.js"></script>
+    <script src="font\font.js"></script>
+    <script src="loader\loaders.js"></script>
+        <script src="loader\others.js"></script>
+
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+
+<script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
+
+<script>
+  // On DOM load
+  window.addEventListener("DOMContentLoaded", () => {
+    gsap.utils.toArray(".clipp-section").forEach((section, index) => {
+      gsap.to(section, {
+        clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
+        duration: 0.7,
+        ease: "power2.out",
+      });
+    });
+
+    // Set viewport height for mobile
     function setVH() {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -590,149 +476,9 @@
     
     setVH();
     window.addEventListener('resize', setVH);
-
-    // Font loading and preload removal
-    document.addEventListener('DOMContentLoaded', function() {
-      // Remove preload class after a short delay
-      setTimeout(() => {
-        document.body.classList.remove('preload');
-      }, 100);
-
-      // Menu toggle functionality
-      const menuToggle = document.getElementById('menu-toggle-btn');
-      const sidebar = document.getElementById('sidebar-multi-level-sidebar');
-      const menuIconPath = document.getElementById('menu-icon-path');
-
-      menuToggle.addEventListener('click', function() {
-        const isOpen = sidebar.classList.contains('show');
-        
-        if (isOpen) {
-          sidebar.classList.remove('show');
-          menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-          menuToggle.setAttribute('aria-expanded', 'false');
-        } else {
-          sidebar.classList.add('show');
-          menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-          menuToggle.setAttribute('aria-expanded', 'true');
-        }
-      });
-
-      // Sidebar menu functionality
-      const menuHeaders = document.querySelectorAll('.sidebar-menu-header');
-      menuHeaders.forEach(header => {
-        header.addEventListener('click', function() {
-          const menuBody = this.parentElement.querySelector('.sidebar-menu-body');
-          const icon = this.querySelector('svg');
-          const isOpen = menuBody.classList.contains('open');
-
-          // Close all other menus
-          document.querySelectorAll('.sidebar-menu-body').forEach(body => {
-            if (body !== menuBody) {
-              body.classList.remove('open');
-            }
-          });
-          document.querySelectorAll('.sidebar-menu-header svg').forEach(svg => {
-            if (svg !== icon) {
-              svg.style.transform = 'rotate(0deg)';
-            }
-          });
-
-          // Toggle current menu
-          if (isOpen) {
-            menuBody.classList.remove('open');
-            icon.style.transform = 'rotate(0deg)';
-          } else {
-            menuBody.classList.add('open');
-            icon.style.transform = 'rotate(180deg)';
-          }
-        });
-      });
-
-      // Horizontal scroll for carousel
-      const scroller = document.getElementById('scroller');
-      const scrollerWrapper = scroller.parentElement;
-      
-      let isDown = false;
-      let startX;
-      let scrollLeft;
-
-      // Mouse events for desktop
-      scrollerWrapper.addEventListener('mousedown', (e) => {
-        isDown = true;
-        scrollerWrapper.style.cursor = 'grabbing';
-        startX = e.pageX - scrollerWrapper.offsetLeft;
-        scrollLeft = scrollerWrapper.scrollLeft;
-      });
-
-      scrollerWrapper.addEventListener('mouseleave', () => {
-        isDown = false;
-        scrollerWrapper.style.cursor = 'grab';
-      });
-
-      scrollerWrapper.addEventListener('mouseup', () => {
-        isDown = false;
-        scrollerWrapper.style.cursor = 'grab';
-      });
-
-      scrollerWrapper.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - scrollerWrapper.offsetLeft;
-        const walk = (x - startX) * 2;
-        const scrollAmount = scrollLeft - walk;
-        scroller.style.transform = `translateX(-${Math.max(0, scrollAmount)}px)`;
-      });
-
-      // Touch events for mobile
-      let touchStartX = 0;
-      let currentTranslateX = 0;
-
-      scrollerWrapper.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-      }, { passive: true });
-
-      scrollerWrapper.addEventListener('touchmove', (e) => {
-        if (!touchStartX) return;
-        const touchCurrentX = e.touches[0].clientX;
-        const diff = touchStartX - touchCurrentX;
-        const newTranslateX = Math.max(0, Math.min(currentTranslateX + diff, scroller.scrollWidth - scrollerWrapper.clientWidth));
-        scroller.style.transform = `translateX(-${newTranslateX}px)`;
-      }, { passive: true });
-
-      scrollerWrapper.addEventListener('touchend', () => {
-        const currentTransform = scroller.style.transform;
-        const match = currentTransform.match(/translateX\((-?\d+(?:\.\d+)?)px\)/);
-        if (match) {
-          currentTranslateX = Math.abs(parseFloat(match[1]));
-        }
-        touchStartX = 0;
-      }, { passive: true });
-
-      // Auto-scroll animation (optional)
-      let autoScrollDirection = 1;
-      let autoScrollSpeed = 0.5;
-      
-      function autoScroll() {
-        if (!isDown && touchStartX === 0) {
-          currentTranslateX += autoScrollSpeed * autoScrollDirection;
-          
-          const maxScroll = scroller.scrollWidth - scrollerWrapper.clientWidth;
-          
-          if (currentTranslateX >= maxScroll || currentTranslateX <= 0) {
-            autoScrollDirection *= -1;
-          }
-          
-          currentTranslateX = Math.max(0, Math.min(currentTranslateX, maxScroll));
-          scroller.style.transform = `translateX(-${currentTranslateX}px)`;
-        }
-        
-        requestAnimationFrame(autoScroll);
-      }
-      
-      // Uncomment to enable auto-scroll
-      // autoScroll();
-    });
-  </script>
+  });
+</script>
 
 </body>
+
 </html>
