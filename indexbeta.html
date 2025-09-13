@@ -34,6 +34,7 @@
       :root {
         --carousel-image-height: clamp(150px, 25vw, 389px);
         --video-reel-width: clamp(160px, 40vw, 480px);
+        --nav-height: 3rem;
       }
 
       /* For laptops (13-inch screens around 1366px width) */
@@ -59,7 +60,19 @@
 
       body {
         transition: opacity 0.2s ease-in;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
       }
+
+      /* Base layout for all devices */
+      .main-content {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
       /* Styles using the new clamp variables */
       .carousel-image {
         height: var(--carousel-image-height);
@@ -69,29 +82,60 @@
       .video-reel {
         width: var(--video-reel-width);
       }
-      
-      /* Corrected CSS to control positioning ONLY on desktop/laptop */
+
+      /* Mobile-first approach - normal flow */
+      .images-container {
+        padding-top: var(--nav-height);
+        min-height: calc(100vh - var(--nav-height));
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .video-titles-container {
+        width: 100%;
+        padding: 2rem 0;
+      }
+
+      /* Desktop/Laptop specific positioning */
       @media (min-width: 768px) {
-        .images-container {
+        body {
+          height: 100vh;
+          overflow: hidden;
+        }
+
+        .main-content {
+          height: 100vh;
           position: relative;
+        }
+
+        .images-container {
+          position: fixed;
+          top: var(--nav-height);
+          left: 0;
+          right: 0;
+          bottom: 0;
           z-index: 10;
+          padding-top: 2rem;
+          min-height: calc(100vh - var(--nav-height));
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
         }
 
         .video-titles-container {
           position: fixed;
           bottom: 0;
           left: 0;
-          width: 100%;
+          right: 0;
           z-index: 20;
+          background: transparent;
+          padding: 2rem 0;
         }
 
-        .clipp-section {
-          height: auto;
-        }
-
-        body {
-          height: auto;
-          overflow-y: hidden;
+        /* Ensure proper spacing from nav */
+        .images-container .overflow-hidden {
+          margin-top: 1rem;
         }
       }
 
@@ -99,6 +143,23 @@
       #navbar,
       #sidebar-multi-level-sidebar {
         z-index: 30 !important;
+      }
+
+      /* Prevent any potential overflow */
+      * {
+        box-sizing: border-box;
+      }
+
+      /* Video overlay styles */
+      #videoOverlayBg {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        pointer-events: none;
+        opacity: 0;
+        z-index: 9998;
       }
     </style>
   </head>
@@ -324,9 +385,9 @@
         </aside>
 
         <section
-          class="clipp-section images-container h-[calc(var(--vh)_*_100)] w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424]"
+          class="clipp-section images-container w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424]"
         >
-          <div class="w-full pb-6 px-0 z-10 md:pt-28 lg:pt-32">
+          <div class="w-full pb-6 px-0 z-10">
             <div class="overflow-hidden relative w-full">
               <div id="scroller" class="flex w-max will-change-transform">
                 <a
@@ -450,19 +511,6 @@
               </div>
             </div>
             <div id="videoOverlayBg" class="video-overlay-bg"></div>
-
-            <style>
-              #videoOverlayBg {
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.3);
-                backdrop-filter: blur(50px);
-                -webkit-backdrop-filter: blur(50px);
-                pointer-events: none;
-                opacity: 0;
-                z-index: 9998;
-              }
-            </style>
 
             <div
               class="w-full md:w-5/8 flex flex-col justify-end sm:text-left md:text-left"
