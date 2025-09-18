@@ -30,35 +30,8 @@
     <link rel="stylesheet" href="sections/hero.css" />
     <link rel="stylesheet" href="sections\carousel.css" />
     <style>
-      /* Default sizes for larger screens */
       :root {
-        --carousel-image-height: clamp(150px, 25vw, 389px);
-        --video-reel-width: clamp(160px, 40vw, 480px);
         --nav-height: 3rem;
-      }
-
-      /* For laptops (13-inch screens around 1366px width) */
-      @media (max-width: 1366px) {
-        :root {
-          --carousel-image-height: clamp(
-            150px,
-            20vw,
-            150px
-          ); /* Set max height to 150px */
-          --video-reel-width: clamp(
-            160px,
-            25vw,
-            250px
-          ); /* Adjust smaller */
-        }
-      }
-
-      /* For mobile devices (smaller than 767px width) */
-      @media (max-width: 767px) {
-        :root {
-          --carousel-image-height: clamp(150px, 25vw, 250px);
-          --video-reel-width: clamp(160px, 30vw, 250px);
-        }
       }
 
       body.preload {
@@ -70,7 +43,8 @@
         transition: opacity 0.2s ease-in;
         margin: 0;
         padding: 0;
-        overflow-x: hidden; /* Fix: Hides horizontal overflow */
+        overflow-x: hidden;
+        min-height: 100vh;
       }
 
       /* Base layout for all devices */
@@ -79,116 +53,33 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        overflow-x: hidden; /* Fix: Hides horizontal overflow */
+        overflow-x: hidden;
       }
 
-      /* Styles using the new clamp variables */
-      .carousel-image {
-        height: var(--carousel-image-height);
-        aspect-ratio: 16 / 9;
-      }
-
-      .video-reel {
-        width: var(--video-reel-width);
-      }
-
-      /* Mobile-first approach - normal flow */
       .images-container {
         padding-top: calc(var(--nav-height) + 1rem);
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow: hidden; /* Fix: Ensures the container clips its content */
+        padding-bottom: 2rem;
+        z-index: 10;
+        width: 100%;
       }
 
       .video-titles-container {
         width: 100%;
-        padding: 2rem 0;
+        z-index: 20;
+        background: transparent;
+        padding-bottom: 4rem;
+        margin-top: auto; /* Pushes the container to the bottom */
       }
 
-      /* Tablet specific positioning */
-      @media (min-width: 640px) and (max-width: 767px) {
-        body {
-          height: 100vh;
-          overflow: hidden;
-        }
-
-        .main-content {
-          height: 100vh;
-          position: relative;
-        }
-
-        .images-container {
-          position: fixed;
-          top: var(--nav-height);
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 10;
-          padding-top: 2rem;
-          min-height: calc(100vh - var(--nav-height));
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-        }
-
-        .video-titles-container {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          z-index: 20;
-          background: transparent;
-          padding: 2rem 0;
-        }
-
-        /* Ensure proper spacing from nav */
-        .images-container .overflow-hidden {
-          margin-top: 1rem;
-        }
+      .carousel-image {
+        /* Fluid scaling using clamp() for image height */
+        height: clamp(150px, 25vw, 389px);
+        aspect-ratio: 16 / 9;
       }
 
-      /* Desktop/Laptop specific positioning */
-      @media (min-width: 768px) {
-        body {
-          height: 100vh;
-          overflow: hidden;
-        }
-
-        .main-content {
-          height: 100vh;
-          position: relative;
-        }
-
-        .images-container {
-          position: fixed;
-          top: var(--nav-height);
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 10;
-          padding-top: 2rem;
-          min-height: calc(100vh - var(--nav-height));
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-        }
-
-        .video-titles-container {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          z-index: 20;
-          background: transparent;
-          padding: 2rem 0;
-        }
-
-        /* Ensure proper spacing from nav */
-        .images-container .overflow-hidden {
-          margin-top: 1rem;
-        }
+      .video-reel {
+        /* Fluid scaling for video reel width */
+        width: clamp(160px, 40vw, 480px);
       }
 
       /* Ensure nav and aside are always on top */
@@ -200,18 +91,6 @@
       /* Prevent any potential overflow */
       * {
         box-sizing: border-box;
-      }
-
-      /* Video overlay styles */
-      #videoOverlayBg {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(50px);
-        -webkit-backdrop-filter: blur(50px);
-        pointer-events: none;
-        opacity: 0;
-        z-index: 9998;
       }
     </style>
   </head>
