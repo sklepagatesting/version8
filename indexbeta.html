@@ -68,36 +68,23 @@
         z-index: 10;
         width: 100%;
         position: relative; /* Needed for stacking context */
-        display: flex; /* Flexbox for centering */
-        justify-content: center; /* Center horizontally */
-        align-items: center; /* Center vertically if needed */
-        overflow: hidden;
       }
 
-      .carousel-scroller {
-        display: flex;
-        /* No w-max here, let flex handle sizing */
-        padding: 0 1rem; /* Add padding for spacing */
+      .video-titles-container {
+        z-index: 20; /* Places this section on top */
+        background: transparent;
+        padding: 2rem;
+        width: 100%;
+        /* New positioning to anchor it to the bottom */
+        position: absolute;
+        bottom: 0;
+        left: 0;
       }
 
       .carousel-image {
         /* Fluid scaling using clamp() for image height */
         height: clamp(150px, 25vh, 389px);
         aspect-ratio: 16 / 9;
-        flex-shrink: 1; /* Allow images to shrink */
-        width: auto; /* Allow width to scale with aspect ratio */
-      }
-
-      .video-titles-container {
-        z-index: 20; /* Places this section on top */
-        background: transparent;
-        width: 100%;
-        /* New positioning to anchor it to the bottom */
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding-top: 2rem;
-        padding-bottom: 3rem;
       }
 
       .video-reel {
@@ -341,12 +328,12 @@
         <section
           class="clipp-section images-container w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424]"
         >
-          <div class="w-full pb-6 px-0 flex justify-center">
+          <div class="w-full pb-6 px-0">
             <div class="overflow-hidden relative w-full">
-              <div id="scroller" class="flex will-change-transform carousel-scroller">
+              <div id="scroller" class="flex w-max will-change-transform">
                 <a
                   href="home.html"
-                  class="group relative flex-shrink mr-8"
+                  class="group relative flex-shrink-0 mr-8"
                   data-transition
                   rel="nofollow noopener"
                 >
@@ -378,7 +365,7 @@
 
                 <a
                   href="home2.html"
-                  class="group relative flex-shrink mr-8"
+                  class="group relative flex-shrink-0 mr-8"
                   data-transition
                   rel="nofollow noopener"
                 >
@@ -400,7 +387,7 @@
 
                 <a
                   href="home2.html"
-                  class="group relative flex-shrink mr-8"
+                  class="group relative flex-shrink-0 mr-8"
                   data-transition
                   rel="nofollow noopener"
                 >
@@ -422,7 +409,7 @@
 
                 <a
                   href="home2.html"
-                  class="group relative flex-shrink mr-8"
+                  class="group relative flex-shrink-0 mr-8"
                   data-transition
                   rel="nofollow noopener"
                 >
