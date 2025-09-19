@@ -80,12 +80,16 @@
     left: 0;
   }
 
-  .carousel-image {
-    /* Fluid scaling using clamp() for image width and height */
-    width: clamp(150px, 30vw, 350px);
-    height: clamp(150px, 25vh, 350px);
-    aspect-ratio: 16 / 9;
-  }
+.carousel-image {
+  /* Fluid scaling for image width */
+  width: clamp(150px, 40vw, 350px);
+  /* The height will be automatically calculated to maintain a 16:9 ratio */
+  aspect-ratio: 16 / 9;
+  /* Optional: Set max-width for better control on very large screens */
+  max-width: 350px;
+  /* Optional: Set max-height if you want to cap it */
+  max-height: 350px;
+}
 
   .video-reel {
     /* Fluid scaling for video reel width */
