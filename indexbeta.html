@@ -29,80 +29,80 @@
     <link rel="stylesheet" href="controlers\scroll.css" />
     <link rel="stylesheet" href="sections/hero.css" />
     <link rel="stylesheet" href="sections\carousel.css" />
-    <style>
-      :root {
-        --nav-height: 3rem;
-      }
+   <style>
+  :root {
+    --nav-height: 3rem;
+  }
 
-      html,
-      body {
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
+  html,
+  body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
 
-      body.preload {
-        visibility: hidden;
-        opacity: 0;
-      }
+  body.preload {
+    visibility: hidden;
+    opacity: 0;
+  }
 
-      body {
-        transition: opacity 0.2s ease-in;
-        overflow-x: hidden;
-      }
+  body {
+    transition: opacity 0.2s ease-in;
+    overflow-x: hidden;
+  }
+  /* Main content container fills the entire viewport. */
+  .main-content {
+    position: relative; /* important for absolute positioning of its children */
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-      /* Main content container fills the entire viewport. */
-      .main-content {
-        position: relative; /* important for absolute positioning of its children */
-        height: 100vh;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
+  .images-container {
+    flex-grow: 1; /* This section takes up all remaining space */
+    padding-top: calc(var(--nav-height) + 1rem);
+    z-index: 10;
+    width: 100%;
+    position: relative; /* Needed for stacking context */
+  }
 
-      .images-container {
-        flex-grow: 1; /* This section takes up all remaining space */
-        padding-top: calc(var(--nav-height) + 1rem);
-        z-index: 10;
-        width: 100%;
-        position: relative; /* Needed for stacking context */
-      }
+  .video-titles-container {
+    z-index: 20; /* Places this section on top */
+    background: transparent;
+    padding: 2rem;
+    width: 100%;
+    /* New positioning to anchor it to the bottom */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
 
-      .video-titles-container {
-        z-index: 20; /* Places this section on top */
-        background: transparent;
-        padding: 2rem;
-        width: 100%;
-        /* New positioning to anchor it to the bottom */
-        position: absolute;
-        bottom: 0;
-        left: 0;
-      }
+  .carousel-image {
+    /* Fluid scaling using clamp() for image width and height */
+    width: clamp(150px, 30vw, 350px);
+    height: clamp(150px, 25vh, 350px);
+    aspect-ratio: 16 / 9;
+  }
 
-      .carousel-image {
-        /* Fluid scaling using clamp() for image height */
-        height: clamp(150px, 25vh, 389px);
-        aspect-ratio: 16 / 9;
-      }
+  .video-reel {
+    /* Fluid scaling for video reel width */
+    width: clamp(160px, 40vw, 480px);
+  }
 
-      .video-reel {
-        /* Fluid scaling for video reel width */
-        width: clamp(160px, 40vw, 480px);
-      }
+  /* Ensure nav and aside are always on top */
+  #navbar,
+  #sidebar-multi-level-sidebar {
+    z-index: 30 !important;
+  }
 
-      /* Ensure nav and aside are always on top */
-      #navbar,
-      #sidebar-multi-level-sidebar {
-        z-index: 30 !important;
-      }
-
-      /* Prevent any potential overflow */
-      * {
-        box-sizing: border-box;
-      }
-    </style>
+  /* Prevent any potential overflow */
+  * {
+    box-sizing: border-box;
+  }
+</style>
   </head>
   <body class="preload">
     <main id="swup">
