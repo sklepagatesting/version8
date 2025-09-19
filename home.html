@@ -182,15 +182,16 @@ body.preload {
   <div class="flex flex-col justify-end">
 
     <!-- Fixed 16:9 Responsive Sizes -->
-    <div class="image-container relative overflow-hidden aspect-[16/9] 
-                w-[200px] sm:w-[400px] lg:w-[701px] border-1 border-black" data-transition>
-      <img id="image-current"
-           class="absolute inset-0 w-full h-full object-cover shadow-lg will-change-transform z-10 border-none"
-           data-transition />
-      <img id="image-next"
-           class="absolute inset-0 w-full h-full object-cover shadow-lg opacity-0 pointer-events-none will-change-transform z-0 border-none"
-           data-transition />
-    </div>
+<div class="image-container relative overflow-hidden aspect-[16/9] border-1 border-black"
+  style="width: clamp(150px, 30vw, 350px); height: clamp(150px, 20vh, 350px);"
+  data-transition>
+  <img id="image-current"
+    class="absolute inset-0 w-full h-full object-cover shadow-lg will-change-transform z-10 border-none"
+    data-transition />
+  <img id="image-next"
+    class="absolute inset-0 w-full h-full object-cover shadow-lg opacity-0 pointer-events-none will-change-transform z-0 border-none"
+    data-transition />
+</div>
 
   </div>
 </div>
@@ -350,4 +351,5 @@ body.preload {
 </body>
 
 </html>
+
 
