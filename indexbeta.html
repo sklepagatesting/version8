@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -63,7 +65,7 @@
 
   .images-container {
     flex-grow: 1; /* This section takes up all remaining space */
-    padding-top: calc(var(--nav-height) + 4rem);
+    padding-top: calc(var(--nav-height) + 6rem);
     z-index: 10;
     width: 100%;
     position: relative; /* Needed for stacking context */
@@ -81,14 +83,15 @@
   }
 
 .carousel-image {
-  /* Fluid scaling for image width */
-  width: clamp(150px, 40vw, 350px);
-  /* The height will be automatically calculated to maintain a 16:9 ratio */
+  width: clamp(200px, 40vw, 400px);
   aspect-ratio: 16 / 9;
-  /* Optional: Set max-width for better control on very large screens */
-  max-width: 350px;
-  /* Optional: Set max-height if you want to cap it */
-  max-height: 350px;
+  max-width: 500px;
+
+  /* instead of max-height (which breaks aspect-ratio), 
+     use height:auto so it scales naturally */
+  height: auto;
+  max-height: 350px;   /* acts as a cap, but keeps aspect ratio */
+  object-fit: cover;   /* optional: keeps cropping instead of squishing */
 }
 
   .video-reel {
@@ -438,7 +441,7 @@
         </section>
 
         <section class="video-titles-container w-full bg-white dark:bg-[#242424]">
-          <div class="w-full px-8 pb-12 gap-8 flex flex-col-reverse md:flex-row">
+          <div class="w-full flex flex-col-reverse md:flex-row">
             <div class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative">
               <div class="flex flex-col justify-end">
                 <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
