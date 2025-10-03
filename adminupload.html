@@ -11,140 +11,140 @@
   </style>
 </head>
 <body>
-  <div class="min-h-screen flex flex-col items-center justify-center p-4">
-    <div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
-      <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Publish New Content 📝</h1>
-      <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium">Checking Admin Status...</p>
+<div class="min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Publish New Content 📝</h1>
+    <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium">Checking Admin Status...</p>
 
-      <form id="content-form" class="space-y-6 hidden">
-        <div>
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-          <input type="text" id="title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
-        </div>
+    <form id="content-form" class="space-y-6 hidden">
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <input type="text" id="title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+      </div>
 
-        <div>
-          <label for="context" class="block text-sm font-medium text-gray-700 mb-1">Context (Main Text)</label>
-          <textarea id="context" rows="5" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150"></textarea>
-        </div>
+      <div>
+        <label for="context" class="block text-sm font-medium text-gray-700 mb-1">Context (Main Text)</label>
+        <textarea id="context" rows="5" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150"></textarea>
+      </div>
 
-        <div>
-          <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-          <input type="url" id="image" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150" placeholder="https://example.com/image.jpg">
-        </div>
-        
-        <div>
-          <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
-          <input type="text" id="author" readonly required class="w-full p-3 border border-gray-200 bg-gray-50 rounded-lg text-gray-600">
-        </div>
+      <div>
+        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+        <input type="url" id="image" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150" placeholder="https://example.com/image.jpg">
+      </div>
+      
+      <div>
+        <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+        <input type="text" id="author" readonly required class="w-full p-3 border border-gray-200 bg-gray-50 rounded-lg text-gray-600">
+      </div>
 
-        <button type="submit" id="submit-btn" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 disabled:opacity-50">
-          Publish Content
-        </button>
-      </form>
-    </div>
+      <button type="submit" id="submit-btn" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 disabled:opacity-50">
+        Publish Content
+      </button>
+    </form>
   </div>
+</div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, addDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
-      authDomain: "sklepaga-8790e.firebaseapp.com",
-      projectId: "sklepaga-8790e",
-      storageBucket: "sklepaga-8790e.appspot.com",
-      messagingSenderId: "815409129057",
-      appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
-      measurementId: "G-9GH707G2WZ"
-    };
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+  authDomain: "sklepaga-8790e.firebaseapp.com",
+  projectId: "sklepaga-8790e",
+  storageBucket: "sklepaga-8790e.appspot.com",
+  messagingSenderId: "815409129057",
+  appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+  measurementId: "G-9GH707G2WZ"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    const authStatus = document.getElementById('auth-status');
-    const contentForm = document.getElementById('content-form');
-    const authorInput = document.getElementById('author');
-    const submitBtn = document.getElementById('submit-btn');
+const authStatus = document.getElementById('auth-status');
+const contentForm = document.getElementById('content-form');
+const authorInput = document.getElementById('author');
+const submitBtn = document.getElementById('submit-btn');
 
-    let currentAdminUser = null;
+let currentAdminUser = null;
 
-    // Check admin status
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
-      }
+// ✅ Check admin
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
 
-      try {
-        const adminRef = doc(db, "admin", user.uid);
-        const adminSnap = await getDoc(adminRef);
-
-        if (adminSnap.exists()) {
-          currentAdminUser = user;
-          authStatus.classList.add('hidden');
-          contentForm.classList.remove('hidden');
-          authorInput.value = user.email;
-        } else {
-          authStatus.textContent = "Access Denied. Redirecting...";
-          authStatus.classList.remove('text-red-500');
-          authStatus.classList.add('text-blue-500');
-          setTimeout(() => window.location.href = "messenger.html", 1500);
-        }
-      } catch (error) {
-        console.error("Error checking admin status:", error);
-        authStatus.textContent = "Error verifying admin. Try logging in again.";
-      }
-    });
-
-    // Save content
-    async function saveContent(newContent) {
-      const docRef = await addDoc(collection(db, "content"), newContent);
-      return docRef.id;
+  try {
+    const adminSnap = await getDoc(doc(db, "admin", user.uid));
+    if (adminSnap.exists()) {
+      currentAdminUser = user;
+      authStatus.classList.add('hidden');
+      contentForm.classList.remove('hidden');
+      authorInput.value = user.email;
+    } else {
+      authStatus.textContent = "Access Denied. Redirecting...";
+      authStatus.classList.remove('text-red-500');
+      authStatus.classList.add('text-blue-500');
+      setTimeout(() => window.location.href="messenger.html", 1500);
     }
+  } catch (e) {
+    console.error(e);
+    authStatus.textContent = "Error verifying admin. Try again.";
+  }
+});
 
-    // Update JSON cache
-    async function updateContentDataJSON() {
-      const snapshot = await getDocs(collection(db, "content"));
-      const allContent = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+// Save new content
+async function saveContent(data) {
+  return await addDoc(collection(db, "content"), data);
+}
 
-      const jsonDocRef = doc(db, "contentJson", "data");
-      await setDoc(jsonDocRef, {
-        updatedAt: new Date().toISOString(),
-        content: allContent
-      });
-    }
+// Update JSON cache
+async function updateContentJSON() {
+  const snapshot = await getDocs(collection(db, "content"));
+  const allContent = [];
+  snapshot.forEach(d => allContent.push({ id: d.id, ...d.data() }));
 
-    // Handle form submission
-    contentForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Publishing...';
+  await setDoc(doc(db, "contentJson", "data"), {
+    updatedAt: new Date().toISOString(),
+    content: allContent
+  });
+}
 
-      const newContent = {
-        title: document.getElementById('title').value.trim(),
-        context: document.getElementById('context').value.trim(),
-        image: document.getElementById('image').value.trim(),
-        author: currentAdminUser.email,
-        authorId: currentAdminUser.uid,
-        date: new Date().toISOString(),
-        timestamp: Date.now()
-      };
+// Form submit
+contentForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Publishing...';
 
-      try {
-        await saveContent(newContent);
-        await updateContentDataJSON();
-        alert("✅ Content published!");
-        contentForm.reset();
-      } catch (err) {
-        console.error(err);
-        alert(`❌ Failed: ${err.message}`);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Publish Content';
-      }
-    });
-  </script>
+  if (!currentAdminUser) return;
+
+  const newContent = {
+    title: document.getElementById('title').value.trim(),
+    context: document.getElementById('context').value.trim(),
+    image: document.getElementById('image').value.trim(),
+    author: currentAdminUser.email,
+    authorId: currentAdminUser.uid,
+    date: new Date().toISOString(),
+    timestamp: Date.now()
+  };
+
+  try {
+    await saveContent(newContent);
+    await updateContentJSON();
+    alert("✅ Content published!");
+    contentForm.reset();
+  } catch (error) {
+    console.error(error);
+    alert(`❌ Failed: ${error.message}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Publish Content';
+  }
+});
+</script>
 </body>
 </html>
