@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Update</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +21,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
     <link rel="prefetch" href="home.html" as="document" />
-
     <link rel="stylesheet" href="navbar\navbar.css" />
     <link rel="stylesheet" href="font\font.css" />
     <link rel="stylesheet" href="animations/global.css" />
@@ -31,73 +30,81 @@
     <link rel="stylesheet" href="sections\carousel.css" />
 
     <style>
-  :root {
-    --nav-height: 3rem;
-  }
+      :root {
+        --nav-height: 3rem;
+      }
 
-  html,
-  body {
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+      html,
+      body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
 
-  body.preload {
-    visibility: hidden;
-    opacity: 0;
-  }
+      body.preload {
+        visibility: hidden;
+        opacity: 0;
+      }
 
-  body {
-    transition: opacity 0.2s ease-in;
-    overflow-x: hidden;
-  }
-  /* Main content container fills the entire viewport. */
-  .main-content {
-    position: relative; 
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+      body {
+        transition: opacity 0.2s ease-in;
+        overflow-x: hidden;
+      }
+      /* Main content container fills the entire viewport. */
+      .main-content {
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
 
-  .images-container {
-    flex-grow: 1; 
-    padding-top: calc(var(--nav-height) + 1.5rem);
-    z-index: 10;
-    width: 100%;
-    position: relative;   }
+      .images-container {
+        flex-grow: 1;
+        padding-top: calc(var(--nav-height) + 1.5rem);
+        z-index: 10;
+        width: 100%;
+        position: relative;
+      }
 
-  .video-titles-container {
-    z-index: 20; 
-    background: transparent;
-    padding: 2rem;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }.carousel-image {
-  width: clamp(200px, 40vw, 400px);
-  aspect-ratio: 16 / 9;
-  max-width: 500px;
-  height: auto;
-  max-height: 350px;   
-  object-fit: cover;   
-  }
+      .video-titles-container {
+        z-index: 20;
+        background: transparent;
+        padding: 2rem;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      .carousel-image {
+        width: clamp(200px, 40vw, 400px);
+        aspect-ratio: 16 / 9;
+        max-width: 500px;
+        height: auto;
+        max-height: 350px;
+        object-fit: cover;
+      }
 
-  .video-reel {   width: clamp(100px, 30vw, 300px);  }
+      .video-reel {
+        width: clamp(100px, 30vw, 300px);
+      }
 
-  /* Ensure nav and aside are always on top */
-  #navbar,  #sidebar-multi-level-sidebar {    z-index: 30 !important;  }
+      /* Ensure nav and aside are always on top */
+      #navbar,
+      #sidebar-multi-level-sidebar {
+        z-index: 30 !important;
+      }
 
-  * {    box-sizing: border-box;  }
-  </style>
+      * {
+        box-sizing: border-box;
+      }
+    </style>
   </head>
   <body class="preload">
     <main id="swup">
       <div class="main-content text-container">
-        
         <nav
           id="navbar"
           class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full"
@@ -143,78 +150,179 @@
           </div>
         </nav>
 
-        <aside          id="sidebar-multi-level-sidebar"          class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"          style="height: calc(100vh - 3rem); overflow-y: auto"          aria-label="Sidebar"        >
-          <div            class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto"          >
-            <div              id="sidebar-menu"              class="font-theme space-y-5 flex flex-col items-center justify-center"            >
+        <aside
+          id="sidebar-multi-level-sidebar"
+          class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
+          style="height: calc(100vh - 3rem); overflow-y: auto"
+          aria-label="Sidebar"
+        >
+          <div
+            class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto"
+          >
+            <div
+              id="sidebar-menu"
+              class="font-theme space-y-5 flex flex-col items-center justify-center"
+            >
               <div class="sidebar-menu-item flex flex-col items-center">
-                <button                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"                >
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
                   <h2 class="subtext-title">CALENDAR</h2>
-                  <svg                    class="w-5 h-5 stroke-white transition-transform duration-300"                    fill="none"                    stroke="currentColor"                    viewBox="0 0 24 24"                  >
-                    <path                      stroke-linecap="round"                      stroke-linejoin="round"                      d="M19 9l-7 7-7-7"                    />
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                <div                  class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"                >
-                  <a href="#" class="subtext submenu-link inline-block"                    >Happening Now</a                  >
-                  <a href="#" class="subtext submenu-link inline-block"                    >Upcoming Activities</a                  >
+                <div
+                  class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a href="#" class="subtext submenu-link inline-block"
+                    >Happening Now</a
+                  >
+                  <a href="#" class="subtext submenu-link inline-block"
+                    >Upcoming Activities</a
+                  >
                   <br />
                 </div>
               </div>
               <div class="sidebar-menu-item flex flex-col items-center">
-                <button                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"                >
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
                   <h2 class="font-theme subtext-title">NEWS</h2>
-                  <svg                    class="w-5 h-5 stroke-white transition-transform duration-300"                    fill="none"                    stroke="currentColor"                    viewBox="0 0 24 24"                  >
-                    <path                      stroke-linecap="round"                      stroke-linejoin="round"                      d="M19 9l-7 7-7-7"                    />
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                <div                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"                >
-                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"                    >Featured News</a                  >
-                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"                    >All Articles</a                  >
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >Featured News</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >All Articles</a
+                  >
                   <br />
                 </div>
               </div>
               <div class="sidebar-menu-item flex flex-col items-center">
-                <button                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"                >
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
                   <h2 class="subtext-title">ABOUT</h2>
-                  <svg                    class="w-5 h-5 stroke-white transition-transform duration-300"                    fill="none"                    stroke="currentColor"                    viewBox="0 0 24 24"                  >
-                    <path                      stroke-linecap="round"                      stroke-linejoin="round"                      d="M19 9l-7 7-7-7"                    />
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                <div                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"                >
-                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"                    >What is SK</a                  >
-                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"                    >SK Officials</a                  >
-                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"                    >About Developers</a                  >
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >What is SK</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >SK Officials</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >About Developers</a
+                  >
                   <br />
                 </div>
               </div>
               <div class="sidebar-menu-item flex flex-col items-center">
-                <button                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"                >
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
                   <h2 class="subtext-title">CONTACT</h2>
-                  <svg                    class="w-5 h-5 stroke-white transition-transform duration-300"                    fill="none"                    stroke="currentColor"                    viewBox="0 0 24 24"                  >
-                    <path                      stroke-linecap="round"                      stroke-linejoin="round"                      d="M19 9l-7 7-7-7"                    />
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                <div                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"                >
-                  <a                    href="authentication.html"                    class="subtext submenu-link block text-[#FFFFF]"                    >Real-time Chat</a                  >
-                  <a                    href="contactbeta.html"                    class="subtext submenu-link block text-[#FFFFF]"                    >Send a message</a                  >
-                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"                    >Schedule a meetup</a                  >
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a
+                    href="authentication.html"
+                    class="subtext submenu-link block text-[#FFFFF]"
+                    >Real-time Chat</a
+                  >
+                  <a
+                    href="contactbeta.html"
+                    class="subtext submenu-link block text-[#FFFFF]"
+                    >Send a message</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >Schedule a meetup</a
+                  >
                   <br />
                 </div>
               </div>
               <div class="sidebar-menu-item flex flex-col items-center">
-                <button                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"                >
-                  <h2 href="pages/article1.html" class="subtext-title">                    SITE MAP                  </h2>
-                  <svg                    class="w-5 h-5 stroke-white transition-transform duration-300"                    fill="none"                    stroke="currentColor"                    viewBox="0 0 24 24"                  >
-                    <path                      stroke-linecap="round"                      stroke-linejoin="round"                      d="M19 9l-7 7-7-7"                    />
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
+                  <h2 href="pages/article1.html" class="subtext-title">
+                    SITE MAP
+                  </h2>
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                <div                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"                >
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
                   <br />
                 </div>
               </div>
             </div>
           </div>
         </aside>
-        
+
         <section
           class="clipp-section images-container w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424]"
         >
@@ -227,9 +335,13 @@
           </div>
         </section>
 
-        <section class="video-titles-container w-full bg-white dark:bg-[#242424] mt-0 pt-0">
+        <section
+          class="video-titles-container w-full bg-white dark:bg-[#242424] mt-0 pt-0"
+        >
           <div class="w-full flex flex-col-reverse md:flex-row">
-            <div class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative">
+            <div
+              class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative"
+            >
               <div class="flex flex-col justify-end">
                 <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
                 <div class="w-full max-w-sm">
@@ -286,7 +398,7 @@
         </section>
       </div>
     </main>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
 
@@ -315,7 +427,7 @@
       window.addEventListener("DOMContentLoaded", () => {
         gsap.utils.toArray(".clipp-section").forEach((section, index) => {
           gsap.to(section, {
-            clipPath: "inset(0% 0% 0% 0%)", 
+            clipPath: "inset(0% 0% 0% 0%)",
             duration: 0.7,
             ease: "power2.out",
           });
@@ -324,110 +436,114 @@
     </script>
 
     <script>
-        // Helper function to extract a simple value from the complex Firestore REST API response structure
-        const extractValue = (field) => {
-            if (!field) return null;
-            if (field.stringValue) return field.stringValue;
-            if (field.integerValue) return parseInt(field.integerValue);
-            return null; 
-        };
+      // Helper function to extract a simple value from the complex Firestore REST API response structure
+      const extractValue = (field) => {
+        if (!field) return null;
+        if (field.stringValue) return field.stringValue;
+        if (field.integerValue) return parseInt(field.integerValue);
+        return null;
+      };
 
-        async function fetchAndRenderProjects() {
-            // ⭐️ CORRECTED JSON_URL using your Project ID ⭐️
-            const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data'; 
-            
-            const scroller = document.getElementById('scroller');
-            if (!scroller) return;
-            
-            scroller.innerHTML = '<p class="text-gray-500 p-4">Loading projects...</p>';
+      async function fetchAndRenderProjects() {
+        // ⭐️ CORRECTED JSON_URL using your Project ID ⭐️
+        const JSON_URL =
+          'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
+        const scroller = document.getElementById('scroller');
+        if (!scroller) return;
 
-            try {
-                // To help with perceived "hard reload," we append a random query param to the URL.
-                // This bypasses local browser caching of the API response, but doesn't affect 
-                // static file caching (JS, CSS) which is fine for performance.
-                const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;
-                
-                const response = await fetch(cacheBustingURL, {
-                    // Setting 'cache: "no-cache"' for a client-side fetch is a strong hint 
-                    // to the browser not to use the local cache.
-                    cache: "no-cache" 
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP status ${response.status}`);
-                }
-                
-                let data = await response.json();
-                let contentArray = [];
+        scroller.innerHTML = '<p class="text-gray-500 p-4">Loading projects...</p>';
 
-                // --- Parsing Logic for Raw Firestore REST API Output ---
-                const rawContentValues = data.fields?.content?.arrayValue?.values;
-                
-                if (rawContentValues && Array.isArray(rawContentValues)) {
-                    contentArray = rawContentValues.map(item => {
-                        const fields = item.mapValue?.fields;
-                        if (!fields) return null;
+        try {
+          // To help with perceived "hard reload," we append a random query param to the URL.
+          const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;
 
-                        return {
-                            id: extractValue(fields.id) || 'default',
-                            title: extractValue(fields.title),
-                            // 🌟 MODIFIED: Extract the new slug field
-                            slug: extractValue(fields.slug),
-                            context: extractValue(fields.context),
-                            image: extractValue(fields.image),
-                            category: extractValue(fields.category),
-                            timestamp: extractValue(fields.timestamp),
-                        };
-                    }).filter(item => item !== null); 
-                } else {
-                     throw new Error("Invalid content format from server or no data found.");
-                }
+          const response = await fetch(cacheBustingURL, {
+            // Setting 'cache: "no-cache"' for a client-side fetch is a strong hint
+            // to the browser not to use the local cache.
+            cache: 'no-cache',
+          });
 
-                // 2. Filter for 'projects' only
-                const projectContent = contentArray
-                    .filter(item => item.category === 'projects');
+          if (!response.ok) {
+            throw new Error(`HTTP status ${response.status}`);
+          }
 
-                if (projectContent.length === 0) {
-                    scroller.innerHTML = "<p class='text-gray-500 p-4'>No projects found in the database. Add content via Admin Panel.</p>";
-                    return;
-                }
+          let data = await response.json();
+          let contentArray = [];
 
-                // 3. Sort (newest first) and Generate HTML
-                const projectHTML = projectContent
-                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)) 
-                    .map(item => {
-                        // Use slug for the URL if it exists, otherwise fall back to the ID.
-                        const linkHref = item.slug ? `article/${item.slug}.html` : `article/${item.id}.html`;
-                        
-                        return `
-                            <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-                                <div class="zoom overflow-hidden relative carousel-image">
-                                    <img
-                                        src="${item.image}"
-                                        alt="${item.title}"
-                                        class="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div class="w-full pt-2 overflow-hidden">
-                                    <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
-                                        ${item.title}
-                                    </p>
-                                </div>
-                            </a>
-                        `;
-                    }).join('');
+          // --- Parsing Logic for Raw Firestore REST API Output ---
+          const rawContentValues = data.fields?.content?.arrayValue?.values;
 
-                // 4. Insert the new HTML into the scroller
-                scroller.innerHTML = projectHTML;
+          if (rawContentValues && Array.isArray(rawContentValues)) {
+            contentArray = rawContentValues
+              .map((item) => {
+                const fields = item.mapValue?.fields;
+                if (!fields) return null;
 
-            } catch (error) {
-                console.error("Failed to load and render content from JSON:", error);
-                scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check **Firebase Security Rules** for 'contentJson' collection. (${error.message})</p>`;
-            }
+                return {
+                  id: extractValue(fields.id) || 'default',
+                  title: extractValue(fields.title),
+                  // 🌟 MODIFIED: Extract the new slug field
+                  slug: extractValue(fields.slug),
+                  context: extractValue(fields.context),
+                  image: extractValue(fields.image),
+                  category: extractValue(fields.category),
+                  timestamp: extractValue(fields.timestamp),
+                };
+              })
+              .filter((item) => item !== null);
+          } else {
+            throw new Error('Invalid content format from server or no data found.');
+          }
+
+          // 2. Filter for 'projects' only
+          const projectContent = contentArray.filter(
+            (item) => item.category === 'projects'
+          );
+
+          if (projectContent.length === 0) {
+            scroller.innerHTML =
+              "<p class='text-gray-500 p-4'>No projects found in the database. Add content via Admin Panel.</p>";
+            return;
+          }
+
+          // 3. Sort (newest first) and Generate HTML
+          const projectHTML = projectContent
+            .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+            .map((item) => {
+              // 💥 CRITICAL UPDATE HERE 💥
+              // Link to article.html using a query parameter for the slug.
+              const linkHref = item.slug
+                ? `article.html?slug=${item.slug}`
+                : `article.html?id=${item.id}`;
+
+              return `
+                <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+                    <div class="zoom overflow-hidden relative carousel-image">
+                        <img
+                            src="${item.image}"
+                            alt="${item.title}"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div class="w-full pt-2 overflow-hidden">
+                        <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                            ${item.title}
+                        </p>
+                    </div>
+                </a>
+            `;
+            })
+            .join('');
+
+          // 4. Insert the new HTML into the scroller
+          scroller.innerHTML = projectHTML;
+        } catch (error) {
+          console.error('Failed to load and render content from JSON:', error);
+          scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check **Firebase Security Rules** for 'contentJson' collection. (${error.message})</p>`;
         }
-
-        // Run the function when the DOM content is fully loaded
-        window.addEventListener("DOMContentLoaded", fetchAndRenderProjects);
+      }
+      // Run the function when the DOM content is fully loaded
+      window.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
     </script>
   </body>
 </html>
