@@ -82,6 +82,12 @@ function heroIn() {
 
 // --- Loader animation ---
 function runLoader() {
+  // Hide main content immediately
+  const wrapper = document.getElementById("main-content");
+  if (wrapper) wrapper.style.display = "none";
+  document.body.style.overflow = "hidden";
+  document.body.classList.add("preload");
+
   const screen = document.createElement('div');
   Object.assign(screen.style, {
     position: 'fixed',
@@ -262,12 +268,21 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPageTransition();
 });
 
-// --- bfcache handling ---
+// --- Enhanced bfcache handling - Force reload on back/forward ---
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
-    const wrapper = document.getElementById("main-content");
-    if (wrapper) wrapper.style.display = "block";
-    document.body.style.overflow = "auto";
-    document.body.classList.remove("preload");
+    // Page was restored from bfcache - reload it to show loader again
+    window.location.reload();
   }
+});
+
+// --- Additional safeguard: Prevent bfcache entirely ---
+window.addEventListener('beforeunload', () => {
+  // This helps prevent the page from being cached
+  document.body.style.display = 'none';
+});
+
+// --- Force unload event to prevent caching ---
+window.addEventListener('unload', () => {
+  // Empty function to trigger unload, which helps prevent bfcache
 });
