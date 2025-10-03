@@ -56,4 +56,92 @@ const firebaseConfig = {
   projectId: "sklepaga-8790e",
   storageBucket: "sklepaga-8790e.appspot.com",
   messagingSenderId: "815409129057",
-  appId: "1:8154
+  appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+  measurementId: "G-9GH707G2WZ"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const authStatus = document.getElementById('auth-status');
+const contentForm = document.getElementById('content-form');
+const authorInput = document.getElementById('author');
+const submitBtn = document.getElementById('submit-btn');
+
+let currentAdminUser = null;
+
+// Check admin status
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return window.location.href = "index.html";
+
+  try {
+    const adminSnap = await getDoc(doc(db, "admin", user.uid));
+    if (adminSnap.exists()) {
+      currentAdminUser = user;
+      authStatus.classList.add('hidden');
+      contentForm.classList.remove('hidden');
+      authorInput.value = user.email;
+    } else {
+      authStatus.textContent = "Access Denied. Redirecting...";
+      authStatus.classList.remove('text-red-500');
+      authStatus.classList.add('text-blue-500');
+      setTimeout(() => window.location.href = "messenger.html", 1500);
+    }
+  } catch (e) {
+    console.error(e);
+    authStatus.textContent = "Error verifying admin. Try logging in again.";
+  }
+});
+
+// Save new content
+async function saveContent(contentData) {
+  return await addDoc(collection(db, "content"), contentData);
+}
+
+// Update contentJson/data
+async function updateContentDataJSON() {
+  const snapshot = await getDocs(collection(db, "content"));
+  const allContent = [];
+  snapshot.forEach(d => allContent.push({ id: d.id, ...d.data() }));
+
+  await setDoc(doc(db, "contentJson", "data"), {
+    updatedAt: new Date().toISOString(),
+    content: allContent
+  });
+}
+
+// Handle Form Submit
+contentForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Publishing...';
+
+  if (!currentAdminUser) return;
+
+  const newContent = {
+    title: document.getElementById('title').value.trim(),
+    context: document.getElementById('context').value.trim(),
+    image: document.getElementById('image').value.trim(),
+    author: currentAdminUser.email,
+    authorId: currentAdminUser.uid,
+    date: new Date().toISOString(),
+    timestamp: Date.now()
+  };
+
+  try {
+    await saveContent(newContent);
+    await updateContentDataJSON();
+    alert("✅ Content published!");
+    contentForm.reset();
+  } catch (error) {
+    console.error(error);
+    alert(`❌ Failed: ${error.message}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Publish Content';
+  }
+});
+</script>
+</body>
+</html>
