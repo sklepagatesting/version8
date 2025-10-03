@@ -49,7 +49,6 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, collection, addDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // ✅ Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
       authDomain: "sklepaga-8790e.firebaseapp.com",
@@ -71,58 +70,48 @@
 
     let currentAdminUser = null;
 
-    // 🔑 Check admin status
+    // 🔑 Admin check
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "index.html"; // redirect to login
+        window.location.href = "index.html";
         return;
       }
 
       try {
-        const adminRef = doc(db, "admin", user.uid);
-        const adminSnap = await getDoc(adminRef);
-
+        const adminSnap = await getDoc(doc(db, "admin", user.uid));
         if (adminSnap.exists()) {
           currentAdminUser = user;
           authStatus.classList.add('hidden');
           contentForm.classList.remove('hidden');
-          authorInput.value = user.email; // Only email auth
+          authorInput.value = user.email;
         } else {
           authStatus.textContent = "Access Denied. Redirecting...";
           authStatus.classList.remove('text-red-500');
           authStatus.classList.add('text-blue-500');
-          setTimeout(() => {
-            window.location.href = "messenger.html";
-          }, 1500);
+          setTimeout(() => window.location.href = "messenger.html", 1500);
         }
-      } catch (error) {
-        console.error("Error checking admin status:", error);
-        authStatus.textContent = "Error verifying admin. Try logging in again.";
+      } catch (err) {
+        console.error("Admin check error:", err);
+        authStatus.textContent = "Error verifying admin.";
       }
     });
 
-    // Save new content
+    // 🔹 Save content
     async function saveContent(contentData) {
-      const docRef = await addDoc(collection(db, "content"), contentData);
-      return docRef.id;
+      return await addDoc(collection(db, "content"), contentData);
     }
 
-    // Update contentJson/data
+    // 🔹 Update JSON cache
     async function updateContentDataJSON() {
       const snapshot = await getDocs(collection(db, "content"));
-      const allContent = [];
-      snapshot.forEach(d => {
-        allContent.push({ id: d.id, ...d.data() });
-      });
-
-      const jsonDocRef = doc(db, "contentJson", "data");
-      await setDoc(jsonDocRef, {
+      const allContent = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      await setDoc(doc(db, "contentJson", "data"), {
         updatedAt: new Date().toISOString(),
         content: allContent
       });
     }
 
-    // Handle Form Submit
+    // 🔹 Handle form submit
     contentForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       submitBtn.disabled = true;
@@ -145,9 +134,9 @@
         await updateContentDataJSON();
         alert("✅ Content published!");
         contentForm.reset();
-      } catch (error) {
-        console.error(error);
-        alert(`❌ Failed: ${error.message}`);
+      } catch (err) {
+        console.error(err);
+        alert(`❌ Failed: ${err.message}`);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Publish Content';
