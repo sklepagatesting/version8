@@ -11,13 +11,15 @@
     </style>
 </head>
 <body>
-    <div class="min-h-screen flex flex-col items-center justify-start p-4 bg-f4f7fa">
-        <div class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-2xl border border-gray-100 mt-8 mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Admin Panel ⚙️</h1>
-            <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium">Checking Admin Status...</p>
+    <div class="min-h-screen flex flex-col items-center justify-start p-4 sm:p-8 bg-f4f7fa">
 
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">Publish/Edit Content 📝</h2>
-            <form id="content-form" class="space-y-6 hidden">
+        <div class="w-full max-w-xl lg:max-w-4xl bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100 mt-4 sm:mt-8 mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">Admin Panel ⚙️</h1>
+            <p id="auth-status" class="text-center text-sm mb-4 sm:mb-6 text-red-500 font-medium">Checking Admin Status...</p>
+
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">Publish/Edit Content 📝</h2>
+            <form id="content-form" class="space-y-4 sm:space-y-6 hidden">
+                
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
                     <input type="text" id="title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
@@ -25,7 +27,7 @@
 
                 <fieldset>
                     <legend class="text-sm font-medium text-gray-700 mb-2">Category</legend>
-                    <div class="flex space-x-4">
+                    <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
                         <label class="inline-flex items-center">
                             <input type="radio" name="category" value="projects" required class="form-radio text-purple-600 h-4 w-4">
                             <span class="ml-2 text-gray-700">Projects</span>
@@ -40,6 +42,7 @@
                         </label>
                     </div>
                 </fieldset>
+                
                 <div>
                     <label for="context" class="block text-sm font-medium text-gray-700 mb-1">Context (Main Text)</label>
                     <textarea id="context" rows="5" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150"></textarea>
@@ -51,25 +54,27 @@
                 </div>
                 
                 <div>
-                    <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
-                    <input type="text" id="author" readonly required class="w-full p-3 border border-gray-200 bg-gray-50 rounded-lg text-gray-600">
+                    <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author / Publisher</label>
+                    <input type="text" id="author" required class="w-full p-3 border border-gray-300 rounded-lg text-gray-800 focus:ring-purple-500 focus:border-purple-500 transition duration-150">
                 </div>
 
-                <button type="submit" id="submit-btn" data-mode="create" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 disabled:opacity-50">
-                    Publish Content
-                </button>
-                <button type="button" id="cancel-edit-btn" class="w-full bg-gray-400 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-gray-500 transition duration-300 hidden">
-                    Cancel Edit
-                </button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button type="submit" id="submit-btn" data-mode="create" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 disabled:opacity-50 sm:col-span-1">
+                        Publish Content
+                    </button>
+                    <button type="button" id="cancel-edit-btn" class="w-full bg-gray-400 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-gray-500 transition duration-300 hidden sm:col-span-1">
+                        Cancel Edit
+                    </button>
+                </div>
             </form>
         </div>
 
-        <div id="content-management" class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-2xl border border-gray-100 mt-8 mb-8 hidden">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">Manage Existing Content 📋</h2>
+        <div id="content-management" class="w-full max-w-xl lg:max-w-4xl bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100 mt-4 sm:mt-8 mb-8 hidden">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">Manage Existing Content 📋</h2>
 
-            <div class="flex items-center space-x-4 mb-4">
-                <label for="category-filter" class="text-sm font-medium text-gray-700">Filter by Category:</label>
-                <select id="category-filter" class="p-2 border border-gray-300 rounded-lg">
+            <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-6">
+                <label for="category-filter" class="text-sm font-medium text-gray-700 flex-shrink-0">Filter by Category:</label>
+                <select id="category-filter" class="w-full sm:w-auto p-2 border border-gray-300 rounded-lg">
                     <option value="all">All Categories</option>
                     <option value="projects">Projects</option>
                     <option value="news">News</option>
@@ -98,6 +103,7 @@
             deleteDoc 
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
+        // IMPORTANT: Replace with your actual Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
             authDomain: "sklepaga-8790e.firebaseapp.com",
@@ -130,7 +136,7 @@
             context: document.getElementById('context').value.trim(),
             image: document.getElementById('image').value.trim(),
             category: document.querySelector('input[name="category"]:checked')?.value || '', 
-            author: currentAdminUser.email,
+            author: authorInput.value.trim(), // Author is now editable
             authorId: currentAdminUser.uid,
         });
 
@@ -139,17 +145,19 @@
             document.getElementById('title').value = data.title;
             document.getElementById('context').value = data.context;
             document.getElementById('image').value = data.image;
+            
             // Select the correct radio button
             const categoryRadio = document.querySelector(`input[name="category"][value="${data.category}"]`);
             if (categoryRadio) {
                 categoryRadio.checked = true;
             }
+            
+            // Load existing author value
             authorInput.value = data.author;
         };
 
         // --- Content Functions ---
 
-        // Save/Update content to the 'content' collection
         async function saveContent(data) {
             if (editingDocId) {
                 // Update existing document
@@ -167,7 +175,6 @@
             }
         }
 
-        // Refresh the public-facing JSON cache
         async function updateContentJSON() {
             const snapshot = await getDocs(collection(db, "content"));
             const allContent = [];
@@ -178,7 +185,6 @@
             });
         }
 
-        // Fetch and display content for management
         async function renderContentList() {
             contentList.innerHTML = '<p class="text-gray-500">Loading content...</p>';
             try {
@@ -197,16 +203,16 @@
                 }
 
                 contentList.innerHTML = filteredContent
-                    .sort((a, b) => b.timestamp - a.timestamp) // Sort by newest first
+                    .sort((a, b) => b.timestamp - a.timestamp) 
                     .map(d => `
-                        <div class="p-4 border rounded-lg shadow-sm flex justify-between items-center hover:bg-gray-50 transition duration-150">
-                            <div>
-                                <p class="text-lg font-semibold text-gray-800">${d.title} <span class="text-sm font-normal text-purple-600">(${d.category || 'N/A'})</span></p>
-                                <p class="text-sm text-gray-500">Author: ${d.author}</p>
+                        <div class="p-4 border rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-50 transition duration-150">
+                            <div class="mb-2 sm:mb-0">
+                                <p class="text-base font-semibold text-gray-800">${d.title} <span class="text-xs font-normal text-purple-600">(${d.category || 'N/A'})</span></p>
+                                <p class="text-sm text-gray-500">By: ${d.author || 'N/A'} - ${new Date(d.timestamp).toLocaleDateString()}</p>
                             </div>
-                            <div class="space-x-2 flex-shrink-0">
-                                <button data-id="${d.id}" data-action="edit" class="bg-blue-100 text-blue-700 py-1 px-3 rounded hover:bg-blue-200 font-medium text-sm">Edit</button>
-                                <button data-id="${d.id}" data-action="delete" class="bg-red-100 text-red-700 py-1 px-3 rounded hover:bg-red-200 font-medium text-sm">Delete</button>
+                            <div class="space-x-2 flex-shrink-0 mt-2 sm:mt-0">
+                                <button data-id="${d.id}" data-action="edit" class="bg-blue-100 text-blue-700 py-1 px-3 rounded hover:bg-blue-200 font-medium text-xs sm:text-sm">Edit</button>
+                                <button data-id="${d.id}" data-action="delete" class="bg-red-100 text-red-700 py-1 px-3 rounded hover:bg-red-200 font-medium text-xs sm:text-sm">Delete</button>
                             </div>
                         </div>
                     `).join('');
@@ -217,7 +223,6 @@
             }
         }
 
-        // Handle Edit action
         async function handleEdit(docId) {
             try {
                 const docRef = doc(db, "content", docId);
@@ -229,7 +234,8 @@
                     submitBtn.textContent = 'Update Content';
                     submitBtn.dataset.mode = 'edit';
                     cancelEditBtn.classList.remove('hidden');
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to form
+                    // Scroll to form (useful on mobile)
+                    window.scrollTo({ top: contentForm.offsetTop - 20, behavior: 'smooth' }); 
                 } else {
                     alert("Content not found!");
                 }
@@ -239,7 +245,6 @@
             }
         }
 
-        // Handle Delete action
         async function handleDelete(docId) {
             if (!confirm("Are you sure you want to delete this content? This action is irreversible.")) return;
 
@@ -262,13 +267,13 @@
             cancelEditBtn.classList.add('hidden');
             editingDocId = null;
             if (currentAdminUser) {
-                 authorInput.value = currentAdminUser.email; // Keep author email
+                 // Set author back to the logged-in user for new content
+                 authorInput.value = currentAdminUser.email; 
             }
         }
 
         // --- Event Listeners ---
 
-        // Auth state check
         onAuthStateChanged(auth, async (user) => {
             if (!user) return window.location.href = "index.html";
 
@@ -279,8 +284,11 @@
                     authStatus.classList.add('hidden');
                     contentForm.classList.remove('hidden');
                     contentManagement.classList.remove('hidden'); 
-                    authorInput.value = user.email;
-                    renderContentList(); // Initial content load
+                    
+                    // Initialize author for new content
+                    resetForm(); 
+                    
+                    renderContentList(); 
                 } else {
                     authStatus.textContent = "Access Denied. Redirecting...";
                     authStatus.classList.remove('text-red-500');
@@ -297,7 +305,7 @@
         contentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Basic validation for category
+            // Basic validation
             if (!document.querySelector('input[name="category"]:checked')) {
                 alert("Please select a Category.");
                 return;
@@ -323,7 +331,6 @@
             }
         });
         
-        // Cancel Edit handler
         cancelEditBtn.addEventListener('click', resetForm); 
 
         // Edit/Delete button delegation
@@ -336,7 +343,6 @@
             }
         });
 
-        // Category Filter handler
         categoryFilter.addEventListener('change', renderContentList);
     </script>
 </body>
