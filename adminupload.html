@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Publish Content</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7fa; }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Publish New Content 📝</h1>
+            <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium hidden">Checking Admin Status...</p>
+
+            <form id="content-form" class="space-y-6 hidden">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" id="title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                </div>
+
+                <div>
+                    <label for="context" class="block text-sm font-medium text-gray-700 mb-1">Context (Main Text)</label>
+                    <textarea id="context" rows="5" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150"></textarea>
+                </div>
+
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                    <input type="url" id="image" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150" placeholder="e.g., https://example.com/image.jpg">
+                </div>
+                
+                <div>
+                    <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+                    <input type="text" id="author" readonly required class="w-full p-3 border border-gray-200 bg-gray-50 rounded-lg text-gray-600">
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 disabled:opacity-50">
+                    Publish Content
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Your Firebase config (REPLACE WITH YOUR ACTUAL CONFIG)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs", // Use the correct key here
+            authDomain: "sklepaga-8790e.firebaseapp.com",
+            projectId: "sklepaga-8790e",
+            storageBucket: "sklepaga-8790e.appspot.com",
+            messagingSenderId: "815409129057",
+            appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+            measurementId: "G-9GH707G2WZ"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const authStatus = document.getElementById('auth-status');
+        const contentForm = document.getElementById('content-form');
+        const authorInput = document.getElementById('author');
+        const submitBtn = document.getElementById('submit-btn');
+
+        let currentAdminUser = null;
+
+        /**
+         * 1. CHECK ADMIN STATUS & REDIRECT
+         */
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // Not logged in
+                window.location.href = "index.html";
+                return;
+            }
+
+            authStatus.textContent = "Verifying role...";
+            try {
+                const adminRef = doc(db, "admin", user.uid);
+                const adminSnap = await getDoc(adminRef);
+
+                if (adminSnap.exists()) {
+                    // Admin confirmed
+                    currentAdminUser = user;
+                    authStatus.classList.add('hidden');
+                    contentForm.classList.remove('hidden');
+                    authorInput.value = user.displayName || user.email; // Set author name
+                } else {
+                    // Not admin, redirect
+                    authStatus.textContent = "Access Denied. Redirecting...";
+                    authStatus.classList.remove('text-red-500');
+                    authStatus.classList.add('text-blue-500');
+                    setTimeout(() => {
+                        window.location.href = "messenger.html"; // Redirect to a user page
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error("Error checking admin status:", error);
+                authStatus.textContent = "Error during verification. Please try logging in again.";
+            }
+        });
+
+        /**
+         * 2. SAVE CONTENT TO FIRESTORE
+         */
+        async function saveContent(contentData) {
+            try {
+                // Add the new content to the 'content' collection
+                const docRef = await addDoc(collection(db, "content"), contentData);
+                return docRef.id;
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                throw new Error("Failed to save content to database.");
+            }
+        }
+
+        /**
+         * 3. CREATE/UPDATE "JSON" FIRESTORE DOCUMENT
+         * This simulates creating the JSON file by writing all content
+         * to a single, easy-to-read document to reduce read operations.
+         */
+        async function updateContentDataJSON() {
+            try {
+                // 1. Fetch all documents from the 'content' collection
+                const contentCollection = collection(db, "content");
+                const snapshot = await getDocs(contentCollection);
+                
+                const allContent = [];
+                snapshot.forEach(doc => {
+                    // Collect all content data with its Firestore ID
+                    allContent.push({
+                        id: doc.id, 
+                        ...doc.data()
+                    });
+                });
+
+                // 2. Write the entire array to a single document named 'data' 
+                //    in a collection called 'contentJson'
+                const jsonDocRef = doc(db, "contentJson", "data");
+                await setDoc(jsonDocRef, { 
+                    updatedAt: new Date().toISOString(),
+                    content: allContent 
+                });
+
+                console.log("Simulated JSON data updated successfully in Firestore.");
+            } catch (e) {
+                console.error("Error updating 'JSON' document: ", e);
+                throw new Error("Failed to update content JSON document.");
+            }
+        }
+
+
+        // Handle Form Submission
+        contentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Publishing...';
+
+            if (!currentAdminUser) return;
+
+            const newContent = {
+                title: document.getElementById('title').value.trim(),
+                context: document.getElementById('context').value.trim(),
+                image: document.getElementById('image').value.trim(),
+                author: currentAdminUser.displayName || currentAdminUser.email,
+                authorId: currentAdminUser.uid,
+                date: new Date().toISOString(), // Store current date/time
+                timestamp: Date.now()
+            };
+
+            try {
+                // 1. Save the new content document
+                await saveContent(newContent);
+                
+                // 2. Update the dedicated "JSON" document
+                await updateContentDataJSON();
+
+                alert("Content successfully published and 'JSON' data updated!");
+                contentForm.reset();
+            } catch (error) {
+                alert(`Publication failed: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publish Content';
+            }
+        });
+    </script>
+</body>
+</html>
