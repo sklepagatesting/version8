@@ -80,6 +80,9 @@
       try {
         const adminSnap = await getDoc(doc(db, "admin", user.uid));
         if (adminSnap.exists()) {
+          // 🛑 FIX: Force token refresh to ensure security rules pass
+          await user.getIdToken(true); 
+
           currentAdminUser = user;
           authStatus.classList.add('hidden');
           contentForm.classList.remove('hidden');
@@ -117,7 +120,12 @@
       submitBtn.disabled = true;
       submitBtn.textContent = 'Publishing...';
 
-      if (!currentAdminUser) return;
+      if (!currentAdminUser) {
+        alert("Authorization failed. Please re-login.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Publish Content';
+        return;
+      }
 
       const newContent = {
         title: document.getElementById('title').value.trim(),
@@ -136,7 +144,8 @@
         contentForm.reset();
       } catch (err) {
         console.error(err);
-        alert(`❌ Failed: ${err.message}`);
+        // This is where "Missing or insufficient permissions" would be caught
+        alert(`❌ Failed: ${err.message}. Check browser console for details.`);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Publish Content';
