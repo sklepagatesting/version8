@@ -1,167 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Upload Panel</title>
-  <script type="module">
-    // ----------------- IMPORT FIREBASE -----------------
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      signInWithPopup, 
-      onAuthStateChanged, 
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { 
-      getFirestore, 
-      doc, 
-      getDoc, 
-      getDocs, 
-      addDoc, 
-      setDoc, 
-      collection 
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-6">
 
-    // ----------------- CONFIG -----------------
+  <!-- LOGIN PANEL -->
+  <div id="login" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
+    <h2 class="text-xl font-bold text-center mb-4">Admin Login</h2>
+    <button id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl">
+      Sign in with Google
+    </button>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-profile" class="hidden w-full max-w-md bg-white rounded-2xl shadow-xl p-6 space-y-6">
+    <div class="flex items-center space-x-4">
+      <img id="admin-avatar" class="w-16 h-16 rounded-full border-2 border-blue-400" src="" alt="Admin Avatar">
+      <div>
+        <h3 id="admin-name" class="text-lg font-bold"></h3>
+        <p id="admin-email" class="text-gray-600"></p>
+      </div>
+    </div>
+
+    <!-- Upload Avatar -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Upload New Avatar</label>
+      <input type="file" id="avatarUpload" accept="image/*"
+        class="block w-full text-sm text-gray-500
+               file:mr-4 file:py-2 file:px-4
+               file:rounded-xl file:border-0
+               file:text-sm file:font-semibold
+               file:bg-blue-50 file:text-blue-600
+               hover:file:bg-blue-100"/>
+    </div>
+
+    <button id="logout-btn" class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl">
+      Logout
+    </button>
+  </div>
+
+  <script type="module">
+    // --- Firebase SDKs ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } 
+      from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } 
+      from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } 
+      from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+
+    // --- Your Firebase Config (already working one you shared) ---
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+      authDomain: "sklepaga-8790e.firebaseapp.com",
+      projectId: "sklepaga-8790e",
+      storageBucket: "sklepaga-8790e.appspot.com",
+      messagingSenderId: "815409129057",
+      appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+      measurementId: "G-9GH707G2WZ"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const provider = new GoogleAuthProvider();
+    const storage = getStorage(app);
 
-    // ----------------- DOM ELEMENTS -----------------
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const statusBox = document.getElementById("status");
-    const uploadForm = document.getElementById("uploadForm");
-    const titleInput = document.getElementById("title");
-    const contextInput = document.getElementById("context");
-    const imageInput = document.getElementById("image");
-    const authorInput = document.getElementById("author");
+    const loginUI = document.getElementById("login");
+    const profileUI = document.getElementById("admin-profile");
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
 
-    let currentUser = null;
-    let isAdmin = false;
+    const adminAvatar = document.getElementById("admin-avatar");
+    const adminName = document.getElementById("admin-name");
+    const adminEmail = document.getElementById("admin-email");
+    const avatarUpload = document.getElementById("avatarUpload");
 
-    // ----------------- LOGIN -----------------
+    let activeAdmin = null;
+
+    // Sign in with Google
     loginBtn.addEventListener("click", async () => {
       try {
+        const provider = new GoogleAuthProvider();
         await signInWithPopup(auth, provider);
       } catch (err) {
-        statusBox.textContent = `❌ Login failed: ${err.message}`;
+        alert("Login failed: " + err.message);
       }
     });
 
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-    });
+    // Logout
+    logoutBtn.addEventListener("click", () => signOut(auth));
 
-    // ----------------- AUTH STATE -----------------
+    // Auth state listener
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUser = user;
-        statusBox.textContent = `Signed in as ${user.email} (UID: ${user.uid})... checking admin...`;
-
-        // check admin doc
-        const adminDoc = await getDoc(doc(db, "admin", user.uid));
-        if (adminDoc.exists()) {
-          isAdmin = true;
-          statusBox.textContent = `✅ Admin confirmed: ${user.email}`;
-          uploadForm.style.display = "block";
-          loginBtn.style.display = "none";
-          logoutBtn.style.display = "inline-block";
-          authorInput.value = user.displayName || user.email;
-        } else {
-          isAdmin = false;
-          statusBox.textContent = `❌ Not an admin (${user.email})`;
-          uploadForm.style.display = "none";
-          loginBtn.style.display = "none";
-          logoutBtn.style.display = "inline-block";
-        }
-      } else {
-        currentUser = null;
-        isAdmin = false;
-        statusBox.textContent = "Not signed in.";
-        uploadForm.style.display = "none";
-        loginBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
-      }
-    });
-
-    // ----------------- UPLOAD HANDLER -----------------
-    uploadForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!isAdmin || !currentUser) {
-        alert("❌ You are not authorized.");
+      if (!user) {
+        loginUI.classList.remove("hidden");
+        profileUI.classList.add("hidden");
         return;
       }
 
-      const newContent = {
-        title: titleInput.value.trim(),
-        context: contextInput.value.trim(),
-        image: imageInput.value.trim(),
-        author: currentUser.displayName || currentUser.email,
-        authorId: currentUser.uid,
-        date: new Date().toISOString(),
-        timestamp: Date.now()
-      };
+      // Check if user is admin
+      const adminRef = doc(db, "admin", user.uid);
+      const snap = await getDoc(adminRef);
+      if (!snap.exists()) {
+        alert("You are not an admin.");
+        await signOut(auth);
+        return;
+      }
+
+      activeAdmin = user;
+      loginUI.classList.add("hidden");
+      profileUI.classList.remove("hidden");
+
+      adminName.textContent = user.displayName || "Admin User";
+      adminEmail.textContent = user.email;
+      adminAvatar.src = snap.data().avatar || user.photoURL || 
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email)}&background=random`;
+    });
+
+    // Upload Avatar
+    avatarUpload?.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file || !activeAdmin) return;
 
       try {
-        // 1. Add to /content collection
-        await addDoc(collection(db, "content"), newContent);
+        const storageRef = ref(storage, `avatars/${activeAdmin.uid}`);
+        await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(storageRef);
 
-        // 2. Fetch all content
-        const snapshot = await getDocs(collection(db, "content"));
-        const allContent = [];
-        snapshot.forEach(docSnap => {
-          allContent.push({ id: docSnap.id, ...docSnap.data() });
-        });
+        // Update Firestore admin doc
+        await setDoc(doc(db, "admin", activeAdmin.uid), { avatar: url }, { merge: true });
 
-        // 3. Update /contentJson/data
-        await setDoc(doc(db, "contentJson", "data"), {
-          updatedAt: new Date().toISOString(),
-          content: allContent
-        });
-
-        alert("✅ Content published successfully!");
-        uploadForm.reset();
-        authorInput.value = currentUser.displayName || currentUser.email;
+        adminAvatar.src = url;
+        alert("✅ Avatar updated successfully!");
       } catch (err) {
-        console.error("Upload failed:", err);
-        alert(`❌ Upload failed: ${err.message}`);
+        console.error(err);
+        alert("❌ Failed to upload avatar");
       }
     });
   </script>
-</head>
-<body style="font-family: sans-serif; max-width: 700px; margin: 2rem auto;">
-  <h1>Admin Upload Panel</h1>
-  <p id="status">Checking auth...</p>
-  <button id="loginBtn">🔑 Sign in with Google</button>
-  <button id="logoutBtn" style="display:none;">🚪 Sign out</button>
-
-  <form id="uploadForm" style="display:none; margin-top: 1.5rem;">
-    <h2>📤 Publish Content</h2>
-    <label>Title:<br>
-      <input type="text" id="title" required style="width:100%; padding:8px; margin:4px 0;">
-    </label><br>
-    <label>Context:<br>
-      <textarea id="context" rows="5" required style="width:100%; padding:8px; margin:4px 0;"></textarea>
-    </label><br>
-    <label>Image URL:<br>
-      <input type="url" id="image" required style="width:100%; padding:8px; margin:4px 0;">
-    </label><br>
-    <label>Author:<br>
-      <input type="text" id="author" readonly style="width:100%; padding:8px; margin:4px 0; background:#f0f0f0;">
-    </label><br>
-    <button type="submit" style="margin-top:10px; padding:10px 20px;">Publish</button>
-  </form>
 </body>
 </html>
