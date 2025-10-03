@@ -70,7 +70,7 @@
 
     let currentAdminUser = null;
 
-    // 🔑 Admin check
+    // Check admin status
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html";
@@ -78,11 +78,10 @@
       }
 
       try {
-        const adminSnap = await getDoc(doc(db, "admin", user.uid));
-        if (adminSnap.exists()) {
-          // 🛑 FIX: Force token refresh to ensure security rules pass
-          await user.getIdToken(true); 
+        const adminRef = doc(db, "admin", user.uid);
+        const adminSnap = await getDoc(adminRef);
 
+        if (adminSnap.exists()) {
           currentAdminUser = user;
           authStatus.classList.add('hidden');
           contentForm.classList.remove('hidden');
@@ -93,39 +92,35 @@
           authStatus.classList.add('text-blue-500');
           setTimeout(() => window.location.href = "messenger.html", 1500);
         }
-      } catch (err) {
-        console.error("Admin check error:", err);
-        authStatus.textContent = "Error verifying admin.";
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+        authStatus.textContent = "Error verifying admin. Try logging in again.";
       }
     });
 
-    // 🔹 Save content
-    async function saveContent(contentData) {
-      return await addDoc(collection(db, "content"), contentData);
+    // Save content
+    async function saveContent(newContent) {
+      const docRef = await addDoc(collection(db, "content"), newContent);
+      return docRef.id;
     }
 
-    // 🔹 Update JSON cache
+    // Update JSON cache
     async function updateContentDataJSON() {
       const snapshot = await getDocs(collection(db, "content"));
       const allContent = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      await setDoc(doc(db, "contentJson", "data"), {
+
+      const jsonDocRef = doc(db, "contentJson", "data");
+      await setDoc(jsonDocRef, {
         updatedAt: new Date().toISOString(),
         content: allContent
       });
     }
 
-    // 🔹 Handle form submit
+    // Handle form submission
     contentForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       submitBtn.disabled = true;
       submitBtn.textContent = 'Publishing...';
-
-      if (!currentAdminUser) {
-        alert("Authorization failed. Please re-login.");
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Publish Content';
-        return;
-      }
 
       const newContent = {
         title: document.getElementById('title').value.trim(),
@@ -144,8 +139,7 @@
         contentForm.reset();
       } catch (err) {
         console.error(err);
-        // This is where "Missing or insufficient permissions" would be caught
-        alert(`❌ Failed: ${err.message}. Check browser console for details.`);
+        alert(`❌ Failed: ${err.message}`);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Publish Content';
