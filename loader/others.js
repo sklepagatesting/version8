@@ -49,6 +49,9 @@
   document.body.insertBefore(overlayDiv, document.body.firstChild);
 })();
 
+// --- Always run loader on every page load ---
+const shouldRunLoader = true;
+
 // --- Text reveal with IntersectionObserver ---
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -82,12 +85,6 @@ function heroIn() {
 
 // --- Loader animation ---
 function runLoader() {
-  // Hide main content immediately
-  const wrapper = document.getElementById("main-content");
-  if (wrapper) wrapper.style.display = "none";
-  document.body.style.overflow = "hidden";
-  document.body.classList.add("preload");
-
   const screen = document.createElement('div');
   Object.assign(screen.style, {
     position: 'fixed',
@@ -177,15 +174,15 @@ function runLoader() {
 
           heroIn();
           startObservingText();
-          if (typeof initScroller === "function") initScroller();
-          isPageReady = true;
+          window.dispatchEvent(new Event("scroller:start"));
+          window.dispatchEvent(new Event("page:ready"));
         }, 1000);
       }
     }, 20);
   });
 }
 
-// Global flag for transition control
+// Global flag to control when transitions are allowed
 let isPageReady = false;
 
 // --- Page Transition Logic ---
@@ -195,15 +192,16 @@ function setupPageTransition() {
 
   document.querySelectorAll('[data-transition]').forEach(link => {
     link.addEventListener('click', (e) => {
-      if (!isPageReady) return;
-
+      if (!isPageReady) {
+        return;
+      }
+      
       e.preventDefault();
       const href = link.getAttribute('href');
 
       transitionEl.style.display = "none";
       overlayEl.style.display = "none";
 
-      // Reset styles
       transitionEl.style.transition = "none";
       transitionEl.style.bottom = "0";
       transitionEl.style.left = "50%";
@@ -262,27 +260,206 @@ window.addEventListener("resize", () => {
   }
 });
 
-// --- Init on DOM ready ---
+// --- Loader and Transition Control ---
 document.addEventListener('DOMContentLoaded', () => {
-  runLoader();
+  if (shouldRunLoader) {
+    runLoader();
+  } else {
+    const wrapper = document.getElementById("main-content");
+    if (wrapper) wrapper.style.display = "block";
+    document.body.style.overflow = "auto";
+    document.body.classList.remove("preload");
+    
+    isPageReady = true;
+    startObservingText();
+    heroIn();
+    window.dispatchEvent(new Event("scroller:start"));
+  }
+
+  window.addEventListener('page:ready', () => {
+    isPageReady = true;
+  });
+
   setupPageTransition();
 });
 
-// --- Enhanced bfcache handling - Force reload on back/forward ---
+// --- Force reload on back/forward navigation ---
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
-    // Page was restored from bfcache - reload it to show loader again
     window.location.reload();
   }
 });
 
-// --- Additional safeguard: Prevent bfcache entirely ---
-window.addEventListener('beforeunload', () => {
-  // This helps prevent the page from being cached
-  document.body.style.display = 'none';
-});
+// ============================================
+// SCROLLER SCRIPT - Runs after loader completes
+// ============================================
 
-// --- Force unload event to prevent caching ---
-window.addEventListener('unload', () => {
-  // Empty function to trigger unload, which helps prevent bfcache
+window.addEventListener("scroller:start", () => {
+  // Prevent duplicate initialization
+  if (window.scrollerInitialized) return;
+  window.scrollerInitialized = true;
+
+  // Check if dependencies are ready
+  if (typeof gsap === 'undefined' || typeof ModifiersPlugin === 'undefined') {
+    console.warn('GSAP not loaded yet');
+    return;
+  }
+
+  const scroller = document.getElementById("scroller");
+  if (!scroller) {
+    console.warn('Scroller element not found');
+    return;
+  }
+
+  // --- Register GSAP Plugin ---
+  gsap.registerPlugin(ModifiersPlugin);
+
+  // --- Duplicate for seamless loop ---
+  scroller.innerHTML += scroller.innerHTML;
+  const scrollWidth = scroller.scrollWidth / 2;
+
+  // --- Get initial offset from first card ---
+  const firstCard = scroller.children[0];
+  const cardStyle = window.getComputedStyle(firstCard);
+  const marginRight = parseFloat(cardStyle.marginRight);
+  const initialOffset = marginRight;
+
+  let position = initialOffset;
+  let velocity = 0;
+  let scrollAllowed = false;
+
+  // --- Set initial scroll position ---
+  gsap.set(scroller, { x: initialOffset });
+
+  const cards = scroller.children;
+
+  // --- Prevent scroller collapsing during animation ---
+  const cardHeight = cards[0].offsetHeight;
+  scroller.style.height = cardHeight + "px";
+  scroller.style.overflow = "hidden";
+
+  // --- GPU-optimized initial state for cards ---
+  gsap.set(cards, {
+    scaleY: 0,
+    transformOrigin: "bottom right",
+    willChange: "transform"
+  });
+
+  // --- SCROLL LOCK HELPERS ---
+  const preventScroll = (e) => e.preventDefault();
+
+  const keyScrollBlock = (e) => {
+    const blocked = [32, 33, 34, 35, 36, 37, 38, 39, 40];
+    if (blocked.includes(e.keyCode)) e.preventDefault();
+  };
+
+  const lockScroll = () => {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('keydown', keyScrollBlock, { passive: false });
+  };
+
+  const unlockScroll = () => {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.style.height = '';
+
+    window.removeEventListener('wheel', preventScroll, { passive: false });
+    window.removeEventListener('touchmove', preventScroll, { passive: false });
+    window.removeEventListener('keydown', keyScrollBlock, { passive: false });
+  };
+
+  // Lock all scrolling and inputs immediately
+  lockScroll();
+
+  // --- INTRO ANIMATION ---
+  setTimeout(() => {
+    const fastDuration = 2;
+    const fastDistance = scrollWidth * 1.5;
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        position = parseFloat(gsap.getProperty(scroller, "x"));
+        scroller.style.height = "";
+        scroller.style.overflow = "";
+
+        unlockScroll();
+        scrollAllowed = true;
+      }
+    });
+
+    tl.to(cards, {
+      scaleY: 1,
+      duration: 1,
+      ease: "power4.out"
+    }, 0);
+
+    tl.to(scroller, {
+      x: `-=${fastDistance}`,
+      duration: fastDuration,
+      ease: "power4.out",
+      modifiers: {
+        x: gsap.utils.unitize(x => {
+          const raw = parseFloat(x);
+          const looped = raw % scrollWidth;
+          return looped;
+        })
+      }
+    }, 0);
+  }, 2000);
+
+  // --- WHEEL INPUT ---
+  window.addEventListener("wheel", (e) => {
+    if (!scrollAllowed) return;
+    velocity += e.deltaY * 0.05;
+  }, { passive: true });
+
+  // --- TOUCH INPUT ---
+  const touchScrollMultiplier = 0.12;
+  let startY;
+  let isDraggingDown = false;
+
+  window.addEventListener("touchstart", (e) => {
+    if (!scrollAllowed) return;
+    startY = e.touches[0].clientY;
+    velocity = 0;
+    isDraggingDown = false;
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (!scrollAllowed) return;
+
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - startY;
+
+    if (deltaY > 0) isDraggingDown = true;
+
+    velocity += -deltaY * touchScrollMultiplier;
+    startY = currentY;
+
+    if (window.scrollY === 0 && isDraggingDown) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // --- GSAP Infinite Carousel Scroll Logic ---
+  gsap.ticker.add(() => {
+    if (Math.abs(velocity) > 0.001) {
+      position -= velocity;
+      velocity *= 0.94;
+
+      if (position <= -scrollWidth) {
+        position += scrollWidth;
+      }
+      if (position >= 0) {
+        position -= scrollWidth;
+      }
+
+      gsap.set(scroller, { x: position });
+    }
+  });
 });
