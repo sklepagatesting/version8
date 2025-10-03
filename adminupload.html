@@ -14,7 +14,7 @@
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
         <div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
             <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Publish New Content 📝</h1>
-            <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium hidden">Checking Admin Status...</p>
+            <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium">Checking Admin Status...</p>
 
             <form id="content-form" class="space-y-6 hidden">
                 <div>
@@ -44,180 +44,185 @@
         </div>
     </div>
 
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, addDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // Your Firebase config (ensure this is correct)
-    const firebaseConfig = {
-        apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs", 
-        authDomain: "sklepaga-8790e.firebaseapp.com",
-        projectId: "sklepaga-8790e",
-        storageBucket: "sklepaga-8790e.appspot.com",
-        messagingSenderId: "815409129057",
-        appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
-        measurementId: "G-9GH707G2WZ"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const authStatus = document.getElementById('auth-status');
-    const contentForm = document.getElementById('content-form');
-    const authorInput = document.getElementById('author');
-    const submitBtn = document.getElementById('submit-btn');
-
-    let currentAdminUser = null;
-
-    // --- DEBUGGING FLAG ---
-    const DEBUG_MODE = true;
-
-    // Helper function for clearer logging
-    function debugLog(message, ...optionalParams) {
-        if (DEBUG_MODE) {
-            console.log(`[DEBUG] ${message}`, ...optionalParams);
-        }
-    }
-
-    /**
-     * 1. CHECK ADMIN STATUS & REDIRECT
-     */
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            debugLog("User not logged in. Redirecting to index.html.");
-            window.location.href = "index.html";
-            return;
-        }
-        debugLog(`User logged in. UID: ${user.uid}`);
-        
-        authStatus.textContent = "Verifying role...";
-        try {
-            const adminRef = doc(db, "admin", user.uid);
-            const adminSnap = await getDoc(adminRef);
-
-            if (adminSnap.exists()) {
-                debugLog("SUCCESS: User is confirmed as Admin.");
-                currentAdminUser = user;
-                authStatus.classList.add('hidden');
-                contentForm.classList.remove('hidden');
-                authorInput.value = user.displayName || user.email;
-            } else {
-                debugLog("FAILURE: User is NOT an Admin. Redirecting.");
-                authStatus.textContent = "Access Denied. Redirecting...";
-                authStatus.classList.remove('text-red-500');
-                authStatus.classList.add('text-blue-500');
-                setTimeout(() => {
-                    window.location.href = "messenger.html";
-                }, 1500);
-            }
-        } catch (error) {
-            debugLog("ERROR during admin status check:", error);
-            authStatus.textContent = "Critical error during verification.";
-        }
-    });
-
-    /**
-     * 2. SAVE CONTENT TO FIRESTORE (CORE COLLECTION)
-     */
-    async function saveContent(contentData) {
-        try {
-            debugLog("Attempting to save content to /content collection...");
-            // *** DEBUG POINT 1: This is where the 'content' security rule is hit. ***
-            const docRef = await addDoc(collection(db, "content"), contentData);
-            debugLog(`SUCCESS: Content saved with ID: ${docRef.id}`);
-            return docRef.id;
-        } catch (e) {
-            debugLog("ERROR at DEBUG POINT 1 (saveContent):", e);
-            throw new Error(`Failed to save content to database. Check 'content' security rule. Details: ${e.message}`);
-        }
-    }
-
-    /**
-     * 3. CREATE/UPDATE "JSON" FIRESTORE DOCUMENT (CACHE)
-     */
-    async function updateContentDataJSON() {
-        try {
-            debugLog("Starting process to update 'JSON' cache document...");
-            
-            // 1. Fetch all documents from the 'content' collection
-            debugLog("Fetching all content from /content collection...");
-            const contentCollection = collection(db, "content");
-            // NOTE: This read operation is allowed because the code is running 
-            // after the admin check (it would fail if running on a public page 
-            // due to 'allow read: if false;' rule).
-            const snapshot = await getDocs(contentCollection);
-            
-            const allContent = [];
-            snapshot.forEach(doc => {
-                allContent.push({
-                    id: doc.id, 
-                    ...doc.data()
-                });
-            });
-            debugLog(`Successfully fetched ${allContent.length} content items.`);
-
-            // 2. Write the entire array to the 'contentJson/data' document
-            const jsonDocRef = doc(db, "contentJson", "data");
-            
-            debugLog("Attempting to write updated array to /contentJson/data...");
-            // *** DEBUG POINT 2: This is where the 'contentJson' security rule is hit. ***
-            await setDoc(jsonDocRef, { 
-                updatedAt: new Date().toISOString(),
-                content: allContent 
-            });
-
-            debugLog("SUCCESS: Simulated JSON cache document updated.");
-        } catch (e) {
-            debugLog("ERROR at DEBUG POINT 2 (updateContentDataJSON):", e);
-            throw new Error(`Failed to update content JSON document. Check 'contentJson' security rule. Details: ${e.message}`);
-        }
-    }
-
-
-    // Handle Form Submission
-    contentForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Publishing...';
-
-        if (!currentAdminUser) {
-             debugLog("Submit blocked: currentAdminUser is null.");
-             alert("Error: Admin user not verified. Please reload.");
-             submitBtn.disabled = false;
-             submitBtn.textContent = 'Publish Content';
-             return;
-        }
-
-        const newContent = {
-            title: document.getElementById('title').value.trim(),
-            context: document.getElementById('context').value.trim(),
-            image: document.getElementById('image').value.trim(),
-            author: currentAdminUser.displayName || currentAdminUser.email,
-            authorId: currentAdminUser.uid,
-            date: new Date().toISOString(), 
-            timestamp: Date.now()
+        // Your Firebase config (REPLACE WITH YOUR ACTUAL CONFIG)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs", // Use the correct key here
+            authDomain: "sklepaga-8790e.firebaseapp.com",
+            projectId: "sklepaga-8790e",
+            storageBucket: "sklepaga-8790e.appspot.com",
+            messagingSenderId: "815409129057",
+            appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+            measurementId: "G-9GH707G2WZ"
         };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        try {
-            // 1. Save the new content document
-            await saveContent(newContent);
-            
-            // 2. Update the dedicated "JSON" document
-            await updateContentDataJSON();
+        const authStatus = document.getElementById('auth-status');
+        const contentForm = document.getElementById('content-form');
+        const authorInput = document.getElementById('author');
+        const submitBtn = document.getElementById('submit-btn');
 
-            alert("Content successfully published and 'JSON' data updated!");
-            contentForm.reset();
-        } catch (error) {
-            // Display the detailed error message from the thrown exception
-            console.error("Publication process failed:", error);
-            alert(`Publication failed: ${error.message}`);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Publish Content';
+        let currentAdminUser = null;
+        
+        // --- DEBUGGING FLAG ---
+        const DEBUG_MODE = true;
+
+        // Helper function for clearer logging
+        function debugLog(message, ...optionalParams) {
+            if (DEBUG_MODE) {
+                console.log(`[DEBUG] ${message}`, ...optionalParams);
+            }
         }
-    });
-</script>
+
+        /**
+         * 1. CHECK ADMIN STATUS & REDIRECT
+         */
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // Not logged in -> Redirect to login page (consistent with the other admin page)
+                debugLog("User not logged in. Redirecting to google.html.");
+                window.location.href = "google.html";
+                return;
+            }
+            debugLog(`User logged in. UID: ${user.uid}`);
+
+            authStatus.textContent = "Verifying role...";
+            try {
+                const adminRef = doc(db, "admin", user.uid);
+                const adminSnap = await getDoc(adminRef);
+
+                if (adminSnap.exists()) {
+                    // Admin confirmed
+                    debugLog("SUCCESS: User is confirmed as Admin.");
+                    currentAdminUser = user;
+                    authStatus.classList.add('hidden');
+                    contentForm.classList.remove('hidden');
+                    authorInput.value = user.displayName || user.email; // Set author name
+                } else {
+                    // Not admin, redirect (consistent with the other admin page logic)
+                    debugLog("FAILURE: User is NOT an Admin. Signing out.");
+                    authStatus.textContent = "Access Denied. Signing out...";
+                    authStatus.classList.remove('text-red-500');
+                    authStatus.classList.add('text-blue-500');
+                    alert("You are not authorized.");
+                    // Use a short delay before signing out to let the user see the alert
+                    setTimeout(() => {
+                        auth.signOut();
+                        window.location.href = "google.html";
+                    }, 500); 
+                }
+            } catch (error) {
+                debugLog("ERROR during admin status check:", error);
+                authStatus.textContent = "Critical error during verification.";
+            }
+        });
+
+        /**
+         * 2. SAVE CONTENT TO FIRESTORE (CORE COLLECTION)
+         */
+        async function saveContent(contentData) {
+            try {
+                debugLog("Attempting to save content to /content collection...");
+                // *** DEBUG POINT 1: This is where the 'content' security rule is hit. ***
+                const docRef = await addDoc(collection(db, "content"), contentData);
+                debugLog(`SUCCESS: Content saved with ID: ${docRef.id}`);
+                return docRef.id;
+            } catch (e) {
+                debugLog("ERROR at DEBUG POINT 1 (saveContent):", e);
+                // Throw specific error message for easier debugging
+                throw new Error(`Failed to save content to database. Check 'content' security rule. Details: ${e.message}`);
+            }
+        }
+
+        /**
+         * 3. CREATE/UPDATE "JSON" FIRESTORE DOCUMENT (CACHE)
+         */
+        async function updateContentDataJSON() {
+            try {
+                debugLog("Starting process to update 'JSON' cache document...");
+
+                // 1. Fetch all documents from the 'content' collection
+                debugLog("Fetching all content from /content collection...");
+                const contentCollection = collection(db, "content");
+                const snapshot = await getDocs(contentCollection);
+                
+                const allContent = [];
+                snapshot.forEach(doc => {
+                    allContent.push({
+                        id: doc.id, 
+                        ...doc.data()
+                    });
+                });
+                debugLog(`Successfully fetched ${allContent.length} content items.`);
+
+                // 2. Write the entire array to the 'contentJson/data' document
+                const jsonDocRef = doc(db, "contentJson", "data");
+                
+                debugLog("Attempting to write updated array to /contentJson/data...");
+                // *** DEBUG POINT 2: This is where the 'contentJson' security rule is hit. ***
+                await setDoc(jsonDocRef, { 
+                    updatedAt: new Date().toISOString(),
+                    content: allContent 
+                });
+
+                debugLog("SUCCESS: Simulated JSON cache document updated.");
+            } catch (e) {
+                debugLog("ERROR at DEBUG POINT 2 (updateContentDataJSON):", e);
+                // Throw specific error message for easier debugging
+                throw new Error(`Failed to update content JSON document. Check 'contentJson' security rule. Details: ${e.message}`);
+            }
+        }
+
+
+        // Handle Form Submission
+        contentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Publishing...';
+
+            if (!currentAdminUser) {
+                 debugLog("Submit blocked: currentAdminUser is null.");
+                 alert("Error: Admin user not verified. Please reload.");
+                 submitBtn.disabled = false;
+                 submitBtn.textContent = 'Publish Content';
+                 return;
+            }
+
+            const newContent = {
+                title: document.getElementById('title').value.trim(),
+                context: document.getElementById('context').value.trim(),
+                image: document.getElementById('image').value.trim(),
+                author: currentAdminUser.displayName || currentAdminUser.email,
+                authorId: currentAdminUser.uid,
+                date: new Date().toISOString(), // Store current date/time
+                timestamp: Date.now()
+            };
+
+            try {
+                // 1. Save the new content document
+                await saveContent(newContent);
+                
+                // 2. Update the dedicated "JSON" document
+                await updateContentDataJSON();
+
+                alert("Content successfully published and 'JSON' data updated!");
+                contentForm.reset();
+            } catch (error) {
+                // Display the detailed error message from the thrown exception
+                console.error("Publication process failed:", error);
+                alert(`Publication failed: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publish Content';
+            }
+        });
+    </script>
 </body>
 </html>
