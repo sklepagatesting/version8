@@ -154,7 +154,7 @@
             <section class="font-theme px-4 py-8 sm:py-16 bg-white dark:bg-[#242424]">
                 <div class="max-w-screen-xl mx-auto px-4 pb-6 sm:pb-8 pt-10 sm:pt-24">
 
-                    <div id="loading-or-error" class="hidden text-center py-20">
+                    <div id="loading-or-error" class="text-center py-20">
                         <p class="text-xl text-gray-700 dark:text-gray-300">Loading article...</p>
                     </div>
 
@@ -319,7 +319,7 @@
 
 
     <script>
-        // IMPORTANT: Replace with your actual Firebase config (or ensure this is available globally)
+        // IMPORTANT: Replace with your actual Firebase config/Project ID
         const FIREBASE_PROJECT_ID = 'sklepaga-8790e'; 
         const JSON_URL = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/contentJson/data`; 
 
@@ -334,32 +334,28 @@
             return null;
         };
 
-        // Function to extract the slug from the URL: /article/[slug].html
+        // 🟢 CORRECT FUNCTION TO READ THE SLUG FROM THE URL: article.html?slug=example-slug
         function getSlugFromUrl() {
-            const path = window.location.pathname;
-            // Matches anything between the last '/' and '.html'
-            const match = path.match(/\/article\/([^\/]+)\.html$/); 
-            if (match && match[1]) {
-                return match[1];
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug'); // Looks for the 'slug' parameter
+            if (slug) {
+                return slug;
             }
-            // Fallback for hosting environments that don't use .html extensions (e.g., netlify/vercel)
-            // Tries to grab the last path segment: /article/slug -> slug
-            const segments = path.split('/').filter(s => s.length > 0);
-            if (segments.length >= 2 && segments[segments.length - 2] === 'article') {
-                return segments[segments.length - 1];
-            }
-            return null; 
+            // Fallback check for 'id' 
+            return params.get('id'); 
         }
 
         async function loadArticle() {
-            const slug = getSlugFromUrl();
+            const targetSlug = getSlugFromUrl(); // Use the updated function
             
-            if (!slug) {
-                loadingOrError.innerHTML = '<p class="text-xl text-red-500">Error: Article slug not found in URL.</p>';
+            if (!targetSlug) {
+                loadingOrError.innerHTML = '<p class="text-xl text-red-500">Error: Article slug not found in URL (missing ?slug=).</p>';
                 loadingOrError.classList.remove('hidden');
+                articleMain.classList.add('hidden');
                 return;
             }
 
+            loadingOrError.innerHTML = '<p class="text-xl text-gray-700 dark:text-gray-300">Loading article...</p>';
             loadingOrError.classList.remove('hidden');
             articleMain.classList.add('hidden');
 
@@ -380,22 +376,22 @@
 
                     const itemSlug = extractValue(fields.slug);
 
-                    if (itemSlug === slug) {
+                    if (itemSlug === targetSlug) {
                         articleData = {
                             title: extractValue(fields.title),
                             slug: itemSlug,
-                            datePublished: extractValue(fields.datePublished),
+                            datePublished: extractValue(fields.timestamp), // Using timestamp field for date
                             context: extractValue(fields.context),
                             image: extractValue(fields.image),
                             category: extractValue(fields.category),
-                            author: extractValue(fields.author),
+                            author: extractValue(fields.author) || 'SK Lepaga Council',
                         };
                         break;
                     }
                 }
 
                 if (!articleData) {
-                    loadingOrError.innerHTML = `<p class="text-xl text-red-500">Article with slug "${slug}" not found.</p>`;
+                    loadingOrError.innerHTML = `<p class="text-xl text-red-500">Article with slug "${targetSlug}" not found in database.</p>`;
                     return;
                 }
 
@@ -405,8 +401,12 @@
                 document.getElementById('article-category-meta').textContent = articleData.category;
                 document.getElementById('article-title').textContent = articleData.title;
                 document.getElementById('article-image').src = articleData.image;
-                document.getElementById('article-image').alt = articleData.title; // Set meaningful alt text
-                document.getElementById('article-date').textContent = new Date(articleData.datePublished).toLocaleDateString();
+                document.getElementById('article-image').alt = articleData.title; 
+                
+                // Format the timestamp to a readable date
+                const dateObj = articleData.datePublished ? new Date(articleData.datePublished * 1000) : new Date();
+                document.getElementById('article-date').textContent = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                
                 document.getElementById('article-author').textContent = articleData.author;
                 document.getElementById('article-slug').textContent = articleData.slug;
                 document.getElementById('article-context').textContent = articleData.context;
