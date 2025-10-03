@@ -1,8 +1,3 @@
-// This is the final, complete JavaScript file that combines all features.
-// It handles the first-visit-only loader, the hero and text animations,
-// the page transitions, and ensures everything is synchronized correctly.
-// This script replaces all previous scripts you were using.
-
 // --- Inject transition elements and styles early ---
 (function injectTransitionElements() {
   const style = document.createElement("style");
@@ -52,17 +47,6 @@
 
   document.body.insertBefore(transitionDiv, document.body.firstChild);
   document.body.insertBefore(overlayDiv, document.body.firstChild);
-})();
-
-// --- Determine if the loader should run ---
-const shouldRunLoader = (() => {
-  const isFirstLoadInSession = !sessionStorage.getItem('hasRunLoader');
-  let navigationType = 'navigate';
-  if (window.performance && window.performance.getEntriesByType) {
-    const navEntries = window.performance.getEntriesByType("navigation");
-    if (navEntries.length > 0) navigationType = navEntries[0].type;
-  }
-  return isFirstLoadInSession && navigationType !== 'back_forward';
 })();
 
 // --- Text reveal with IntersectionObserver ---
@@ -187,15 +171,15 @@ function runLoader() {
 
           heroIn();
           startObservingText();
-          window.dispatchEvent(new Event("scroller:start"));
-          window.dispatchEvent(new Event("page:ready")); // Signal that the page is ready and transitions can be active
+          if (typeof initScroller === "function") initScroller();
+          isPageReady = true;
         }, 1000);
       }
     }, 20);
   });
 }
 
-// Global flag to control when transitions are allowed
+// Global flag for transition control
 let isPageReady = false;
 
 // --- Page Transition Logic ---
@@ -205,19 +189,15 @@ function setupPageTransition() {
 
   document.querySelectorAll('[data-transition]').forEach(link => {
     link.addEventListener('click', (e) => {
-      // Only run the transition if the page is ready
-      if (!isPageReady) {
-        return;
-      }
-      
+      if (!isPageReady) return;
+
       e.preventDefault();
       const href = link.getAttribute('href');
 
-      // Hide elements first
       transitionEl.style.display = "none";
       overlayEl.style.display = "none";
 
-      // Reset styles to small dot at bottom center
+      // Reset styles
       transitionEl.style.transition = "none";
       transitionEl.style.bottom = "0";
       transitionEl.style.left = "50%";
@@ -228,12 +208,10 @@ function setupPageTransition() {
       overlayEl.style.transition = "none";
       overlayEl.style.background = "rgba(0,0,0,0)";
 
-      // Show elements before animating
       transitionEl.style.display = "block";
       overlayEl.style.display = "block";
 
       requestAnimationFrame(() => {
-        // Animate to full screen from bottom center
         transitionEl.style.transition = "bottom 1s ease-in-out, width 1s ease-in-out, height 1s ease-in-out, transform 1s ease-in-out";
         transitionEl.style.bottom = "50%";
         transitionEl.style.width = "100vw";
@@ -271,59 +249,18 @@ let prevBreakpoint = getBreakpoint();
 window.addEventListener("resize", () => {
   const bp = getBreakpoint();
   if (bp !== prevBreakpoint) {
-    prevBreakpoint = bp; // update immediately
-    sessionStorage.removeItem("hasRunLoader");
-
-    // Force full reload with cache bust
+    prevBreakpoint = bp;
     window.location.href = window.location.pathname +
       (window.location.search ? window.location.search + '&' : '?') +
       '_br=' + Date.now();
   }
 });
 
-
-// --- Loader and Transition Control ---
+// --- Init on DOM ready ---
 document.addEventListener('DOMContentLoaded', () => {
-  if (shouldRunLoader) {
-    runLoader();
-    sessionStorage.setItem('hasRunLoader', 'true');
-  } else {
-    // If loader is skipped (e.g., back navigation), the page is ready immediately.
-    const wrapper = document.getElementById("main-content");
-    if (wrapper) wrapper.style.display = "block";
-    document.body.style.overflow = "auto";
-    document.body.classList.remove("preload");
-    
-    // Set the flag and fire the events for a skipped loader.
-    isPageReady = true;
-    startObservingText();
-    heroIn();
-    window.dispatchEvent(new Event("scroller:start"));
-  }
-
-  // Listen for the custom event to set the flag
-  window.addEventListener('page:ready', () => {
-    isPageReady = true;
-  });
-
-  // Set up page transition listeners after the DOM is ready.
+  runLoader();
   setupPageTransition();
 });
-
-// --- Idle session reset logic ---
-let activityTimer;
-const IDLE_TIMEOUT = 5 * 60 * 1000;
-function resetIdleTimer() {
-  clearTimeout(activityTimer);
-  activityTimer = setTimeout(() => {
-    sessionStorage.removeItem('hasRunLoader');
-    console.log("Idle detected, loader flag reset.");
-  }, IDLE_TIMEOUT);
-}
-['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt =>
-  document.addEventListener(evt, resetIdleTimer, false)
-);
-resetIdleTimer();
 
 // --- bfcache handling ---
 window.addEventListener('pageshow', (event) => {
