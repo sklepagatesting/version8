@@ -54,7 +54,7 @@
   }
   /* Main content container fills the entire viewport. */
   .main-content {
-    position: relative; /* important for absolute positioning of its children */
+    position: relative; 
     height: 100vh;
     width: 100%;
     display: flex;
@@ -63,19 +63,18 @@
   }
 
   .images-container {
-    flex-grow: 1; /* This section takes up all remaining space */
+    flex-grow: 1; 
     padding-top: calc(var(--nav-height) + 1.5rem);
     z-index: 10;
     width: 100%;
-    position: relative; /* Needed for stacking context */
+    position: relative; 
   }
 
   .video-titles-container {
-    z-index: 20; /* Places this section on top */
+    z-index: 20; 
     background: transparent;
     padding: 2rem;
     width: 100%;
-    /* New positioning to anchor it to the bottom */
     position: absolute;
     bottom: 0;
     left: 0;
@@ -84,12 +83,9 @@
   width: clamp(200px, 40vw, 400px);
   aspect-ratio: 16 / 9;
   max-width: 500px;
-
-  /* instead of max-height (which breaks aspect-ratio), 
-      use height:auto so it scales naturally */
   height: auto;
-  max-height: 350px;   /* acts as a cap, but keeps aspect ratio */
-  object-fit: cover;   /* optional: keeps cropping instead of squishing */
+  max-height: 350px;   
+  object-fit: cover;   
 }
 
   .video-reel {
@@ -102,7 +98,6 @@
     z-index: 30 !important;
   }
 
-  /* Prevent any potential overflow */
   * {
     box-sizing: border-box;
   }</style>
@@ -425,11 +420,10 @@
     <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
 
     <script>
-      // On DOM load
       window.addEventListener("DOMContentLoaded", () => {
         gsap.utils.toArray(".clipp-section").forEach((section, index) => {
           gsap.to(section, {
-            clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
+            clipPath: "inset(0% 0% 0% 0%)", 
             duration: 0.7,
             ease: "power2.out",
           });
@@ -438,66 +432,73 @@
     </script>
 
     <script>
+        // Helper function to extract a simple value from the complex Firestore REST API response structure
+        const extractValue = (field) => {
+            if (!field) return null;
+            if (field.stringValue) return field.stringValue;
+            if (field.integerValue) return parseInt(field.integerValue);
+            // Add checks for other types if needed (e.g., booleanValue)
+            return null; 
+        };
+
         async function fetchAndRenderProjects() {
-            // 🚨 IMPORTANT: REPLACE THIS URL 🚨
-            // You MUST use the public URL to your 'contentJson/data' document.
-            // A typical Firebase Firestore REST API URL looks like:
-            // 'https://firestore.googleapis.com/v1/projects/YOUR_PROJECT_ID/databases/(default)/documents/contentJson/data'
-            const JSON_URL = 'YOUR_PUBLIC_FIREBASE_JSON_URL'; 
+            // ⭐️ CORRECTED JSON_URL using your Project ID ⭐️
+            const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data'; 
 
             const scroller = document.getElementById('scroller');
-            if (!scroller) {
-                console.error("Scroller element not found.");
-                return;
-            }
+            if (!scroller) return;
             
-            // Set initial loading state
             scroller.innerHTML = '<p class="text-gray-500 p-4">Loading projects...</p>';
 
             try {
                 const response = await fetch(JSON_URL);
                 if (!response.ok) {
+                    // This will now likely trigger the HTTP 403 error if rules are not set
                     throw new Error(`HTTP status ${response.status}`);
                 }
                 
                 let data = await response.json();
                 let contentArray = [];
 
-                // Logic to handle the expected JSON structure from the Admin Panel
-                if (data && Array.isArray(data.content)) {
-                    // Structure: { content: [...] } - (Clean structure created by the Admin Panel)
-                    contentArray = data.content;
-                } else if (data.fields && data.fields.content && data.fields.content.arrayValue) {
-                    // Structure: Raw Firestore REST API output (often complex)
-                    // You may need to adjust this complex mapping depending on how Firebase formats the output
-                    contentArray = data.fields.content.arrayValue.values.map(item => {
-                        return Object.keys(item.mapValue.fields).reduce((acc, key) => {
-                            // Simple attempt to convert Firestore map values to clean JS object
-                            const value = item.mapValue.fields[key];
-                            if (value.stringValue) acc[key] = value.stringValue;
-                            else if (value.integerValue) acc[key] = parseInt(value.integerValue);
-                            else acc[key] = value; // Fallback for other types
-                            return acc;
-                        }, {});
-                    });
+                // --- Parsing Logic for Raw Firestore REST API Output ---
+                const rawContentValues = data.fields?.content?.arrayValue?.values;
+                
+                if (rawContentValues && Array.isArray(rawContentValues)) {
+                    contentArray = rawContentValues.map(item => {
+                        const fields = item.mapValue?.fields;
+                        if (!fields) return null;
+
+                        // Map the complex fields to a simple JavaScript object
+                        return {
+                            id: extractValue(fields.id) || 'default',
+                            title: extractValue(fields.title),
+                            context: extractValue(fields.context),
+                            image: extractValue(fields.image),
+                            category: extractValue(fields.category),
+                            timestamp: extractValue(fields.timestamp), // Used for sorting
+                            // You can extract other fields like author, date, etc., here if needed
+                        };
+                    }).filter(item => item !== null); // Remove any items that failed parsing
                 } else {
-                     throw new Error("Invalid content format from server.");
+                     // If the structure is not as expected (e.g., if you manually uploaded the JSON)
+                     // You can add an alternative parsing path here if necessary.
+                     throw new Error("Invalid content format from server or no data found.");
                 }
 
-                // Filter for 'projects'
-                const projectContent = contentArray.filter(item => item.category === 'projects');
+                // 2. Filter for 'projects' only
+                const projectContent = contentArray
+                    .filter(item => item.category === 'projects');
 
                 if (projectContent.length === 0) {
-                    scroller.innerHTML = "<p class='text-gray-500 p-4'>No projects found in the database.</p>";
+                    scroller.innerHTML = "<p class='text-gray-500 p-4'>No projects found in the database. Add content via Admin Panel.</p>";
                     return;
                 }
 
-                // Generate the HTML structure for the carousel
+                // 3. Sort (newest first) and Generate HTML
                 const projectHTML = projectContent
-                    // Sort by timestamp if available, descending order
                     .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)) 
                     .map(item => `
-                        <a href="article/${item.id || 'default'}.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+                        <a href="article/${item.id}.html" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                             <div class="zoom overflow-hidden relative carousel-image">
                                 <img
                                     src="${item.image}"
@@ -513,12 +514,13 @@
                         </a>
                     `).join('');
 
-                // Insert the new HTML into the scroller
+                // 4. Insert the new HTML into the scroller
                 scroller.innerHTML = projectHTML;
 
             } catch (error) {
                 console.error("Failed to load and render content from JSON:", error);
-                scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Please check the JSON_URL. (${error.message})</p>`;
+                // The most likely error is now 403 (Forbidden) if rules aren't set.
+                scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check **Firebase Security Rules** for 'contentJson' collection. (${error.message})</p>`;
             }
         }
 
