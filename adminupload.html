@@ -108,18 +108,37 @@
                 </div>
                 
                 <div>
-                    <label for="image-upload" class="block text-sm font-medium text-gray-700 mb-1" id="image-label">
-                        Image File (Upload) <span id="current-image-status" class="text-xs text-gray-500 italic ml-2"></span>
-                    </label>
-                    <input type="file" id="image-upload" accept="image/*" class="w-full form-input-flat p-2">
-                    <p class="text-xs text-gray-400 mt-1">Select a new file to upload. Leaving this empty will keep the existing image in Edit mode.</p>
-                </div>
-                
-                <div>
                     <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author / Publisher</label>
                     <input type="text" id="author" required class="w-full form-input-flat text-gray-800">
                 </div>
-                
+
+                <div class="border p-4 rounded-lg bg-gray-50 space-y-3">
+                    <p class="text-sm font-semibold text-gray-800 border-b pb-2">Image Management</p>
+
+                    <div>
+                        <label for="image-upload" class="block text-sm font-medium text-gray-700 mb-1" id="image-label">
+                            1. Image File (Upload) <span id="current-image-status" class="text-xs text-gray-500 italic ml-2"></span>
+                        </label>
+                        <input type="file" id="image-upload" accept="image/*" class="w-full form-input-flat p-2">
+                        <p class="text-xs text-gray-400 mt-1">Select a new file to upload. This takes precedence over a URL.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload Progress</label>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="upload-progress-bar" class="bg-[#5c5cff] h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p id="upload-progress-text" class="text-xs text-gray-500 mt-1">Ready to upload...</p>
+                    </div>
+
+                    <div>
+                        <label for="image-url-input" class="block text-sm font-medium text-gray-700 mb-1">
+                            2. OR - Image URL (Paste a link here)
+                        </label>
+                        <input type="url" id="image-url-input" class="w-full form-input-flat" placeholder="https://example.com/your-hosted-image.jpg">
+                        <p class="text-xs text-gray-400 mt-1">Use this if the image is hosted externally. Leave both 1 & 2 empty to keep existing image.</p>
+                    </div>
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                     <button type="submit" id="submit-btn" data-mode="create" class="action-button bg-[#5c5cff] text-white hover:bg-[#4a4aee] disabled:opacity-50 sm:col-span-1">
                         Publish Content
@@ -150,367 +169,406 @@
         </div>
     </div>
     
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { 
-        getFirestore, 
-        doc, 
-        getDoc, 
-        collection, 
-        addDoc, 
-        getDocs, 
-        setDoc,
-        updateDoc, 
-        deleteDoc 
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    
-    import { 
-        getStorage, 
-        ref, 
-        uploadBytes, 
-        getDownloadURL,
-        deleteObject 
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
-
-    // IMPORTANT: Replace with your actual Firebase config
-    const firebaseConfig = {
-        apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
-        authDomain: "sklepaga-8790e.firebaseapp.com",
-        projectId: "sklepaga-8790e",
-        storageBucket: "sklepaga-8790e.appspot.com",
-        messagingSenderId: "815409129057",
-        appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
-        measurementId: "G-9GH707G2WZ"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app); 
-
-    const authStatus = document.getElementById('auth-status');
-    const contentForm = document.getElementById('content-form');
-    const titleInput = document.getElementById('title');
-    const datePublishedInput = document.getElementById('date-published'); 
-    const contextInput = document.getElementById('context');
-    const imageUploadInput = document.getElementById('image-upload'); 
-    const currentImageStatus = document.getElementById('current-image-status'); 
-    const authorInput = document.getElementById('author');
-    const submitBtn = document.getElementById('submit-btn');
-    const cancelEditBtn = document.getElementById('cancel-edit-btn');
-    const contentListEl = document.getElementById('content-list');
-    const contentManagement = document.getElementById('content-management');
-    const categoryFilter = document.getElementById('category-filter');
-
-    let currentAdminUser = null;        
-    let editingDocId = null; 
-    let allContent = []; 
-    let currentImageUrl = ''; 
-    
-    // --- Helper Functions ---
-    const createBaseSlug = (title) => {
-        return title.toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '') 
-            .replace(/[\s_-]+/g, '-') 
-            .replace(/^-+|-+$/g, ''); 
-    };
-
-    async function generateUniqueSlug(title, currentDocId) {
-        if (!title) return '';
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            setDoc,
+            updateDoc, 
+            deleteDoc 
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
         
-        const baseSlug = createBaseSlug(title);
-        let finalSlug = baseSlug;
-        let counter = 1;
-        
-        const comparableContent = allContent.filter(c => c.id !== currentDocId);
+        // 🌟 UPDATED IMPORT for Progress Bar (uploadBytesResumable) 🌟
+        import { 
+            getStorage, 
+            ref, 
+            uploadBytesResumable, // Use this for progress tracking
+            getDownloadURL,
+            deleteObject 
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
-        while (comparableContent.some(c => c.slug === finalSlug)) {
-            counter++;
-            finalSlug = `${baseSlug}-${counter}`;
+        // IMPORTANT: Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+            authDomain: "sklepaga-8790e.firebaseapp.com",
+            projectId: "sklepaga-8790e",
+            storageBucket: "sklepaga-8790e.appspot.com",
+            messagingSenderId: "815409129057",
+            appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+            measurementId: "G-9GH707G2WZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app); 
+
+        const authStatus = document.getElementById('auth-status');
+        const contentForm = document.getElementById('content-form');
+        const titleInput = document.getElementById('title');
+        const datePublishedInput = document.getElementById('date-published'); 
+        const contextInput = document.getElementById('context');
+        const imageUploadInput = document.getElementById('image-upload'); 
+        const currentImageStatus = document.getElementById('current-image-status'); 
+        const authorInput = document.getElementById('author');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const contentListEl = document.getElementById('content-list');
+        const contentManagement = document.getElementById('content-management');
+        const categoryFilter = document.getElementById('category-filter');
+        
+        // 🌟 NEW UI ELEMENTS FOR PROGRESS BAR AND URL INPUT 🌟
+        const imageUrlInput = document.getElementById('image-url-input');
+        const progressBar = document.getElementById('upload-progress-bar');
+        const progressText = document.getElementById('upload-progress-text');
+
+        let currentAdminUser = null;        
+        let editingDocId = null; 
+        let allContent = []; 
+        let currentImageUrl = ''; 
+        
+        // --- Helper Functions ---
+        const createBaseSlug = (title) => {
+            return title.toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '') 
+                .replace(/[\s_-]+/g, '-') 
+                .replace(/^-+|-+$/g, ''); 
+        };
+
+        async function generateUniqueSlug(title, currentDocId) {
+            if (!title) return '';
+            
+            const baseSlug = createBaseSlug(title);
+            let finalSlug = baseSlug;
+            let counter = 1;
+            
+            const comparableContent = allContent.filter(c => c.id !== currentDocId);
+
+            while (comparableContent.some(c => c.slug === finalSlug)) {
+                counter++;
+                finalSlug = `${baseSlug}-${counter}`;
+            }
+            return finalSlug;
         }
-        return finalSlug;
-    }
 
-    // 🌟 REFINED: uploadImageAndGetURL function 🌟
-    async function uploadImageAndGetURL(file, slug) {
-        // 🔑 If no new file is provided, return the existing URL (used in Edit mode).
-        if (!file) {
-             return currentImageUrl; 
-        }
+        // 🌟 UPDATED: uploadImageAndGetURL to include progress tracking 🌟
+        async function uploadImageAndGetURL(file, slug) {
+            // If no file is provided, return the existing URL (used in Edit mode or if URL is used)
+            if (!file) {
+                 return currentImageUrl; 
+            }
 
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${slug}-${Date.now()}.${fileExtension}`;
-        
-        const storageRef = ref(storage, `content-images/${fileName}`);
+            const fileExtension = file.name.split('.').pop();
+            const fileName = `${slug}-${Date.now()}.${fileExtension}`;
+            const storageRef = ref(storage, `content-images/${fileName}`);
 
-        try {
-            const snapshot = await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(snapshot.ref);
-            return downloadURL;
-        } catch (error) {
-            console.error("Image upload failed:", error);
-            throw new Error("Failed to upload image to storage.");
-        }
-    }
+            // Use Promise to handle the asynchronous upload task with monitoring
+            return new Promise((resolve, reject) => {
+                const uploadTask = uploadBytesResumable(storageRef, file);
 
-    // 🌟 SIMPLIFIED: getFormData 🌟 (Only text fields)
-    const getFormData = () => ({
-        title: titleInput.value.trim(),
-        datePublished: datePublishedInput.value.trim(), 
-        context: contextInput.value.trim(),
-        category: document.querySelector('input[name="category"]:checked')?.value || '', 
-        author: authorInput.value.trim(),
-        authorId: currentAdminUser.uid,
-    });
-
-    const setFormData = (data) => {
-        titleInput.value = data.title;
-        contextInput.value = data.context;
-        datePublishedInput.value = data.datePublished || new Date().toISOString().substring(0, 10);                                
-        
-        const categoryRadio = document.querySelector(`input[name="category"][value="${data.category}"]`);
-        if (categoryRadio) {
-            categoryRadio.checked = true;
-        }                                
-        authorInput.value = data.author;
-        
-        currentImageUrl = data.image || ''; // Set the existing URL for reference
-        currentImageStatus.textContent = currentImageUrl ? '(Existing image linked)' : '(No image linked)';
-
-        imageUploadInput.value = ''; // Clear file input
-    };
-
-    async function saveContent(data) {
-        if (editingDocId) {
-            await updateDoc(doc(db, "content", editingDocId), {
-                ...data,
-                updatedAt: new Date().toISOString()
-            });
-        } else {
-            await addDoc(collection(db, "content"), {
-                ...data,
-                timestamp: Date.now()
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // Calculate percentage
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        
+                        // Update UI
+                        progressBar.style.width = progress + '%';
+                        progressText.textContent = `Uploading: ${progress.toFixed(0)}%`;
+                    }, 
+                    (error) => {
+                        // Handle unsuccessful uploads
+                        console.error("Image upload failed:", error);
+                        progressBar.style.width = '0%';
+                        progressText.textContent = "Upload failed.";
+                        reject(new Error("Failed to upload image to storage."));
+                    }, 
+                    () => {
+                        // Handle successful uploads
+                        progressText.textContent = "Upload complete! Fetching URL...";
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            resolve(downloadURL);
+                        }).catch(reject);
+                    }
+                );
             });
         }
-    }
 
-    async function fetchAllContent() {
-        const snapshot = await getDocs(collection(db, "content"));
-        allContent = []; 
-        snapshot.forEach(d => allContent.push({ id: d.id, ...d.data() }));
-    }
-
-    async function updateContentJSON() {
-        await setDoc(doc(db, "contentJson", "data"), {
-            updatedAt: new Date().toISOString(),
-            content: allContent
+        const getFormData = () => ({
+            title: titleInput.value.trim(),
+            datePublished: datePublishedInput.value.trim(), 
+            context: contextInput.value.trim(),
+            category: document.querySelector('input[name="category"]:checked')?.value || '', 
+            author: authorInput.value.trim(),
+            authorId: currentAdminUser.uid,
         });
-    }
 
-    async function renderContentList() {
-        contentListEl.innerHTML = '<p class="text-gray-500">Loading content...</p>';
-        
-        await fetchAllContent();
-        
-        try {
-            const filterValue = categoryFilter.value;
-            const filteredContent = filterValue === 'all' 
-                ? allContent 
-                : allContent.filter(c => c.category === filterValue);
+        const setFormData = (data) => {
+            titleInput.value = data.title;
+            contextInput.value = data.context;
+            datePublishedInput.value = data.datePublished || new Date().toISOString().substring(0, 10);                                
+            
+            const categoryRadio = document.querySelector(`input[name="category"][value="${data.category}"]`);
+            if (categoryRadio) {
+                categoryRadio.checked = true;
+            }                                
+            authorInput.value = data.author;
+            
+            currentImageUrl = data.image || ''; 
+            currentImageStatus.textContent = currentImageUrl ? '(Existing image linked)' : '(No image linked)';
 
-            if (filteredContent.length === 0) {
-                contentListEl.innerHTML = `<p class="text-gray-500">No ${filterValue !== 'all' ? filterValue : ''} content found.</p>`;
+            imageUploadInput.value = ''; // Clear file input
+            imageUrlInput.value = ''; // Clear URL input
+        };
+
+        async function saveContent(data) {
+            if (editingDocId) {
+                await updateDoc(doc(db, "content", editingDocId), {
+                    ...data,
+                    updatedAt: new Date().toISOString()
+                });
+            } else {
+                await addDoc(collection(db, "content"), {
+                    ...data,
+                    timestamp: Date.now()
+                });
+            }
+        }
+
+        async function fetchAllContent() {
+            const snapshot = await getDocs(collection(db, "content"));
+            allContent = []; 
+            snapshot.forEach(d => allContent.push({ id: d.id, ...d.data() }));
+        }
+
+        async function updateContentJSON() {
+            await setDoc(doc(db, "contentJson", "data"), {
+                updatedAt: new Date().toISOString(),
+                content: allContent
+            });
+        }
+
+        async function renderContentList() {
+            contentListEl.innerHTML = '<p class="text-gray-500">Loading content...</p>';
+            
+            await fetchAllContent();
+            
+            try {
+                const filterValue = categoryFilter.value;
+                const filteredContent = filterValue === 'all' 
+                    ? allContent 
+                    : allContent.filter(c => c.category === filterValue);
+
+                if (filteredContent.length === 0) {
+                    contentListEl.innerHTML = `<p class="text-gray-500">No ${filterValue !== 'all' ? filterValue : ''} content found.</p>`;
+                    return;
+                }
+
+                contentListEl.innerHTML = filteredContent
+                    .sort((a, b) => b.timestamp - a.timestamp) 
+                    .map(d => `
+                        <div class="p-4 border border-gray-200 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-50 transition duration-150">
+                            <div class="mb-2 sm:mb-0">
+                                <p class="text-base font-semibold text-gray-800">${d.title} <span class="text-xs font-normal text-gray-500">(${d.category || 'N/A'})</span></p>
+                                <p class="text-sm text-gray-500">
+                                    By: ${d.author || 'N/A'} - 
+                                    📅 ${d.datePublished ? new Date(d.datePublished).toLocaleDateString() : 'Date N/A'}
+                                    <span class="text-xs text-gray-400 block sm:inline-block">/slug: ${d.slug || 'N/A'}</span>
+                                </p>
+                            </div>
+                            <div class="space-x-2 flex-shrink-0 mt-2 sm:mt-0">
+                                <button data-id="${d.id}" data-action="edit" class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full hover:bg-blue-200 font-medium text-xs sm:text-sm">Edit</button>
+                                <button data-id="${d.id}" data-action="delete" class="bg-red-100 text-red-700 py-1 px-3 rounded-full hover:bg-red-200 font-medium text-xs sm:text-sm">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+            } catch (err) {
+                console.error("Error fetching content:", err);
+                contentListEl.innerHTML = '<p class="text-red-500">Failed to load content.</p>';
+            }
+        }
+
+        async function handleEdit(docId) {
+            const docData = allContent.find(d => d.id === docId);
+            if (docData) {
+                editingDocId = docId;
+                setFormData(docData);
+                submitBtn.textContent = 'Update Content';
+                submitBtn.dataset.mode = 'edit';
+                cancelEditBtn.classList.remove('hidden');
+                window.scrollTo({ top: contentForm.offsetTop - 20, behavior: 'smooth' }); 
+            } else {
+                alert("Content not found in local cache! Please refresh.");
+            }
+        }
+        
+        async function handleDelete(docId) {
+            if (!confirm("Are you sure you want to delete this content? This action is irreversible.")) return;
+            
+            const docData = allContent.find(d => d.id === docId);
+            const imageUrl = docData?.image;
+
+            try {
+                await deleteDoc(doc(db, "content", docId));
+                
+                if (imageUrl && imageUrl.includes('firebasestorage.googleapis.com')) {
+                    try {
+                        // Only attempt to delete if it's a Firebase Storage URL
+                        const imageRef = ref(storage, imageUrl);
+                        await deleteObject(imageRef);
+                        console.log("Image successfully deleted from storage.");
+                    } catch (storageErr) {
+                        console.warn("Could not delete image from storage (may be already gone or bad URL):", storageErr);
+                    }
+                }
+                
+                await updateContentJSON();
+                alert("Content deleted successfully! ✅");
+                renderContentList();
+            } catch (err) {
+                console.error("Error deleting content:", err);
+                alert(`Failed to delete content: ${err.message}`);
+            }
+        }
+
+        function resetForm() {
+            contentForm.reset();
+            submitBtn.textContent = 'Publish Content';
+            submitBtn.dataset.mode = 'create';
+            cancelEditBtn.classList.add('hidden');
+            editingDocId = null;
+            currentImageUrl = ''; 
+            currentImageStatus.textContent = '';
+            
+            // Reset Progress Bar
+            progressBar.style.width = '0%';
+            progressText.textContent = "Ready to upload...";
+            
+            datePublishedInput.value = new Date().toISOString().substring(0, 10);
+            
+            if (currentAdminUser) {                  
+                authorInput.value = currentAdminUser.email; 
+            }
+        }
+
+        // --- Event Listeners ---
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) return window.location.href = "index.html";
+
+            try {
+                const adminSnap = await getDoc(doc(db, "admin", user.uid));
+                if (adminSnap.exists()) {
+                    currentAdminUser = user;
+                    authStatus.classList.add('hidden');
+                    contentForm.classList.remove('hidden');
+                    contentManagement.classList.remove('hidden');
+                    
+                    resetForm();
+                    renderContentList(); 
+                 } else {
+                    authStatus.textContent = "Access Denied. Redirecting...";
+                    authStatus.classList.remove('text-red-500');
+                    authStatus.classList.add('text-blue-500');
+                    setTimeout(() => window.location.href="messenger.html", 1500);
+                }
+            } catch (err) {
+                console.error(err);
+                authStatus.textContent = "Error verifying admin.";
+            }
+        });
+
+        // 🌟 FINALIZED: Submit handler 🌟
+        contentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!document.querySelector('input[name="category"]:checked')) {
+                alert("Please select a Category.");
                 return;
             }
 
-            contentListEl.innerHTML = filteredContent
-                .sort((a, b) => b.timestamp - a.timestamp) 
-                .map(d => `
-                    <div class="p-4 border border-gray-200 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-50 transition duration-150">
-                        <div class="mb-2 sm:mb-0">
-                            <p class="text-base font-semibold text-gray-800">${d.title} <span class="text-xs font-normal text-gray-500">(${d.category || 'N/A'})</span></p>
-                            <p class="text-sm text-gray-500">
-                                By: ${d.author || 'N/A'} - 
-                                📅 ${d.datePublished ? new Date(d.datePublished).toLocaleDateString() : 'Date N/A'}
-                                <span class="text-xs text-gray-400 block sm:inline-block">/slug: ${d.slug || 'N/A'}</span>
-                            </p>
-                        </div>
-                        <div class="space-x-2 flex-shrink-0 mt-2 sm:mt-0">
-                            <button data-id="${d.id}" data-action="edit" class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full hover:bg-blue-200 font-medium text-xs sm:text-sm">Edit</button>
-                            <button data-id="${d.id}" data-action="delete" class="bg-red-100 text-red-700 py-1 px-3 rounded-full hover:bg-red-200 font-medium text-xs sm:text-sm">Delete</button>
-                        </div>
-                    </div>
-                `).join('');
-        } catch (err) {
-            console.error("Error fetching content:", err);
-            contentListEl.innerHTML = '<p class="text-red-500">Failed to load content.</p>';
-        }
-    }
+            const isEditMode = submitBtn.dataset.mode === 'edit';
+            const file = imageUploadInput.files[0];
+            const directUrl = imageUrlInput.value.trim();
+            let finalImageUrl = currentImageUrl; // Start with the existing image URL
 
-    async function handleEdit(docId) {
-        const docData = allContent.find(d => d.id === docId);
-        if (docData) {
-            editingDocId = docId;
-            setFormData(docData);
-            submitBtn.textContent = 'Update Content';
-            submitBtn.dataset.mode = 'edit';
-            cancelEditBtn.classList.remove('hidden');
-            window.scrollTo({ top: contentForm.offsetTop - 20, behavior: 'smooth' }); 
-        } else {
-            alert("Content not found in local cache! Please refresh.");
-        }
-    }
-    
-    async function handleDelete(docId) {
-        if (!confirm("Are you sure you want to delete this content? This action is irreversible.")) return;
-        
-        const docData = allContent.find(d => d.id === docId);
-        const imageUrl = docData?.image;
-
-        try {
-            await deleteDoc(doc(db, "content", docId));
-            
-            if (imageUrl) {
-                try {
-                    const imageRef = ref(storage, imageUrl);
-                    await deleteObject(imageRef);
-                    console.log("Image successfully deleted from storage.");
-                } catch (storageErr) {
-                    console.warn("Could not delete image from storage (may be already gone or bad URL):", storageErr);
-                }
+            // Core Validation: Must have a file OR a direct URL OR an existing URL.
+            if (!file && !directUrl && !currentImageUrl) {
+                alert("Content requires an image. Please select a file or paste a URL.");
+                return;
             }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = (isEditMode ? 'Updating...' : 'Publishing...');
+
+            if (!currentAdminUser) return;
             
-            await updateContentJSON();
-            alert("Content deleted successfully! ✅");
-            renderContentList();
-        } catch (err) {
-            console.error("Error deleting content:", err);
-            alert(`Failed to delete content: ${err.message}`);
-        }
-    }
+            try {
+                const formData = getFormData();
+                const uniqueSlug = await generateUniqueSlug(formData.title, editingDocId);
+                
+                if (file) {
+                    // Case 1: Upload a new file (and get its URL)
+                    finalImageUrl = await uploadImageAndGetURL(file, uniqueSlug);
+                } else if (directUrl) {
+                    // Case 2: Use the pasted URL
+                    finalImageUrl = directUrl;
+                } 
+                // Case 3: else finalImageUrl remains currentImageUrl (existing image)
 
-    function resetForm() {
-        contentForm.reset();
-        submitBtn.textContent = 'Publish Content';
-        submitBtn.dataset.mode = 'create';
-        cancelEditBtn.classList.add('hidden');
-        editingDocId = null;
-        currentImageUrl = ''; 
-        currentImageStatus.textContent = '';
-        
-        datePublishedInput.value = new Date().toISOString().substring(0, 10);
-        
-        if (currentAdminUser) {                  
-            authorInput.value = currentAdminUser.email; 
-        }
-    }
+                if (!finalImageUrl) {
+                     throw new Error("Image source missing. Cannot save content without an image URL.");
+                }
 
-    // --- Event Listeners ---
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) return window.location.href = "index.html";
+                // 3. Prepare final data for Firestore
+                const finalData = { 
+                    ...formData, 
+                    slug: uniqueSlug,
+                    image: finalImageUrl 
+                };
 
-        try {
-            const adminSnap = await getDoc(doc(db, "admin", user.uid));
-            if (adminSnap.exists()) {
-                currentAdminUser = user;
-                authStatus.classList.add('hidden');
-                contentForm.classList.remove('hidden');
-                contentManagement.classList.remove('hidden');
+                // 4. Save content
+                await saveContent(finalData);
+                
+                // 5. Update global JSON and UI
+                await fetchAllContent();
+                await updateContentJSON();
+                
+                alert(`✅ Content ${isEditMode ? 'updated' : 'published'}!`);
                 
                 resetForm();
                 renderContentList(); 
-             } else {
-                authStatus.textContent = "Access Denied. Redirecting...";
-                authStatus.classList.remove('text-red-500');
-                authStatus.classList.add('text-blue-500');
-                setTimeout(() => window.location.href="messenger.html", 1500);
+            } catch (err) {
+                console.error(err);
+                alert(`❌ Failed: ${err.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = isEditMode ? 'Update Content' : 'Publish Content';
+                // Final Progress UI cleanup
+                progressBar.style.width = '0%';
+                progressText.textContent = "Ready to upload...";
             }
-        } catch (err) {
-            console.error(err);
-            authStatus.textContent = "Error verifying admin.";
-        }
-    });
-
-    // 🌟 REFINED: Submit handler (Create/Update) 🌟
-    contentForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        });
         
-        if (!document.querySelector('input[name="category"]:checked')) {
-            alert("Please select a Category.");
-            return;
-        }
+        cancelEditBtn.addEventListener('click', resetForm); 
 
-        const isEditMode = submitBtn.dataset.mode === 'edit';
-        const file = imageUploadInput.files[0];
-
-        // Core Validation: Must have a file OR an existing URL.
-        if (!file && !currentImageUrl) {
-            alert("Content requires an image. Please select a file or ensure an existing image is linked.");
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = (isEditMode ? 'Updating...' : 'Publishing...');
-
-        if (!currentAdminUser) return;
-        
-        try {
-            const formData = getFormData();
-            
-            // 1. Generate the unique slug
-            const uniqueSlug = await generateUniqueSlug(formData.title, editingDocId);
-            
-            // 2. Upload image and get the URL
-            const imageUrl = await uploadImageAndGetURL(file, uniqueSlug);
-            
-            // CRITICAL CHECK: ensure imageUrl is not empty/null before saving
-            if (!imageUrl) {
-                 throw new Error("Image upload or retrieval failed. Cannot save content without an image URL.");
+        contentListEl.addEventListener('click', (e) => {
+            const target = e.target;
+            if (target.dataset.action === 'edit') {
+                handleEdit(target.dataset.id);
+            } else if (target.dataset.action === 'delete') {
+                handleDelete(target.dataset.id);
             }
+        });
 
-            // 3. Prepare final data for Firestore
-            const finalData = { 
-                ...formData, // All text/date fields
-                slug: uniqueSlug,
-                image: imageUrl // The new or existing URL
-            };
-
-            // 4. Save content
-            await saveContent(finalData);
-            
-            // 5. Update global JSON and UI
-            await fetchAllContent();
-            await updateContentJSON();
-            
-            alert(`✅ Content ${isEditMode ? 'updated' : 'published'}!`);
-            
-            resetForm();
-            renderContentList(); 
-        } catch (err) {
-            console.error(err);
-            alert(`❌ Failed: ${err.message}`);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = isEditMode ? 'Update Content' : 'Publish Content';
-        }
-    });
-    
-    cancelEditBtn.addEventListener('click', resetForm); 
-
-    contentListEl.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target.dataset.action === 'edit') {
-            handleEdit(target.dataset.id);
-        } else if (target.dataset.action === 'delete') {
-            handleDelete(target.dataset.id);
-        }
-    });
-
-    categoryFilter.addEventListener('change', renderContentList);
-    
-    datePublishedInput.value = new Date().toISOString().substring(0, 10);
-</script>
+        categoryFilter.addEventListener('change', renderContentList);
+        
+        datePublishedInput.value = new Date().toISOString().substring(0, 10);
+    </script>
 </body>
 </html>
