@@ -97,7 +97,7 @@
 
                         <div class="max-w-screen-xl mx-auto">
                             <a href="#">
-                                <div id="article-image-container" class="flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing" data-dark-border="#242424">
+                                <div id="article-image-container" class="zoom flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing" data-dark-border="#242424">
                                     <picture>
                                         <source media="(max-width: 767px)" srcset="">
                                         <img id="article-image" src="" alt="Article Image" class="w-full h-auto object-cover">
@@ -169,7 +169,7 @@
                 }
 
                 // 1. Initial Image Zoom-In Animation
-                const target = document.querySelector("#article-image-container.zoom.parallax");
+                const target = document.querySelector("#article-image-container.zoom");
                 if (target) {
                     gsap.fromTo(
                         target, {
