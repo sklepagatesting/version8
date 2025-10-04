@@ -5,89 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Admin Panel - Publish & Manage Content</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f7fa; }
+        /* Apple-like minimalist flat design */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0f0f0; /* Soft light gray background */
+        }
+        .flat-card {
+            background-color: #ffffff;
+            /* Minimalist design: no shadows, no hard borders, just a flat, white panel */
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        .form-input-flat {
+            border: 1px solid #dcdcdc; /* Light border */
+            border-radius: 6px;
+            padding: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        .form-input-flat:focus {
+            border-color: #5c5cff; /* Apple-like blue focus */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(92, 92, 255, 0.2); /* Soft focus ring */
+        }
+        .action-button {
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        /* Custom radio button styles for better appearance */
+        .form-radio {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #dcdcdc;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        .form-radio:checked {
+            border-color: #5c5cff;
+            background-color: #ffffff;
+        }
+        .form-radio:checked::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: #5c5cff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 <body>
-    <div class="min-h-screen flex flex-col items-center justify-start p-4 sm:p-8 bg-f4f7fa">
-        <div class="w-full max-w-xl lg:max-w-4xl bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100 mt-4 sm:mt-8 mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">Admin Panel ⚙️</h1>
-            <p id="auth-status" class="text-center text-sm mb-4 sm:mb-6 text-red-500 font-medium">Checking Admin Status...</p>
-
+    <div class="min-h-screen flex flex-col items-center justify-start p-4 sm:p-8 bg-f0f0f0">
+        
+        <div class="w-full max-w-xl lg:max-w-4xl flat-card mt-4 sm:mt-8 mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 text-center">Admin Panel ⚙️</h1>
+            <p id="auth-status" class="text-center text-sm mb-6 text-red-500 font-medium">Checking Admin Status...</p>
+            
             <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">Publish/Edit Content 📝</h2>
+            
             <form id="content-form" class="space-y-4 sm:space-y-6 hidden">
                 
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" id="title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    <input type="text" id="title" required class="w-full form-input-flat" placeholder="Enter article title here">
                 </div>
-
-                <div>
-                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-1">URL Slug (e.g., tree-planting-activity)</label>
-                    <input type="text" id="slug" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150" placeholder="my-article-slug-here">
-                </div>
+                
                 <fieldset>
                     <legend class="text-sm font-medium text-gray-700 mb-2">Category</legend>
                     <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
                         <label class="inline-flex items-center">
-                            <input type="radio" name="category" value="projects" required class="form-radio text-purple-600 h-4 w-4">
-                            <span class="ml-2 text-gray-700">Projects</span>
+                            <input type="radio" name="category" value="projects" required class="form-radio">
+                            <span class="ml-1 text-gray-700">Projects</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="radio" name="category" value="news" required class="form-radio text-purple-600 h-4 w-4">
-                            <span class="ml-2 text-gray-700">News</span>
+                            <input type="radio" name="category" value="news" required class="form-radio">
+                            <span class="ml-1 text-gray-700">News</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="radio" name="category" value="schedules" required class="form-radio text-purple-600 h-4 w-4">
-                            <span class="ml-2 text-gray-700">Schedules</span>
+                            <input type="radio" name="category" value="schedules" required class="form-radio">
+                            <span class="ml-1 text-gray-700">Schedules</span>
                         </label>
                     </div>
                 </fieldset>
                 
                 <div>
                     <label for="date-published" class="block text-sm font-medium text-gray-700 mb-1">Date Published</label>
-                    <input type="date" id="date-published" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    <input type="date" id="date-published" required class="w-full form-input-flat">
                 </div>
-
+                
                 <div>
                     <label for="context" class="block text-sm font-medium text-gray-700 mb-1">Context (Main Text)</label>
-                    <textarea id="context" rows="5" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150"></textarea>
+                    <textarea id="context" rows="5" required class="w-full form-input-flat"></textarea>
                 </div>
-
+                
                 <div>
                     <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                    <input type="url" id="image" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150" placeholder="https://example.com/image.jpg">
+                    <input type="url" id="image" required class="w-full form-input-flat" placeholder="https://example.com/image.jpg">
                 </div>
                 
                 <div>
                     <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author / Publisher</label>
-                    <input type="text" id="author" required class="w-full p-3 border border-gray-300 rounded-lg text-gray-800 focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    <input type="text" id="author" required class="w-full form-input-flat text-gray-800">
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button type="submit" id="submit-btn" data-mode="create" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 disabled:opacity-50 sm:col-span-1">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <button type="submit" id="submit-btn" data-mode="create" class="action-button bg-[#5c5cff] text-white hover:bg-[#4a4aee] disabled:opacity-50 sm:col-span-1">
                         Publish Content
                     </button>
-                    <button type="button" id="cancel-edit-btn" class="w-full bg-gray-400 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-gray-500 transition duration-300 hidden sm:col-span-1">
+                    <button type="button" id="cancel-edit-btn" class="action-button bg-gray-200 text-gray-700 hover:bg-gray-300 hidden sm:col-span-1">
                         Cancel Edit
                     </button>
                 </div>
             </form>
         </div>
-
-        <div id="content-management" class="w-full max-w-xl lg:max-w-4xl bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100 mt-4 sm:mt-8 mb-8 hidden">
+        
+        <div id="content-management" class="w-full max-w-xl lg:max-w-4xl flat-card mt-4 sm:mt-8 mb-8 hidden">
             <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">Manage Existing Content 📋</h2>
+            
             <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-6">
                 <label for="category-filter" class="text-sm font-medium text-gray-700 flex-shrink-0">Filter by Category:</label>
-                <select id="category-filter" class="w-full sm:w-auto p-2 border border-gray-300 rounded-lg">
+                <select id="category-filter" class="w-full sm:w-auto p-2 border border-gray-300 rounded-lg form-input-flat">
                     <option value="all">All Categories</option>
                     <option value="projects">Projects</option>
                     <option value="news">News</option>
                     <option value="schedules">Schedules</option>
                 </select>
             </div>
+            
             <div id="content-list" class="space-y-4">
                 <p class="text-gray-500" id="loading-text">Loading content...</p>
             </div>
@@ -126,23 +181,50 @@
 
         const authStatus = document.getElementById('auth-status');
         const contentForm = document.getElementById('content-form');
+        const titleInput = document.getElementById('title');
         const datePublishedInput = document.getElementById('date-published'); 
-        const slugInput = document.getElementById('slug'); // 🌟 NEW: Slug Input 🌟
         const authorInput = document.getElementById('author');
         const submitBtn = document.getElementById('submit-btn');
         const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        const contentList = document.getElementById('content-list');
+        const contentListEl = document.getElementById('content-list');
         const contentManagement = document.getElementById('content-management');
         const categoryFilter = document.getElementById('category-filter');
 
-        let currentAdminUser = null;
+        let currentAdminUser = null;        
         let editingDocId = null; 
+        let allContent = []; // Global store for all content to enable fast slug checking
+        
+        // Helper: Generate a URL-friendly slug from a title
+        const createBaseSlug = (title) => {
+            return title.toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '') // Remove all non-word chars except spaces and dashes
+                .replace(/[\s_-]+/g, '-') // Replace spaces/underscores/multiple dashes with a single dash
+                .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
+        };
+
+        // Helper: Check for duplicates and generate a unique slug
+        async function generateUniqueSlug(title, currentDocId) {
+            if (!title) return '';
+            
+            const baseSlug = createBaseSlug(title);
+            let finalSlug = baseSlug;
+            let counter = 1;
+            
+            // Filter out the content being currently edited from the check
+            const comparableContent = allContent.filter(c => c.id !== currentDocId);
+
+            while (comparableContent.some(c => c.slug === finalSlug)) {
+                counter++;
+                finalSlug = `${baseSlug}-${counter}`;
+            }
+            return finalSlug;
+        }
 
         // Helper to get form data
         const getFormData = () => ({
-            title: document.getElementById('title').value.trim(),
-            // 🌟 MODIFIED: Include Slug
-            slug: slugInput.value.trim().toLowerCase().replace(/\s+/g, '-'), 
+            title: titleInput.value.trim(),
+            // SLUG is generated in the submit handler *before* save
             datePublished: datePublishedInput.value.trim(), 
             context: document.getElementById('context').value.trim(),
             image: document.getElementById('image').value.trim(),
@@ -151,19 +233,17 @@
             authorId: currentAdminUser.uid,
         });
 
-        // Helper to set form data
+        // Helper to set form data for editing
         const setFormData = (data) => {
-            document.getElementById('title').value = data.title;
-            slugInput.value = data.slug || ''; // 🌟 MODIFIED: Set Slug 🌟
+            titleInput.value = data.title;
             document.getElementById('context').value = data.context;
             document.getElementById('image').value = data.image;
-            datePublishedInput.value = data.datePublished || new Date().toISOString().substring(0, 10);
-                        
+            datePublishedInput.value = data.datePublished || new Date().toISOString().substring(0, 10);                                    
+            
             const categoryRadio = document.querySelector(`input[name="category"][value="${data.category}"]`);
             if (categoryRadio) {
                 categoryRadio.checked = true;
-            }
-                        
+            }                                    
             authorInput.value = data.author;
         };
 
@@ -184,10 +264,14 @@
             }
         }
 
-        async function updateContentJSON() {
+        async function fetchAllContent() {
             const snapshot = await getDocs(collection(db, "content"));
-            const allContent = [];
+            allContent = []; // Reset global store
             snapshot.forEach(d => allContent.push({ id: d.id, ...d.data() }));
+        }
+
+        async function updateContentJSON() {
+            // Use the freshly fetched and sorted global array
             await setDoc(doc(db, "contentJson", "data"), {
                 updatedAt: new Date().toISOString(),
                 content: allContent
@@ -195,28 +279,28 @@
         }
 
         async function renderContentList() {
-            contentList.innerHTML = '<p class="text-gray-500">Loading content...</p>';
+            contentListEl.innerHTML = '<p class="text-gray-500">Loading content...</p>';
+            
+            // 1. Ensure content store is updated
+            await fetchAllContent();
+            
             try {
-                const snapshot = await getDocs(collection(db, "content"));
-                let allContent = [];
-                snapshot.forEach(d => allContent.push({ id: d.id, ...d.data() }));
-                                
                 const filterValue = categoryFilter.value;
                 const filteredContent = filterValue === 'all' 
                     ? allContent 
                     : allContent.filter(c => c.category === filterValue);
 
                 if (filteredContent.length === 0) {
-                    contentList.innerHTML = `<p class="text-gray-500">No ${filterValue !== 'all' ? filterValue : ''} content found.</p>`;
+                    contentListEl.innerHTML = `<p class="text-gray-500">No ${filterValue !== 'all' ? filterValue : ''} content found.</p>`;
                     return;
                 }
 
-                contentList.innerHTML = filteredContent
+                contentListEl.innerHTML = filteredContent
                     .sort((a, b) => b.timestamp - a.timestamp) 
                     .map(d => `
-                        <div class="p-4 border rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-50 transition duration-150">
+                        <div class="p-4 border border-gray-200 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-50 transition duration-150">
                             <div class="mb-2 sm:mb-0">
-                                <p class="text-base font-semibold text-gray-800">${d.title} <span class="text-xs font-normal text-purple-600">(${d.category || 'N/A'})</span></p>
+                                <p class="text-base font-semibold text-gray-800">${d.title} <span class="text-xs font-normal text-gray-500">(${d.category || 'N/A'})</span></p>
                                 <p class="text-sm text-gray-500">
                                     By: ${d.author || 'N/A'} - 
                                     📅 ${d.datePublished ? new Date(d.datePublished).toLocaleDateString() : 'Date N/A'}
@@ -224,36 +308,28 @@
                                 </p>
                             </div>
                             <div class="space-x-2 flex-shrink-0 mt-2 sm:mt-0">
-                                <button data-id="${d.id}" data-action="edit" class="bg-blue-100 text-blue-700 py-1 px-3 rounded hover:bg-blue-200 font-medium text-xs sm:text-sm">Edit</button>
-                                <button data-id="${d.id}" data-action="delete" class="bg-red-100 text-red-700 py-1 px-3 rounded hover:bg-red-200 font-medium text-xs sm:text-sm">Delete</button>
+                                <button data-id="${d.id}" data-action="edit" class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full hover:bg-blue-200 font-medium text-xs sm:text-sm">Edit</button>
+                                <button data-id="${d.id}" data-action="delete" class="bg-red-100 text-red-700 py-1 px-3 rounded-full hover:bg-red-200 font-medium text-xs sm:text-sm">Delete</button>
                             </div>
                         </div>
                     `).join('');
             } catch (err) {
                 console.error("Error fetching content:", err);
-                contentList.innerHTML = '<p class="text-red-500">Failed to load content.</p>';
+                contentListEl.innerHTML = '<p class="text-red-500">Failed to load content.</p>';
             }
         }
 
         async function handleEdit(docId) {
-            try {
-                const docRef = doc(db, "content", docId);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    editingDocId = docId;
-                    setFormData(data);
-                    submitBtn.textContent = 'Update Content';
-                    submitBtn.dataset.mode = 'edit';
-                    cancelEditBtn.classList.remove('hidden');
-                    // Scroll to form (useful on mobile)
-                    window.scrollTo({ top: contentForm.offsetTop - 20, behavior: 'smooth' });
-                 } else {
-                    alert("Content not found!");
-                }
-            } catch (err) {
-                console.error("Error fetching doc for edit:", err);
-                alert("Error fetching document.");
+            const docData = allContent.find(d => d.id === docId);
+            if (docData) {
+                editingDocId = docId;
+                setFormData(docData);
+                submitBtn.textContent = 'Update Content';
+                submitBtn.dataset.mode = 'edit';
+                cancelEditBtn.classList.remove('hidden');
+                window.scrollTo({ top: contentForm.offsetTop - 20, behavior: 'smooth' }); 
+            } else {
+                alert("Content not found in local cache! Please refresh.");
             }
         }
 
@@ -278,12 +354,13 @@
             submitBtn.dataset.mode = 'create';
             cancelEditBtn.classList.add('hidden');
             editingDocId = null;
-            // Set default date to today's date on reset
+            
+            // Set default date to today's date
             datePublishedInput.value = new Date().toISOString().substring(0, 10);
-            if (currentAdminUser) { 
-                 // Set author back to the logged-in user for new content 
-                 authorInput.value = currentAdminUser.email; 
-             }
+            
+            if (currentAdminUser) {                  
+                authorInput.value = currentAdminUser.email; // Default author
+            }
         }
 
         // --- Event Listeners ---
@@ -297,9 +374,9 @@
                     authStatus.classList.add('hidden');
                     contentForm.classList.remove('hidden');
                     contentManagement.classList.remove('hidden');
-                                         
+                    
                     resetForm();
-                    renderContentList();
+                    renderContentList(); // Initial fetch and render
                  } else {
                     authStatus.textContent = "Access Denied. Redirecting...";
                     authStatus.classList.remove('text-red-500');
@@ -315,13 +392,9 @@
         // Submit handler (Create/Update)
         contentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-                        
+            
             if (!document.querySelector('input[name="category"]:checked')) {
                 alert("Please select a Category.");
-                return;
-            }
-            if (!slugInput.value.trim()) {
-                alert("Please enter a URL Slug.");
                 return;
             }
 
@@ -329,13 +402,29 @@
             submitBtn.textContent = (submitBtn.dataset.mode === 'edit' ? 'Updating...' : 'Publishing...');
 
             if (!currentAdminUser) return;
+            
+            // 🌟 STEP 1: Get data and generate the unique slug
+            const formData = getFormData();
+            
+            // Generate the unique slug based on the title and existing content
+            const uniqueSlug = await generateUniqueSlug(formData.title, editingDocId);
+            
+            // Final data object to save
+            const finalData = { ...formData, slug: uniqueSlug };
 
             try {
-                await saveContent(getFormData());
+                // 🌟 STEP 2: Save the content with the generated slug
+                await saveContent(finalData);
+                
+                // 🌟 STEP 3: Re-fetch all content and update the JSON file
+                await fetchAllContent();
                 await updateContentJSON();
+                
                 alert(`✅ Content ${submitBtn.dataset.mode === 'edit' ? 'updated' : 'published'}!`);
+                
+                // 🌟 STEP 4: Reset UI
                 resetForm();
-                renderContentList();
+                renderContentList(); 
             } catch (err) {
                 console.error(err);
                 alert(`❌ Failed: ${err.message}`);
@@ -348,7 +437,7 @@
         cancelEditBtn.addEventListener('click', resetForm); 
 
         // Edit/Delete button delegation
-        contentList.addEventListener('click', (e) => {
+        contentListEl.addEventListener('click', (e) => {
             const target = e.target;
             if (target.dataset.action === 'edit') {
                 handleEdit(target.dataset.id);
@@ -358,6 +447,9 @@
         });
 
         categoryFilter.addEventListener('change', renderContentList);
+        
+        // Set default date on initial load
+        datePublishedInput.value = new Date().toISOString().substring(0, 10);
     </script>
 </body>
 </html>
