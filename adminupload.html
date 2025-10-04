@@ -14,20 +14,19 @@
         }
         .flat-card {
             background-color: #ffffff;
-            /* Minimalist design: no shadows, no hard borders, just a flat, white panel */
             border-radius: 12px;
             padding: 2rem;
         }
         .form-input-flat {
-            border: 1px solid #dcdcdc; /* Light border */
+            border: 1px solid #dcdcdc; 
             border-radius: 6px;
             padding: 0.75rem;
             transition: all 0.2s ease;
         }
         .form-input-flat:focus {
-            border-color: #5c5cff; /* Apple-like blue focus */
+            border-color: #5c5cff; 
             outline: none;
-            box-shadow: 0 0 0 3px rgba(92, 92, 255, 0.2); /* Soft focus ring */
+            box-shadow: 0 0 0 3px rgba(92, 92, 255, 0.2); 
         }
         .action-button {
             border-radius: 6px;
@@ -35,7 +34,6 @@
             font-weight: 600;
             transition: background-color 0.2s;
         }
-        /* Custom radio button styles for better appearance */
         .form-radio {
             appearance: none;
             width: 16px;
@@ -166,12 +164,13 @@
             updateDoc, 
             deleteDoc 
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-        // 🌟 FIREBASE STORAGE IMPORTS 🌟
+        
         import { 
             getStorage, 
             ref, 
             uploadBytes, 
-            getDownloadURL 
+            getDownloadURL,
+            deleteObject // 🌟 ADDED: For deleting the image from storage on content deletion 🌟
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
         // IMPORTANT: Replace with your actual Firebase config
@@ -188,7 +187,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        // 🌟 INITIALIZE STORAGE 🌟
         const storage = getStorage(app); 
 
         const authStatus = document.getElementById('auth-status');
@@ -196,8 +194,8 @@
         const titleInput = document.getElementById('title');
         const datePublishedInput = document.getElementById('date-published'); 
         const contextInput = document.getElementById('context');
-        const imageUploadInput = document.getElementById('image-upload'); // New
-        const currentImageStatus = document.getElementById('current-image-status'); // New
+        const imageUploadInput = document.getElementById('image-upload'); 
+        const currentImageStatus = document.getElementById('current-image-status'); 
         const authorInput = document.getElementById('author');
         const submitBtn = document.getElementById('submit-btn');
         const cancelEditBtn = document.getElementById('cancel-edit-btn');
@@ -211,7 +209,6 @@
         let currentImageUrl = ''; // Tracks the image URL when in Edit mode
 
         
-        // Helper: Generate a URL-friendly slug from a title
         const createBaseSlug = (title) => {
             return title.toLowerCase()
                 .trim()
@@ -220,7 +217,6 @@
                 .replace(/^-+|-+$/g, ''); 
         };
 
-        // Helper: Check for duplicates and generate a unique slug
         async function generateUniqueSlug(title, currentDocId) {
             if (!title) return '';
             
@@ -237,24 +233,23 @@
             return finalSlug;
         }
 
-        // 🌟 NEW FUNCTION: Upload Image to Firebase Storage 🌟
         async function uploadImageAndGetURL(file, slug) {
-            if (!file) return currentImageUrl; // If no new file, return the existing URL (in edit mode)
+            // 🌟 CRITICAL: If no new file is selected, return the existing URL immediately.
+            if (!file) {
+                 if (!currentImageUrl) {
+                    throw new Error("No image selected and no existing image found.");
+                 }
+                 return currentImageUrl; 
+            }
 
-            // Create a unique file name using the slug, timestamp, and extension
             const fileExtension = file.name.split('.').pop();
             const fileName = `${slug}-${Date.now()}.${fileExtension}`;
             
-            // Define the storage path
             const storageRef = ref(storage, `content-images/${fileName}`);
 
             try {
-                // Upload the file
                 const snapshot = await uploadBytes(storageRef, file);
-                
-                // Get the public download URL
                 const downloadURL = await getDownloadURL(snapshot.ref);
-                
                 return downloadURL;
             } catch (error) {
                 console.error("Image upload failed:", error);
@@ -262,19 +257,16 @@
             }
         }
 
-        // Helper to get form data (now includes the file object)
         const getFormData = () => ({
             title: titleInput.value.trim(),
             datePublished: datePublishedInput.value.trim(), 
             context: contextInput.value.trim(),
-            // Returns the File object if selected, otherwise null
             imageFile: imageUploadInput.files[0] || null, 
             category: document.querySelector('input[name="category"]:checked')?.value || '', 
             author: authorInput.value.trim(),
             authorId: currentAdminUser.uid,
         });
 
-        // Helper to set form data for editing
         const setFormData = (data) => {
             titleInput.value = data.title;
             contextInput.value = data.context;
@@ -286,15 +278,12 @@
             }                                    
             authorInput.value = data.author;
             
-            // Set the current image URL for reference
-            currentImageUrl = data.image; 
+            currentImageUrl = data.image || ''; // Ensure it's an empty string if null
             currentImageStatus.textContent = currentImageUrl ? '(Existing image linked)' : '(No image linked)';
 
-            // Clear the file input for a fresh selection if needed
             imageUploadInput.value = ''; 
         };
 
-        // --- Content Functions ---
         async function saveContent(data) {
             if (editingDocId) {
                 await updateDoc(doc(db, "content", editingDocId), {
@@ -375,14 +364,31 @@
                 alert("Content not found in local cache! Please refresh.");
             }
         }
-
+        
+        // 🌟 UPDATED: Handle delete to remove image from Storage 🌟
         async function handleDelete(docId) {
             if (!confirm("Are you sure you want to delete this content? This action is irreversible.")) return;
+            
+            const docData = allContent.find(d => d.id === docId);
+            const imageUrl = docData?.image;
 
             try {
-                // OPTIONAL: Implement logic here to delete the image from Storage too
-                
+                // 1. Delete content document
                 await deleteDoc(doc(db, "content", docId));
+                
+                // 2. Delete image from Storage (if URL exists)
+                if (imageUrl) {
+                    try {
+                        const imageRef = ref(storage, imageUrl);
+                        await deleteObject(imageRef);
+                        console.log("Image successfully deleted from storage.");
+                    } catch (storageErr) {
+                         // Non-critical: If the storage file is already gone, or the URL is malformed, we just log and continue
+                        console.warn("Could not delete image from storage (may be already gone or bad URL):", storageErr);
+                    }
+                }
+                
+                // 3. Update JSON and UI
                 await updateContentJSON();
                 alert("Content deleted successfully! ✅");
                 renderContentList();
@@ -392,14 +398,13 @@
             }
         }
 
-        // Reset form to Create mode
         function resetForm() {
             contentForm.reset();
             submitBtn.textContent = 'Publish Content';
             submitBtn.dataset.mode = 'create';
             cancelEditBtn.classList.add('hidden');
             editingDocId = null;
-            currentImageUrl = ''; // Clear temporary image URL
+            currentImageUrl = ''; 
             currentImageStatus.textContent = '';
             
             datePublishedInput.value = new Date().toISOString().substring(0, 10);
@@ -435,7 +440,7 @@
             }
         });
 
-        // Submit handler (Create/Update)
+        // 🌟 UPDATED: Submit handler (Create/Update) 🌟
         contentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -447,17 +452,11 @@
             const isEditMode = submitBtn.dataset.mode === 'edit';
             const file = imageUploadInput.files[0];
 
-            // Validation: Must have an image URL OR a file selected for new content
-            if (!isEditMode && !file) {
-                alert("Please select an Image File.");
+            // Primary validation logic
+            if (!file && !currentImageUrl) {
+                alert("Please select an Image File. Content must have an image.");
                 return;
             }
-            // Validation: In Edit mode, if they didn't select a file and there's no existing URL
-            if (isEditMode && !file && !currentImageUrl) {
-                alert("Please select an Image File or ensure an existing image is linked.");
-                return;
-            }
-
 
             submitBtn.disabled = true;
             submitBtn.textContent = (isEditMode ? 'Updating...' : 'Publishing...');
@@ -470,9 +469,9 @@
                 // 1. Generate the unique slug
                 const uniqueSlug = await generateUniqueSlug(formData.title, editingDocId);
                 
-                // 2. Upload image and get the URL
+                // 2. Upload image and get the URL (Uses 'file' if present, otherwise uses 'currentImageUrl')
                 const imageUrl = await uploadImageAndGetURL(file, uniqueSlug);
-
+                
                 // 3. Prepare final data for Firestore
                 const finalData = { 
                     title: formData.title,
@@ -482,7 +481,7 @@
                     author: formData.author,
                     authorId: formData.authorId,
                     slug: uniqueSlug,
-                    image: imageUrl // The URL from storage
+                    image: imageUrl // The URL from storage or the existing URL
                 };
 
                 // 4. Save content
@@ -519,7 +518,6 @@
 
         categoryFilter.addEventListener('change', renderContentList);
         
-        // Set default date on initial load
         datePublishedInput.value = new Date().toISOString().substring(0, 10);
     </script>
 </body>
