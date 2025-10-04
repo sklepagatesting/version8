@@ -41,6 +41,10 @@
             justify-content: center;
             text-align: center;
         }
+        /* Ensure the body text wraps correctly */
+        #article-context {
+            white-space: pre-wrap; /* Allows breaking for long lines */
+        }
     </style>
 
 </head>
@@ -108,15 +112,17 @@
 
                                 <div>
                                     <div class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400">
-                                        <h3 id="article-author" class="rise context"></h3>
-                                        <span id="article-date" class="context font-bold text-gray-500 dark:text-gray-400"></span>
+                                        <h3 id="article-author" class="rise context font-bold">
+                                            </h3>
+                                        <span id="article-date" class="context text-gray-500 dark:text-gray-400">
+                                            </span>
                                     </div>
                                 </div>
 
                                 <div class="relative px-4 space-y-6">
                                     <div class="space-y-10 sm:space-y-8 relative px-4 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300 dark:before:bg-gray-700">
                                         <div id="article-context-wrapper" class="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] before:bg-violet-600 dark:before:bg-violet-400">
-                                            <p id="article-context" class="left-in-slow context dark:text-gray-400 whitespace-pre-line"></p>
+                                            <p id="article-context" class="left-in-slow context dark:text-gray-400"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -178,19 +184,6 @@
                 }
 
                 // 2. Initial Page Reveal (Re-using your existing logic)
-                gsap.utils.toArray(".text-container, .rise, .left-in-slow").forEach((el) => {
-                    // For the main content block, reveal it fully
-                    if (el.classList.contains('clipp-section')) {
-                        gsap.to(el, {
-                            clipPath: "inset(0% 0% 0% 0%)",
-                            duration: 0.7,
-                            ease: "power2.out",
-                        });
-                    }
-                    // Add other initial load animations here if needed
-                });
-
-                // 3. Unhide the body after all content is loaded and animations are set up
                 document.body.classList.remove('preload');
             }
 
@@ -200,13 +193,13 @@
                 const slug = urlParams.get('slug');
 
                 if (!slug) {
-                    document.getElementById('loading-message').textContent = "Error: Article slug not found in URL.";
+                    document.getElementById('loading-message').textContent = "Error: Article slug not found in URL. Check the link from the index page.";
                     return;
                 }
 
-                // Firestore JSON URL (Use your project ID from the admin panel)
+                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase Project ID
                 const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
-                
+
                 try {
                     const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;
                     const response = await fetch(cacheBustingURL, { cache: 'no-cache' });
@@ -223,7 +216,7 @@
                         for (const item of rawContentValues) {
                             const fields = item.mapValue?.fields;
                             const itemSlug = extractValue(fields?.slug);
-                            
+
                             // 3. Find the article matching the URL slug
                             if (itemSlug === slug) {
                                 articleData = {
@@ -241,27 +234,29 @@
 
                     // 4. Populate the HTML
                     if (articleData) {
-                        const dateFormatted = articleData.datePublished 
-                            ? new Date(articleData.datePublished).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) 
+                        const dateFormatted = articleData.datePublished
+                            ? new Date(articleData.datePublished).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
                             : 'Date N/A';
-                        
+
                         document.getElementById('page-title').textContent = articleData.title || 'SK Lepaga Article';
                         document.getElementById('article-category').textContent = articleData.category?.toUpperCase() || 'ANNOUNCEMENT';
                         document.getElementById('article-title').textContent = articleData.title || 'Untitled Article';
-                        
+
                         document.getElementById('article-image').src = articleData.image;
                         document.querySelector('#article-image-container source').srcset = articleData.image; // For mobile source
-                        
-                        document.getElementById('article-author').innerHTML = `#${articleData.author?.replace(/\s+/g, '') || 'SKLepaga'}<br>#${articleData.category?.replace(/\s+/g, '') || 'Announcement'}<br>#${articleData.title?.split(' ')[0] || 'Article'}`;
-                        document.getElementById('article-date').textContent = `Published: ${dateFormatted}`;
-                        
-                        // Use innerHTML for context and replace newlines with <br> for better formatting
+
+                        // ✅ MODIFICATION: Simple Author Name
+                        document.getElementById('article-author').textContent = articleData.author || 'SK Lepaga';
+                        // ✅ MODIFICATION: Simple Date Published
+                        document.getElementById('article-date').textContent = dateFormatted;
+
+                        // Use innerHTML for context and replace newlines with <br> for styling
                         document.getElementById('article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
-                        
+
                         // Hide loading message and show content
                         document.getElementById('loading-message').classList.add('hidden');
                         document.getElementById('article-data').classList.remove('hidden');
-                        
+
                         // 5. Run animations after content is rendered
                         runAnimations();
 
@@ -271,7 +266,7 @@
 
                 } catch (error) {
                     console.error('Failed to load article:', error);
-                    document.getElementById('loading-message').textContent = `Error loading content. Please check console.`;
+                    document.getElementById('loading-message').textContent = `Error loading content. Please check the browser console.`;
                 }
             }
 
