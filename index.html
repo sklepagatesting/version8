@@ -84,7 +84,7 @@
         left: 0;
       }
       .carousel-image {
-        width: clamp(200px, 40vw, 400px); /* responsive width */
+        width: clamp(300px, 40vw, 600px); /* responsive width */
         aspect-ratio: 16 / 9; /* keeps ratio */
         height: auto; /* auto-calculated from width */
         max-height: 40vh; /* cap based on viewport height */
@@ -92,7 +92,7 @@
       }
 
       .video-reel {
-        width: clamp(200px, 40vw, 400px);
+        width: clamp(300px, 40vw, 600px);
       }
       /* Ensure nav and aside are always on top */
       #navbar,
@@ -344,7 +344,7 @@
             <div class="hero w-full md:w-3/8 mb-6 flex items-end relative">
               <div class="flex flex-col justify-end">
                 <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
-                <div class="w-full max-w-sm sm:mb-22 md:mb-20">
+                <div class="w-full max-w-sm sm:mb-22 mb-0">
                   <video
                     id="playReel"
                     src="https://sklepagatesting.github.io/resources/Images/reel.mp4"
@@ -534,6 +534,7 @@
     </script>
   </body>
 </html>
+
 
 
 
