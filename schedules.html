@@ -13,33 +13,39 @@
     <style>
         /* Custom styles for flat-card and dark mode */
         .flat-card {
-            background-color: #ffffff;
+            background-color: #ffffff; /* bg-white */
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .dark .flat-card {
-            background-color: #242424;
+            background-color: #ffffff; /* Keep the card white as per the image */
             box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
         }
 
         /* Styling for the featured schedule's date block */
         .date-block {
-            /* Background matches the card but with a slight border/shadow differentiation if desired */
             background-color: #f7f7f7; /* Light gray for contrast in light mode */
             border-radius: 12px;
             text-align: center;
             flex-shrink: 0;
-            width: 100px; /* Fixed width for the date block */
-            height: 100px; /* Fixed height for a square look */
+            width: 100px;
+            height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            /* Default text color for light mode */
+            color: #1f2937; /* text-gray-900 */
         }
 
         .dark .date-block {
-            background-color: #333333; /* Darker gray for contrast in dark mode */
+            /* Make the date block transparent or slightly darker if needed,
+               but the key is ensuring the text is visible over the gray background */
+            background-color: #f7f7f7; /* Keep background light inside white card */
+            /* Crucial fix: In your dark mode image, the date text is light gray, so let's enforce that */
+            color: #d1d5db; /* text-gray-300 or similar light gray */
+            opacity: 0.5; /* Added opacity to match the faded look in the dark mode image */
         }
 
         /* Modal specific styles (kept for functionality) */
@@ -221,19 +227,19 @@
             const cardSlug = schedule.slug;
 
             if (isFeatured) {
-                // FEATURED CARD: Matches the large block design in the image
+                // FEATURED CARD: Needs white background (flat-card) and visible text.
                 return `
                     <div class="schedule-card flat-card flex flex-col sm:flex-row p-4 sm:p-6 mb-10 w-full shadow-lg transform hover:scale-[1.01] transition-all duration-300 hover:cursor-pointer"
                          data-slug="${cardSlug}">
                         
                         <div class="date-block mr-0 mb-4 sm:mb-0 sm:mr-6">
-                            <p class="font-theme text-gray-900 dark:text-white font-extrabold text-lg leading-none">${monthShort}</p>
-                            <h3 class="font-theme font-extrabold text-7xl text-gray-900 dark:text-white leading-none my-1">${day}</h3>
-                            <p class="font-theme text-gray-900 dark:text-white font-extrabold text-lg leading-none">${year}</p>
+                            <p class="font-theme font-extrabold text-lg leading-none">${monthShort}</p>
+                            <h3 class="font-theme font-extrabold text-7xl leading-none my-1">${day}</h3>
+                            <p class="font-theme font-extrabold text-lg leading-none">${year}</p>
                         </div>
 
                         <div class="flex-grow flex flex-col justify-center">
-                            <h3 class="font-theme font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-2 leading-tight">
+                            <h3 class="font-theme font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-gray-900 mb-2 leading-tight">
                                 ${schedule.title}
                             </h3>
                             <a href="schedulesarticle.html?slug=${cardSlug}" 
@@ -245,9 +251,9 @@
                     </div>
                 `;
             } else {
-                // LIST ITEM: Matches the smaller, flat list items in the image
+                // LIST ITEM: Needs white text on the dark background.
                 return `
-                    <div class="schedule-card flex items-baseline py-2 px-0 hover:bg-gray-50 dark:hover:bg-[#333333] transition-colors duration-200 hover:cursor-pointer"
+                    <div class="schedule-card flex items-baseline py-2 px-0 hover:bg-gray-800 dark:hover:bg-[#333333] transition-colors duration-200 hover:cursor-pointer"
                          data-slug="${cardSlug}">
                         
                         <p class="font-theme text-base font-semibold text-gray-700 dark:text-gray-300 w-36 flex-shrink-0">
@@ -268,7 +274,7 @@
 
         // 4. Main Fetch and Render Function
         async function fetchAndRenderSchedules() {
-            // ... (Firebase fetching logic remains the same) ...
+            // ... (Fetching logic remains the same) ...
             try {
                 const docRef = doc(db, "contentJson", "data");
                 const docSnap = await getDoc(docRef);
@@ -323,17 +329,15 @@
             } catch (error) {
                 console.error("Error fetching schedules:", error);
                 loadingSchedules.textContent = "Failed to load schedules. Please try again later. (Error)";
-                loadingSchedules.classList.remove('hidden');
+                loadingSchedules.classList.add('text-red-500'); // Added red text for error visibility
                 noSchedules.classList.add('hidden');
             }
         }
         
         // 5. Event Listener for Schedule Card Clicks (Opens Modal)
         schedulesList.addEventListener('click', (e) => {
-            // Find the closest card element that has the data-slug attribute
             const card = e.target.closest('.schedule-card');
             
-            // Crucial: Only open the modal if the click target is NOT the "Know more" link
             if (card && e.target.tagName !== 'A') {
                 const slug = card.dataset.slug;
                 const schedule = allSchedules.find(s => s.slug === slug);
