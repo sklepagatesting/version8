@@ -137,6 +137,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
         <script>            
+            // Utility function to extract data from the complex Firestore REST API response            
+            const extractValue = (field) => {                
+                if (!field) return null;                
+                if (field.stringValue) return field.stringValue;                
+                if (field.integerValue) return parseInt(field.integerValue);                
+                if (field.timestampValue) return field.timestampValue;                
+                return null;            
+            };
+
             // Function to run GSAP animations after content is loaded            
             function runAnimations() {                
                 // Ensure ScrollTrigger is registered before use                
@@ -163,120 +172,89 @@
                 document.body.classList.remove('preload');            
             }
 
-            // Expose runAnimations globally so the module script can use it
-            window.runAnimations = runAnimations;
-        </script>
-
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-            import {
-                getFirestore,
-                doc,
-                getDoc,
-                enableIndexedDbPersistence, // <-- Key for Offline Caching
-            } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
-
-            // 1. Firebase Configuration (Replace with your actual config)
-            const firebaseConfig = {
-                // NOTE: Use your actual Firebase Project config here
-                apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
-                authDomain: "sklepaga-8790e.firebaseapp.com",
-                projectId: "sklepaga-8790e",
-                storageBucket: "sklepaga-8790e.appspot.com",
-                messagingSenderId: "815409129057",
-                appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
-                measurementId: "G-9GH707G2WZ",
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-
-            // 2. Enable Firestore Caching
-            try {
-                await enableIndexedDbPersistence(db);
-                console.log("Firestore offline persistence enabled.");
-            } catch (err) {
-                // Handle errors like multiple tabs or unsupported browser
-                if (err.code === 'failed-precondition') {
-                    console.warn("Persistence failed: multiple tabs open, or browser doesn't support it.");
-                } else if (err.code === 'unimplemented') {
-                    console.warn("Persistence not supported on this device.");
-                }
-            }
-
-            // Helper function to format the date from a Firestore Timestamp object
-            function formatDate(timestamp) {
-                // The Firestore SDK automatically converts server timestamps to native Date objects
-                if (!timestamp || !(timestamp instanceof Date)) return 'Date N/A';
-                return timestamp.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            }
-
-            // 3. Main Fetch and Render Function (Replaced old REST API call)
-            async function loadArticle() {
-                const urlParams = new URLSearchParams(window.location.search);
+            async function loadArticle() {                
+                const urlParams = new URLSearchParams(window.location.search);                
                 const slug = urlParams.get('slug');
 
-                if (!slug) {
-                    document.getElementById('loading-message').textContent = "Error: Article slug not found in URL.";
-                    return;
+                if (!slug) {                    
+                    document.getElementById('loading-message').textContent = "Error: Article slug not found in URL. Check the link from the index page.";                    
+                    return;                
                 }
 
-                try {
-                    // Document Reference: 'contentJson/data'
-                    const docRef = doc(db, "contentJson", "data");
-                    
-                    // getDoc() automatically checks the cache first
-                    const docSnap = await getDoc(docRef);
+                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase Project ID                
+                const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
 
-                    if (!docSnap.exists()) {
-                        document.getElementById('loading-message').textContent =
-                            "No content document found in Firestore.";
-                        return;
+                try {                    
+                    const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;                    
+                    const response = await fetch(cacheBustingURL, { cache: 'no-cache' });
+
+                    if (!response.ok) {                        
+                        throw new Error(`HTTP status ${response.status}`);                    
                     }
 
-                    const data = docSnap.data();
-                    // Assuming 'content' is the array field containing all articles
-                    const contentArray = data.content || [];
+                    const data = await response.json();                    
+                    const rawContentValues = data.fields?.content?.arrayValue?.values;                    
+                    let articleData = null;
 
-                    // Find the article matching the URL slug
-                    const articleData = contentArray.find(item => item.slug === slug);
+                    if (rawContentValues && Array.isArray(rawContentValues)) {                        
+                        for (const item of rawContentValues) {                            
+                            const fields = item.mapValue?.fields;                            
+                            const itemSlug = extractValue(fields?.slug);
 
-                    // 4. Populate the HTML
-                    if (articleData) {
-                        // datePublished is now a Date object due to the SDK's automatic conversion
-                        const dateFormatted = formatDate(articleData.datePublished);
+                            // 3. Find the article matching the URL slug                            
+                            if (itemSlug === slug) {                                
+                                articleData = {                                    
+                                    title: extractValue(fields?.title),                                    
+                                    category: extractValue(fields?.category),                                    
+                                    image: extractValue(fields?.image),                                    
+                                    context: extractValue(fields?.context),                                    
+                                    author: extractValue(fields?.author),                                    
+                                    datePublished: extractValue(fields?.datePublished),                                
+                                };                                
+                                break;                            
+                            }                        
+                        }                    
+                    }
 
-                        document.getElementById('page-title').textContent = articleData.title || 'SK Lepaga Article';
-                        document.getElementById('article-category').textContent = articleData.category?.toUpperCase() || 'ANNOUNCEMENT';
+                    // 4. Populate the HTML                    
+                    if (articleData) {                        
+                        const dateFormatted = articleData.datePublished                            
+                            ? new Date(articleData.datePublished).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })                            
+                            : 'Date N/A';
+
+                        document.getElementById('page-title').textContent = articleData.title || 'SK Lepaga Article';                        
+                        document.getElementById('article-category').textContent = articleData.category?.toUpperCase() || 'ANNOUNCEMENT';                        
                         document.getElementById('article-title').textContent = articleData.title || 'Untitled Article';
 
-                        document.getElementById('article-image').src = articleData.image;
-                        document.querySelector('#article-image-container source').srcset = articleData.image;
+                        document.getElementById('article-image').src = articleData.image;                        
+                        document.querySelector('#article-image-container source').srcset = articleData.image; // For mobile source
 
-                        document.getElementById('article-author').textContent = articleData.author || 'SK Lepaga';
+                        // ✅ MODIFICATION: Simple Author Name                        
+                        document.getElementById('article-author').textContent = articleData.author || 'SK Lepaga';                        
+                        // ✅ MODIFICATION: Simple Date Published                        
                         document.getElementById('article-date').textContent = dateFormatted;
 
-                        // Use innerHTML for context and replace newlines with <br> for formatting
+                        // Use innerHTML for context and replace newlines with <br> for styling                        
                         document.getElementById('article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
 
-                        // Hide loading message and show content
-                        document.getElementById('loading-message').classList.add('hidden');
+                        // Hide loading message and show content                        
+                        document.getElementById('loading-message').classList.add('hidden');                        
                         document.getElementById('article-data').classList.remove('hidden');
 
-                        // 5. Run animations after content is rendered
-                        window.runAnimations(); // Call the globally exposed function
+                        // 5. Run animations after content is rendered                        
+                        runAnimations();
 
-                    } else {
-                        document.getElementById('loading-message').textContent = `Article with slug "${slug}" not found.`;
+                    } else {                        
+                        document.getElementById('loading-message').textContent = `Article with slug "${slug}" not found.`;                    
                     }
-                } catch (error) {
-                    console.error('Failed to load article:', error);
-                    document.getElementById('loading-message').textContent = `Error loading content. Please check the browser console.`;
-                }
+                } catch (error) {                    
+                    console.error('Failed to load article:', error);                    
+                    document.getElementById('loading-message').textContent = `Error loading content. Please check the browser console.`;                
+                }            
             }
 
-            // Start the loading process when the DOM is fully loaded
-            window.addEventListener('DOMContentLoaded', loadArticle);
+            // Start the loading process when the DOM is fully loaded            
+            window.addEventListener('DOMContentLoaded', loadArticle);        
         </script>    
     </main>
 </body>
