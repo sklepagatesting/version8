@@ -27,13 +27,17 @@
     <link rel="stylesheet" href="sections\carousel.css">
 
     <style>
-        body.preload {
-            visibility: hidden;
+        /*
+        * Removed .preload and body logic.
+        * New class to hide content while data loads.
+        */
+        .content-hidden {
             opacity: 0;
         }
 
-        body {
-            transition: opacity 0.2s ease-in;
+        .content-visible {
+            opacity: 1;
+            transition: opacity 0.5s ease-in;
         }
 
         /* Hide Scrollbar CSS for carousel */
@@ -49,8 +53,8 @@
 
 </head>
 
-<body class="preload">
-    <main id="swup" class="transition-fade">
+<body>
+    <main id="swup" class="transition-fade content-hidden">
         <div class="main-content text-container">
 
             <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
@@ -170,7 +174,7 @@
                     class="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-800">
                     <p class="text-gray-500 font-medium">Loading Latest News...</p>
                 </div>
-                </div>
+            </div>
 
             <section class="font-theme px-4 py-8 antialiased md:py-16 bg-white dark:bg-[#242424]">
                 <div class="max-w-screen-xl mx-auto">
@@ -183,7 +187,7 @@
                         <div id="featured-loading" class="md:col-span-2 text-center text-gray-500">
                             Fetching featured articles...
                         </div>
-                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -206,7 +210,7 @@
                             <div id="carousel-loading" class="text-gray-500 text-center w-full">
                                 Preparing archive carousel...
                             </div>
-                            </div>
+                        </div>
 
 
                         <div class="flex justify-end mt-4 gap-3">
@@ -273,10 +277,11 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { 
-            getFirestore, 
-            doc, 
-            getDoc 
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            enableIndexedDbPersistence // <-- Import for Caching
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -291,6 +296,18 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // --- Firestore Caching Implementation ---
+        try {
+            await enableIndexedDbPersistence(db);
+            console.log("Firestore offline persistence enabled.");
+        } catch (err) {
+            if (err.code === 'failed-precondition') {
+                console.log("Persistence failed: multiple tabs open, or browser doesn't support it.");
+            } else if (err.code === 'unimplemented') {
+                console.log("Persistence not supported on this device.");
+            }
+        }
         
         // --- Helper Function ---
         const formatDate = (dateString) => {
@@ -300,18 +317,19 @@
                 const date = new Date(dateString + 'T00:00:00'); // Add T00 to prevent timezone issues
                 return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
             } catch {
-                return dateString; 
+                return dateString;
             }
         };
 
         // --- Main Rendering Logic ---
         async function renderNewsContent() {
+            const mainContainer = document.getElementById('swup'); // The main container
             const heroSection = document.getElementById('hero-section');
             const featuredContainer = document.getElementById('featured-news-container');
             const carouselContainer = document.getElementById('carouselCards');
 
             try {
-                // 1. Fetch the Pre-processed JSON from Firestore
+                // 1. Fetch the Pre-processed JSON from Firestore - attempts to read from cache first
                 const docRef = doc(db, "contentJson", "data");
                 const docSnap = await getDoc(docRef);
 
@@ -320,7 +338,7 @@
                 }
 
                 const data = docSnap.data();
-                
+
                 // 2. Filter for "news" category and sort by timestamp (newest first)
                 const allNews = data.content
                     .filter(item => item.category === 'news')
@@ -329,12 +347,14 @@
                 if (allNews.length === 0) {
                     heroSection.innerHTML = '<div class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900"><p class="text-gray-600 font-medium">No News articles published yet.</p></div>';
                     featuredContainer.innerHTML = '';
-                    carouselContainer.innerHTML = '';
+                    carouselContainer.innerHTML = '<div class="text-gray-500 text-center w-full">No older news articles in the archive.</div>';
+                    mainContainer.classList.remove('content-hidden');
+                    mainContainer.classList.add('content-visible');
                     return;
                 }
 
                 // 3. Destructure Content based on layout requirements
-                const latestArticle = allNews[0];          // Hero (Index 0)
+                const latestArticle = allNews[0];        // Hero (Index 0)
                 const featuredArticles = allNews.slice(1, 5); // Grid (Index 1 to 4) - up to 4 articles
                 const archiveArticles = allNews.slice(5);      // Carousel (Index 5 onwards)
 
@@ -346,7 +366,7 @@
                             class="absolute inset-0 w-full h-full object-cover" />
                         <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent"></div>
                         <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-                            <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
+                            <span class="inline-flex items-center gap-2 px-4 py-2 mb-4 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
                                 <span>${latestArticle.category}</span><span class="opacity-70">· ${formatDate(latestArticle.datePublished)}</span>
                             </span>
                             <h1 class="underlines subtext-title text-white mt-2">${latestArticle.title}</h1>
@@ -403,13 +423,17 @@
                 heroSection.innerHTML = '<div class="absolute inset-0 flex items-center justify-center bg-red-100 dark:bg-red-900"><p class="text-red-700 font-medium">Failed to load news content. Please try again later.</p></div>';
                 featuredContainer.innerHTML = '';
                 carouselContainer.innerHTML = '';
+            } finally {
+                // Ensure content is visible after attempting to load
+                mainContainer.classList.remove('content-hidden');
+                mainContainer.classList.add('content-visible');
             }
         }
 
         // Initialize content loading on page load
         document.addEventListener('DOMContentLoaded', renderNewsContent);
     </script>
-    
+
     <script src="navbar\navbar.js"></script>
     <script src="pages/index.js"></script>
     <script src="animations\index.js"></script>
@@ -418,7 +442,7 @@
     <script src="animations/global.js"></script>
     <script src="animations/scroll.js"></script>
     <script src="controlers/carousel.js"></script>
-    
+
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
@@ -432,6 +456,12 @@
 
 
     <script>
+        // NOTE: The previous GSAP logic for .clipp-section and .zoom.parallax was targeting elements
+        // that aren't present in the main content and is not required for the "wait for hero" logic
+        // which is now handled by the Firestore script's 'finally' block.
+        // I've kept the original GSAP snippets below, but they likely won't function
+        // as intended without the corresponding CSS classes and elements.
+        
         // On DOM load
         window.addEventListener("DOMContentLoaded", () => {
             gsap.utils.toArray(".clipp-section").forEach((section, index) => {
@@ -447,15 +477,18 @@
         document.addEventListener("DOMContentLoaded", () => {
             const target = document.querySelector(".zoom.parallax");
 
-            gsap.fromTo(
-                target,
-                { scale: 0, transformOrigin: "bottom left" },
-                {
-                    scale: 1,
-                    duration: 2,
-                    ease: "power2.inOut" // slow at start, smooth acceleration, slow at end
-                }
-            );
+            // Check if the target exists before animating
+            if (target) {
+                gsap.fromTo(
+                    target,
+                    { scale: 0, transformOrigin: "bottom left" },
+                    {
+                        scale: 1,
+                        duration: 2,
+                        ease: "power2.inOut" // slow at start, smooth acceleration, slow at end
+                    }
+                );
+            }
         });
     </script>
 </body>
