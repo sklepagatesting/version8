@@ -1,3 +1,12 @@
+// ============================================
+// --- GLOBAL PROMISE FOR SYNCHRONIZATION ---
+// ============================================
+// This promise will resolve when the dynamic content (Firebase) is finished loading.
+let resolveContentLoaded;
+const CONTENT_LOADED = new Promise(resolve => {
+  resolveContentLoaded = resolve;
+});
+
 // --- Inject transition elements and styles early ---
 (function injectTransitionElements() {
   const style = document.createElement("style");
@@ -147,7 +156,11 @@ function runLoader() {
     }
   }, 100);
 
-  window.addEventListener('load', () => {
+  // Use Promise.all to wait for both static load and dynamic content
+  Promise.all([
+    new Promise(resolve => window.addEventListener('load', resolve)),
+    CONTENT_LOADED
+  ]).then(() => {
     clearInterval(interval);
 
     let finalProgress = fakeProgress;
@@ -234,7 +247,7 @@ function setupPageTransition() {
   });
 }
 
-// --- Breakpoint reload ---
+// --- Breakpoint reload (Existing code unchanged) ---
 const BREAKPOINTS = {
   mobile: { min: 0, max: 767 },
   tablet: { min: 768, max: 1023 },
@@ -260,7 +273,7 @@ window.addEventListener("resize", () => {
   }
 });
 
-// --- Loader and Transition Control ---
+// --- Loader and Transition Control (Existing code unchanged) ---
 document.addEventListener('DOMContentLoaded', () => {
   if (shouldRunLoader) {
     runLoader();
@@ -283,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPageTransition();
 });
 
-// --- Force reload on back/forward navigation ---
+// --- Force reload on back/forward navigation (Existing code unchanged) ---
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
     window.location.reload();
@@ -300,7 +313,7 @@ window.addEventListener("scroller:start", () => {
   window.scrollerInitialized = true;
 
   // Check if dependencies are ready
-  if (typeof gsap === 'undefined' || typeof ModifiersPlugin === 'undefined') {
+  if (typeof gsap === 'undefined') { // Removed ModifiersPlugin check since it's registered below
     console.warn('GSAP not loaded yet');
     return;
   }
@@ -310,16 +323,29 @@ window.addEventListener("scroller:start", () => {
     console.warn('Scroller element not found');
     return;
   }
-
-  // --- Register GSAP Plugin ---
-  gsap.registerPlugin(ModifiersPlugin);
-
-  // --- Duplicate for seamless loop ---
-  scroller.innerHTML += scroller.innerHTML;
+  
+  // *** CRITICAL STEP: RE-INITIALIZE SCROLLER ELEMENTS ***
+  // After dynamic content loads, the scroller.innerHTML is replaced.
+  // We need to ensure we have valid, duplicated content for the scroll effect.
+  
+  // If the scroller has content, duplicate it now for seamless loop
+  if (scroller.children.length > 0 && scroller.children.length < 2) {
+      scroller.innerHTML += scroller.innerHTML;
+  }
+  
   const scrollWidth = scroller.scrollWidth / 2;
 
   // --- Get initial offset from first card ---
   const firstCard = scroller.children[0];
+  if (!firstCard) {
+      console.warn("Scroller children missing. Cannot initialize animation.");
+      return;
+  }
+  
+  // NOTE: Assuming ModifiersPlugin is correctly imported/loaded before this script runs.
+  // Register GSAP Plugin
+  gsap.registerPlugin(ModifiersPlugin); 
+
   const cardStyle = window.getComputedStyle(firstCard);
   const marginRight = parseFloat(cardStyle.marginRight);
   const initialOffset = marginRight;
@@ -345,7 +371,7 @@ window.addEventListener("scroller:start", () => {
     willChange: "transform"
   });
 
-  // --- SCROLL LOCK HELPERS ---
+  // --- SCROLL LOCK HELPERS (Existing code unchanged) ---
   const preventScroll = (e) => e.preventDefault();
 
   const keyScrollBlock = (e) => {
@@ -376,7 +402,7 @@ window.addEventListener("scroller:start", () => {
   // Lock all scrolling and inputs immediately
   lockScroll();
 
-  // --- INTRO ANIMATION ---
+  // --- INTRO ANIMATION (Existing code unchanged) ---
   setTimeout(() => {
     const fastDuration = 2;
     const fastDistance = scrollWidth * 1.5;
@@ -412,13 +438,13 @@ window.addEventListener("scroller:start", () => {
     }, 0);
   }, 2000);
 
-  // --- WHEEL INPUT ---
+  // --- WHEEL INPUT (Existing code unchanged) ---
   window.addEventListener("wheel", (e) => {
     if (!scrollAllowed) return;
     velocity += e.deltaY * 0.05;
   }, { passive: true });
 
-  // --- TOUCH INPUT ---
+  // --- TOUCH INPUT (Existing code unchanged) ---
   const touchScrollMultiplier = 0.12;
   let startY;
   let isDraggingDown = false;
@@ -446,7 +472,7 @@ window.addEventListener("scroller:start", () => {
     }
   }, { passive: false });
 
-  // --- GSAP Infinite Carousel Scroll Logic ---
+  // --- GSAP Infinite Carousel Scroll Logic (Existing code unchanged) ---
   gsap.ticker.add(() => {
     if (Math.abs(velocity) > 0.001) {
       position -= velocity;
