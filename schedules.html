@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News & Articles</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font"
-        type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
@@ -32,15 +31,17 @@
             transition: opacity 0.2s ease-in;
         }
 
-        /* Custom style for flat-card used in the admin panel, reused here for visual consistency */
+        /* Custom style for flat-card: NO BORDERS, just shadow for depth */
         .flat-card {
             background-color: #ffffff;
             border-radius: 12px;
-            /* Using Tailwind classes for padding/shadow */
+            /* Using a subtle shadow for the "flat" card look */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
         }
 
         .dark .flat-card {
-            background-color: #2e2e2e;
+            background-color: #242424; /* Adjusted to your requested dark mode background */
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
         }
 
         /* Modal specific styles */
@@ -72,7 +73,6 @@
             border-radius: 12px;
             max-width: 90%;
             width: 500px;
-            /* Set a max width for desktop view */
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -82,7 +82,7 @@
         }
 
         .dark .modal-content {
-            background-color: #242424;
+            background-color: #242424; /* Adjusted to your requested dark mode background */
             color: #d1d5db;
         }
 
@@ -92,8 +92,7 @@
     </style>
 </head>
 
-<body>
-    <main id="swup" class="transition-fade content-hidden">
+<body class="bg-white dark:bg-[#242424]"> <main id="swup" class="transition-fade content-hidden">
         <div class="main-content text-container">
 
             <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
@@ -102,14 +101,14 @@
                         <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
                             <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo"
                                 class="h-5 w-auto" />
-                            <span class="font-theme font-medium">SK Lepaga</span>
+                            <span class="font-theme font-medium text-gray-900 dark:text-white">SK Lepaga</span>
                         </a>
                         <button id="menu-toggle-btn" type="button"
-                            class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
+                            class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none text-gray-900 dark:text-white"
                             aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
@@ -120,12 +119,11 @@
                 class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
                 style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
                 <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
-                    <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
-
+                    <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center text-gray-900 dark:text-white">
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">CALENDAR</h2>
-                                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none"
+                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -140,55 +138,55 @@
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="font-theme subtext-title">NEWS</h2>
-                                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none"
+                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
                             <div
                                 class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Featured News</a>
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">All Articles</a>
+                                <a href="#" class="subtext submenu-link block">Featured News</a>
+                                <a href="#" class="subtext submenu-link block">All Articles</a>
                                 <br>
                             </div>
                         </div>
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">ABOUT</h2>
-                                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none"
+                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
                             <div
                                 class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">What is SK</a>
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">SK Officials</a>
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">About Developers</a>
+                                <a href="#" class="subtext submenu-link block">What is SK</a>
+                                <a href="#" class="subtext submenu-link block">SK Officials</a>
+                                <a href="#" class="subtext submenu-link block">About Developers</a>
                                 <br>
                             </div>
                         </div>
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">CONTACT</h2>
-                                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none"
+                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
                             <div
                                 class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="pages/article1.html" class="subtext submenu-link block text-[#FFFFF]">Send a
+                                <a href="pages/article1.html" class="subtext submenu-link block">Send a
                                     message</a>
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Send a feedback</a>
-                                <a href="#" class="subtext submenu-link block text-[#FFFFF]">Schedule a meetup</a>
+                                <a href="#" class="subtext submenu-link block">Send a feedback</a>
+                                <a href="#" class="subtext submenu-link block">Schedule a meetup</a>
                                 <br>
                             </div>
                         </div>
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
-                                <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none"
+                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -205,17 +203,15 @@
 
             <section id="schedules-container" class="w-full bg-white dark:bg-[#242424] pt-16 pb-10 md:pt-24 md:pb-16">
                 <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2
-                        class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 md:mb-12 text-center font-theme">
+                    <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 md:mb-12 text-center font-theme">
                         Upcoming Schedules 🗓️
                     </h2>
 
                     <div id="schedules-list" class="space-y-6">
-                        <p id="loading-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400">Loading
-                            schedules...</p>
+                        <p id="loading-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400 font-theme">Loading schedules...</p>
                     </div>
 
-                    <p id="no-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400 hidden mt-10">
+                    <p id="no-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400 hidden mt-10 font-theme">
                         No upcoming schedules posted at the moment. Check back soon!
                     </p>
                 </div>
@@ -225,8 +221,9 @@
                 class="footer relative bg-white dark:bg-[#242424] text-gray-700 dark:text-gray-300 antialiased pt-12 pb-6 border-t border-gray-100 dark:border-gray-800">
                 <div class="footer-tint absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500">
                 </div>
-                <div class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-                    <div class="flex flex-col items-center space-y-4 mb-10 text-center">
+                <div
+                    class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+                    <div class="flex flex-col items-center space-y-4 mb-10 text-center font-theme">
                         <a href="index.html"
                             class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
                             data-transition>HOME</a>
@@ -253,17 +250,19 @@
 
     <div id="schedule-modal" class="modal-overlay" onclick="closeModal()">
         <div class="modal-content flat-card" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-start mb-4 border-b pb-2">
-                <h3 id="modal-title" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+            <div class="flex justify-between items-start mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+                <h3 id="modal-title" class="text-xl font-bold font-theme text-gray-900 dark:text-white"></h3>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <p id="modal-date" class="text-sm text-[#5c5cff] font-medium mb-4"></p>
-            <div id="modal-context" class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap"></div>
+            <p id="modal-date" class="text-sm text-[#5c5cff] font-medium mb-4 font-theme"></p>
+            <div id="modal-context" class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-theme"></div>
+            <div class="mt-6">
+                 <a id="modal-read-more" href="#" class="inline-block px-4 py-2 text-sm font-medium text-white bg-[#5c5cff] rounded-lg hover:bg-[#4a4aee] transition-colors duration-200 font-theme">
+                     See Full Details &rarr;
+                 </a>
+             </div>
         </div>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -277,10 +276,10 @@
             getFirestore,
             doc,
             getDoc,
-            enableIndexedDbPersistence // <-- For Caching
+            enableIndexedDbPersistence
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        // 1. Firebase Configuration (MUST be the same as your Admin Panel)
+        // 1. Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
             authDomain: "sklepaga-8790e.firebaseapp.com",
@@ -299,14 +298,9 @@
             await enableIndexedDbPersistence(db);
             console.log("Firestore offline persistence enabled.");
         } catch (err) {
-            if (err.code === 'failed-precondition') {
-                console.log("Persistence failed: multiple tabs open, or browser doesn't support it.");
-            } else if (err.code === 'unimplemented') {
-                console.log("Persistence not supported on this device.");
-            }
+            // ... (error handling for persistence) ...
         }
 
-        // Global variable to store all fetched schedules for quick modal lookup
         let allSchedules = [];
 
         // 2. DOM elements
@@ -319,6 +313,7 @@
         const modalTitle = document.getElementById('modal-title');
         const modalDate = document.getElementById('modal-date');
         const modalContext = document.getElementById('modal-context');
+        const modalReadMore = document.getElementById('modal-read-more');
 
         // Global functions for modal control
         window.openModal = (schedule) => {
@@ -335,8 +330,11 @@
             modalTitle.textContent = schedule.title;
             modalDate.textContent = `Scheduled for: ${fullDate}`;
             modalContext.textContent = schedule.context;
+            // Set the link for the modal's "See Full Details" button
+            modalReadMore.href = `schedulesarticle.html?slug=${schedule.slug}`;
+
             scheduleModal.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling the body
+            document.body.style.overflow = 'hidden';
         };
 
         window.closeModal = () => {
@@ -346,7 +344,6 @@
 
         // 3. Content Renderer Function
         function createScheduleCard(schedule, isFeatured = false) {
-            // Parse the date Published from the Admin Panel's input (YYYY-MM-DD format)
             const date = new Date(schedule.datePublished + 'T00:00:00');
             const month = date.toLocaleString('en-US', {
                 month: 'short'
@@ -354,42 +351,46 @@
             const day = date.getDate();
             const year = date.getFullYear();
 
-            // Classes for visual differentiation
-            const featuredClass = isFeatured ? 'border-4 border-[#5c5cff] shadow-lg' : 'border border-gray-200 dark:border-gray-700';
-            const titleSize = isFeatured ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl';
+            // Classes for visual differentiation and flat design
+            const cardClasses = isFeatured ? 'shadow-xl p-8 md:p-10 transform hover:scale-[1.01] transition-all duration-300' : 'shadow-md p-6 md:p-8 hover:shadow-lg transition-all duration-300';
+            const titleSize = isFeatured ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl';
+            const dateSize = isFeatured ? 'text-6xl md:text-7xl' : 'text-5xl';
+            const dateText = isFeatured ? 'text-[#5c5cff]' : 'text-[#5c5cff]'; // Keep accent color
 
+            // Create a custom element wrapper to allow the whole card to trigger the modal,
+            // while having a separate link for the "Read More" button.
             return `
-                <div class="schedule-card flat-card p-6 md:p-8 rounded-xl flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 transition-all duration-300 hover:shadow-xl hover:cursor-pointer ${featuredClass}"
+                <div class="schedule-card flat-card rounded-xl flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 hover:cursor-pointer ${cardClasses}"
                      data-slug="${schedule.slug}"
-                      title="Click to view full details">
-                    <div class="flex-shrink-0 text-center w-full sm:w-24">
+                     title="Click to view quick details">
+                    
+                    <div class="flex-shrink-0 text-center w-full sm:w-24 font-theme">
                         <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase leading-none">${month}</p>
-                        <h3 class="text-5xl font-extrabold text-[#5c5cff] leading-none my-1">${day}</h3>
+                        <h3 class="font-extrabold ${dateSize} ${dateText} leading-none my-1">${day}</h3>
                         <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 leading-none">${year}</p>
                     </div>
 
-                    <div class="flex-grow">
+                    <div class="flex-grow font-theme">
                         <h3 class="font-bold text-gray-900 dark:text-white mb-2 ${titleSize}">
                             ${schedule.title}
                         </h3>
                         <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
                             ${schedule.context.substring(0, 150)}...
                         </p>
-                        <span class="text-sm font-medium text-[#5c5cff] hover:text-[#4a4aee] transition-colors duration-200">
+                        <a href="schedulesarticle.html?slug=${schedule.slug}" 
+                           onclick="event.stopPropagation()" 
+                           class="text-sm font-medium text-[#5c5cff] hover:text-[#4a4aee] transition-colors duration-200">
                             Read More &rarr;
-                        </span>
+                        </a>
                     </div>
                 </div>
             `;
         }
 
-        // 4. Main Fetch and Render Function (FIXED TO USE contentJson/data)
+        // 4. Main Fetch and Render Function (Uses contentJson/data)
         async function fetchAndRenderSchedules() {
             try {
-                // 1. Define the document reference for the content JSON
                 const docRef = doc(db, "contentJson", "data");
-
-                // 2. Fetch the pre-processed data (consistent with the News page)
                 const docSnap = await getDoc(docRef);
 
                 if (!docSnap.exists()) {
@@ -399,27 +400,20 @@
                 const data = docSnap.data();
                 const today = new Date().toISOString().substring(0, 10);
 
-                // 3. Filter and Sort the content array locally
                 const allUpcomingSchedules = data.content
                     .filter(item => {
-                        // Filter by category 'schedules'
                         if (item.category !== 'schedules') return false;
-
-                        // Filter by future or today's date (YYYY-MM-DD comparison)
                         return item.datePublished >= today;
                     })
-                    // Sort by datePublished Ascending (next upcoming event first)
                     .sort((a, b) => {
                         if (a.datePublished < b.datePublished) return -1;
                         if (a.datePublished > b.datePublished) return 1;
-                        // If dates are the same, sort by timestamp Descending (newer document first)
                         return b.timestamp - a.timestamp;
                     });
 
 
-                allSchedules = allUpcomingSchedules; // Cache the filtered results globally
+                allSchedules = allUpcomingSchedules;
 
-                // 4. Render
                 loadingSchedules.classList.add('hidden');
 
                 if (allSchedules.length === 0) {
@@ -430,7 +424,7 @@
 
                 let schedulesHtml = '';
 
-                // The first schedule is the 'latest upcoming' (Featured)
+                // The first schedule is the 'latest upcoming' (Featured/Bigger)
                 schedulesHtml += createScheduleCard(allSchedules[0], true);
 
                 // Remaining schedules
@@ -442,18 +436,20 @@
 
             } catch (error) {
                 console.error("Error fetching schedules:", error);
-                loadingSchedules.textContent = "Failed to load schedules. Please check data/rules. (Error)";
+                loadingSchedules.textContent = "Failed to load schedules. Please try again later. (Error)";
                 loadingSchedules.classList.remove('hidden');
                 noSchedules.classList.add('hidden');
             }
         }
-        // 5. Event Listener for Schedule Card Clicks
+        
+        // 5. Event Listener for Schedule Card Clicks (Opens Modal)
         schedulesList.addEventListener('click', (e) => {
             const card = e.target.closest('.schedule-card');
             if (card) {
                 const slug = card.dataset.slug;
                 const schedule = allSchedules.find(s => s.slug === slug);
                 if (schedule) {
+                    // Open modal on card click
                     openModal(schedule);
                 }
             }
@@ -466,7 +462,6 @@
             }
         });
 
-        // Run the fetch function when the page loads
         document.addEventListener('DOMContentLoaded', fetchAndRenderSchedules);
     </script>
     <script src="navbar\navbar.js"></script>
@@ -480,19 +475,8 @@
 
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
     <script>
-        // Note: Any GSAP logic placed here will run ONLY on the initial page load (DOMContentLoaded).
         gsap.registerPlugin(ScrollTrigger);
     </script>
 </body>
-
 </html>
