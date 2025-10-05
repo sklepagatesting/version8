@@ -3,49 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News & Articles</title>
+    <title>Schedules</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2"
-        crossorigin="anonymous">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-    <link rel="prefetch" href="home.html" as="document">
-    <link rel="stylesheet" href="navbar\navbar.css">
     <link rel="stylesheet" href="font\font.css">
-    <link rel="stylesheet" href="animations/global.css">
-    <link rel="stylesheet" href="pages\index.css">
-    <link rel="stylesheet" href="controlers\scroll.css">
-    <link rel="stylesheet" href="controlers\carousel.css">
-    <link rel="stylesheet" href="sections/hero.css">
-    <link rel="stylesheet" href="sections\carousel.css">
     <style>
-        body.preload {
-            visibility: hidden;
-            opacity: 0;
-        }
-
-        body {
-            transition: opacity 0.2s ease-in;
-        }
-
-        /* Custom style for flat-card: NO BORDERS, just shadow for depth */
+        /* Custom styles for flat-card and dark mode */
         .flat-card {
             background-color: #ffffff;
             border-radius: 12px;
-            /* Using a subtle shadow for the "flat" card look */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .dark .flat-card {
-            background-color: #242424; /* Adjusted to your requested dark mode background */
+            background-color: #242424;
             box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
         }
 
-        /* Modal specific styles */
+        /* Styling for the featured schedule's date block */
+        .date-block {
+            /* Background matches the card but with a slight border/shadow differentiation if desired */
+            background-color: #f7f7f7; /* Light gray for contrast in light mode */
+            border-radius: 12px;
+            text-align: center;
+            flex-shrink: 0;
+            width: 100px; /* Fixed width for the date block */
+            height: 100px; /* Fixed height for a square look */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dark .date-block {
+            background-color: #333333; /* Darker gray for contrast in dark mode */
+        }
+
+        /* Modal specific styles (kept for functionality) */
         .modal-overlay {
+            /* ... (Modal styles remain the same) ... */
             position: fixed;
             top: 0;
             left: 0;
@@ -65,7 +64,7 @@
             display: flex;
             opacity: 1;
         }
-
+        
         .modal-content {
             background-color: #ffffff;
             color: #1f2937;
@@ -82,129 +81,27 @@
         }
 
         .dark .modal-content {
-            background-color: #242424; /* Adjusted to your requested dark mode background */
+            background-color: #242424;
             color: #d1d5db;
         }
 
-        .modal-overlay.open .modal-content {
-            transform: scale(1);
-        }
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-white dark:bg-[#242424]"> <main id="swup" class="transition-fade content-hidden">
-        <div class="main-content text-container">
+<body class="bg-white dark:bg-[#242424]">
+    <main id="swup" class="transition-fade content-hidden">
+        <div class="main-content text-container pt-16 md:pt-24">
 
-            <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
-                <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
-                    <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
-                        <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
-                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo"
-                                class="h-5 w-auto" />
-                            <span class="font-theme font-medium text-gray-900 dark:text-white">SK Lepaga</span>
-                        </a>
-                        <button id="menu-toggle-btn" type="button"
-                            class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none text-gray-900 dark:text-white"
-                            aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
-                    </div>
+            <nav class="fixed top-0 left-0 w-full h-12 bg-white dark:bg-[#242424] z-50 shadow-md">
+                <div class="max-w-screen-xl mx-auto px-4 flex items-center h-full">
+                    <h1 class="text-xl font-bold font-theme text-gray-900 dark:text-white">SK Lepaga</h1>
                 </div>
             </nav>
-
-            <aside id="sidebar-multi-level-sidebar"
-                class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
-                style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
-                <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
-                    <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center text-gray-900 dark:text-white">
-                        <div class="sidebar-menu-item flex flex-col items-center">
-                            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-                                <h2 class="subtext-title">CALENDAR</h2>
-                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div
-                                class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="#" class="subtext submenu-link inline-block">Happening Now</a>
-                                <a href="#" class="subtext submenu-link inline-block">Upcoming Activities</a>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="sidebar-menu-item flex flex-col items-center">
-                            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-                                <h2 class="font-theme subtext-title">NEWS</h2>
-                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div
-                                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="#" class="subtext submenu-link block">Featured News</a>
-                                <a href="#" class="subtext submenu-link block">All Articles</a>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="sidebar-menu-item flex flex-col items-center">
-                            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-                                <h2 class="subtext-title">ABOUT</h2>
-                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div
-                                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="#" class="subtext submenu-link block">What is SK</a>
-                                <a href="#" class="subtext submenu-link block">SK Officials</a>
-                                <a href="#" class="subtext submenu-link block">About Developers</a>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="sidebar-menu-item flex flex-col items-center">
-                            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-                                <h2 class="subtext-title">CONTACT</h2>
-                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div
-                                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <a href="pages/article1.html" class="subtext submenu-link block">Send a
-                                    message</a>
-                                <a href="#" class="subtext submenu-link block">Send a feedback</a>
-                                <a href="#" class="subtext submenu-link block">Schedule a meetup</a>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="sidebar-menu-item flex flex-col items-center">
-                            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-                                <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
-                                <svg class="w-5 h-5 stroke-current transition-transform duration-300" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div
-                                class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-                                <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-
-            <section id="schedules-container" class="w-full bg-white dark:bg-[#242424] pt-16 pb-10 md:pt-24 md:pb-16">
+            <section id="schedules-container" class="w-full pt-8 pb-10 md:pb-16">
                 <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 md:mb-12 text-center font-theme">
-                        Upcoming Schedules 🗓️
+                    <h2 class="text-5xl font-extrabold text-gray-900 dark:text-white mb-10 md:mb-16 text-center font-theme uppercase">
+                        Schedules
                     </h2>
 
                     <div id="schedules-list" class="space-y-6">
@@ -216,35 +113,6 @@
                     </p>
                 </div>
             </section>
-
-            <footer
-                class="footer relative bg-white dark:bg-[#242424] text-gray-700 dark:text-gray-300 antialiased pt-12 pb-6 border-t border-gray-100 dark:border-gray-800">
-                <div class="footer-tint absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500">
-                </div>
-                <div
-                    class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-                    <div class="flex flex-col items-center space-y-4 mb-10 text-center font-theme">
-                        <a href="index.html"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>HOME</a>
-                        <a href="/calendar"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>CALENDAR</a>
-                        <a href="/news"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>NEWS</a>
-                        <a href="/about"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>ABOUT</a>
-                        <a href="/contact"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>CONTACT</a>
-                        <a href="/sitemap"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>SITE MAP</a>
-                    </div>
-                </div>
-            </footer>
         </div>
     </main>
 
@@ -265,9 +133,6 @@
              </div>
         </div>
     </div>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
-
     <script type="module">
         import {
             initializeApp
@@ -279,7 +144,7 @@
             enableIndexedDbPersistence
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        // 1. Firebase Configuration
+        // 1. Firebase Configuration (replace with your actual config)
         const firebaseConfig = {
             apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
             authDomain: "sklepaga-8790e.firebaseapp.com",
@@ -293,12 +158,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- Firestore Caching Implementation ---
         try {
             await enableIndexedDbPersistence(db);
-            console.log("Firestore offline persistence enabled.");
         } catch (err) {
-            // ... (error handling for persistence) ...
+            console.warn("Firestore offline persistence failed (may be already active).", err);
         }
 
         let allSchedules = [];
@@ -330,7 +193,6 @@
             modalTitle.textContent = schedule.title;
             modalDate.textContent = `Scheduled for: ${fullDate}`;
             modalContext.textContent = schedule.context;
-            // Set the link for the modal's "See Full Details" button
             modalReadMore.href = `schedulesarticle.html?slug=${schedule.slug}`;
 
             scheduleModal.classList.add('open');
@@ -342,53 +204,71 @@
             document.body.style.overflow = '';
         };
 
-        // 3. Content Renderer Function
+        /**
+         * Renders a schedule item based on its type (featured card or list item).
+         * @param {Object} schedule - The schedule data object.
+         * @param {boolean} isFeatured - True for the first (latest upcoming) schedule.
+         * @returns {string} The HTML string for the element.
+         */
         function createScheduleCard(schedule, isFeatured = false) {
             const date = new Date(schedule.datePublished + 'T00:00:00');
-            const month = date.toLocaleString('en-US', {
-                month: 'short'
-            });
-            const day = date.getDate();
+            const monthShort = date.toLocaleString('en-US', { month: 'short' });
+            const monthLong = date.toLocaleString('en-US', { month: 'long' });
+            const day = date.getDate().toString().padStart(2, '0');
             const year = date.getFullYear();
+            const fullDate = `${monthLong} ${day}, ${year}`;
+            
+            const cardSlug = schedule.slug;
 
-            // Classes for visual differentiation and flat design
-            const cardClasses = isFeatured ? 'shadow-xl p-8 md:p-10 transform hover:scale-[1.01] transition-all duration-300' : 'shadow-md p-6 md:p-8 hover:shadow-lg transition-all duration-300';
-            const titleSize = isFeatured ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl';
-            const dateSize = isFeatured ? 'text-6xl md:text-7xl' : 'text-5xl';
-            const dateText = isFeatured ? 'text-[#5c5cff]' : 'text-[#5c5cff]'; // Keep accent color
+            if (isFeatured) {
+                // FEATURED CARD: Matches the large block design in the image
+                return `
+                    <div class="schedule-card flat-card flex flex-col sm:flex-row p-4 sm:p-6 mb-10 w-full shadow-lg transform hover:scale-[1.01] transition-all duration-300 hover:cursor-pointer"
+                         data-slug="${cardSlug}">
+                        
+                        <div class="date-block mr-0 mb-4 sm:mb-0 sm:mr-6">
+                            <p class="font-theme text-gray-900 dark:text-white font-extrabold text-lg leading-none">${monthShort}</p>
+                            <h3 class="font-theme font-extrabold text-7xl text-gray-900 dark:text-white leading-none my-1">${day}</h3>
+                            <p class="font-theme text-gray-900 dark:text-white font-extrabold text-lg leading-none">${year}</p>
+                        </div>
 
-            // Create a custom element wrapper to allow the whole card to trigger the modal,
-            // while having a separate link for the "Read More" button.
-            return `
-                <div class="schedule-card flat-card rounded-xl flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 hover:cursor-pointer ${cardClasses}"
-                     data-slug="${schedule.slug}"
-                     title="Click to view quick details">
-                    
-                    <div class="flex-shrink-0 text-center w-full sm:w-24 font-theme">
-                        <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase leading-none">${month}</p>
-                        <h3 class="font-extrabold ${dateSize} ${dateText} leading-none my-1">${day}</h3>
-                        <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 leading-none">${year}</p>
+                        <div class="flex-grow flex flex-col justify-center">
+                            <h3 class="font-theme font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-2 leading-tight">
+                                ${schedule.title}
+                            </h3>
+                            <a href="schedulesarticle.html?slug=${cardSlug}" 
+                               onclick="event.stopPropagation()" 
+                               class="font-theme text-sm font-medium text-[#5c5cff] hover:text-[#4a4aee] transition-colors duration-200 underline">
+                                Know more
+                            </a>
+                        </div>
                     </div>
-
-                    <div class="flex-grow font-theme">
-                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 ${titleSize}">
-                            ${schedule.title}
-                        </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                            ${schedule.context.substring(0, 150)}...
+                `;
+            } else {
+                // LIST ITEM: Matches the smaller, flat list items in the image
+                return `
+                    <div class="schedule-card flex items-baseline py-2 px-0 hover:bg-gray-50 dark:hover:bg-[#333333] transition-colors duration-200 hover:cursor-pointer"
+                         data-slug="${cardSlug}">
+                        
+                        <p class="font-theme text-base font-semibold text-gray-700 dark:text-gray-300 w-36 flex-shrink-0">
+                            ${fullDate}
                         </p>
-                        <a href="schedulesarticle.html?slug=${schedule.slug}" 
+                        
+                        <h4 class="font-theme font-bold text-base text-gray-900 dark:text-white flex-grow hover:text-[#5c5cff] dark:hover:text-[#5c5cff] transition-colors duration-200">
+                            ${schedule.title}
+                        </h4>
+                        
+                        <a href="schedulesarticle.html?slug=${cardSlug}" 
                            onclick="event.stopPropagation()" 
-                           class="text-sm font-medium text-[#5c5cff] hover:text-[#4a4aee] transition-colors duration-200">
-                            Read More &rarr;
-                        </a>
+                           class="sr-only"></a>
                     </div>
-                </div>
-            `;
+                `;
+            }
         }
 
-        // 4. Main Fetch and Render Function (Uses contentJson/data)
+        // 4. Main Fetch and Render Function
         async function fetchAndRenderSchedules() {
+            // ... (Firebase fetching logic remains the same) ...
             try {
                 const docRef = doc(db, "contentJson", "data");
                 const docSnap = await getDoc(docRef);
@@ -423,14 +303,20 @@
                 }
 
                 let schedulesHtml = '';
+                let listItemsHtml = '';
 
-                // The first schedule is the 'latest upcoming' (Featured/Bigger)
+
+                // 1. The first schedule is the 'latest upcoming' (Featured/Bigger)
                 schedulesHtml += createScheduleCard(allSchedules[0], true);
 
-                // Remaining schedules
+                // 2. Remaining schedules as list items
                 allSchedules.slice(1).forEach(schedule => {
-                    schedulesHtml += createScheduleCard(schedule);
+                    listItemsHtml += createScheduleCard(schedule, false);
                 });
+                
+                // Wrap list items in a container for separation and better design match
+                schedulesHtml += `<div class="space-y-2 mt-8 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-4">${listItemsHtml}</div>`;
+
 
                 schedulesList.innerHTML = schedulesHtml;
 
@@ -444,12 +330,14 @@
         
         // 5. Event Listener for Schedule Card Clicks (Opens Modal)
         schedulesList.addEventListener('click', (e) => {
+            // Find the closest card element that has the data-slug attribute
             const card = e.target.closest('.schedule-card');
-            if (card) {
+            
+            // Crucial: Only open the modal if the click target is NOT the "Know more" link
+            if (card && e.target.tagName !== 'A') {
                 const slug = card.dataset.slug;
                 const schedule = allSchedules.find(s => s.slug === slug);
                 if (schedule) {
-                    // Open modal on card click
                     openModal(schedule);
                 }
             }
@@ -463,20 +351,6 @@
         });
 
         document.addEventListener('DOMContentLoaded', fetchAndRenderSchedules);
-    </script>
-    <script src="navbar\navbar.js"></script>
-    <script src="pages/index.js"></script>
-    <script src="animations\index.js"></script>
-    <script src="font\font.js"></script>
-    <script src="loader\loader.js"></script>
-    <script src="animations/global.js"></script>
-    <script src="animations/scroll.js"></script>
-    <script src="controlers/carousel.js"></script>
-
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
     </script>
 </body>
 </html>
