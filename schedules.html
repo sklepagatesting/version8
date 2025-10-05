@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News & Articles</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font"
+        type="font/woff2" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+    <link rel="prefetch" href="home.html" as="document">
     <link rel="stylesheet" href="navbar\navbar.css">
     <link rel="stylesheet" href="font\font.css">
     <link rel="stylesheet" href="animations/global.css">
@@ -17,7 +22,6 @@
     <link rel="stylesheet" href="controlers\carousel.css">
     <link rel="stylesheet" href="sections/hero.css">
     <link rel="stylesheet" href="sections\carousel.css">
-
     <style>
         body.preload {
             visibility: hidden;
@@ -32,6 +36,7 @@
         .flat-card {
             background-color: #ffffff;
             border-radius: 12px;
+            /* Using Tailwind classes for padding/shadow */
         }
 
         .dark .flat-card {
@@ -52,8 +57,7 @@
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
-            /* Ensure it closes on click outside */
-            cursor: pointer; 
+            cursor: pointer;
         }
 
         .modal-overlay.open {
@@ -67,13 +71,14 @@
             padding: 1.5rem;
             border-radius: 12px;
             max-width: 90%;
-            width: 500px; /* Set a max width for desktop view */
+            width: 500px;
+            /* Set a max width for desktop view */
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
             transform: scale(0.95);
             transition: transform 0.3s ease-in-out;
-            cursor: default; /* Reset cursor for content */
+            cursor: default;
         }
 
         .dark .modal-content {
@@ -86,6 +91,7 @@
         }
     </style>
 </head>
+
 <body>
     <main id="swup" class="transition-fade content-hidden">
         <div class="main-content text-container">
@@ -94,15 +100,16 @@
                 <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
                     <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
                         <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
-                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
+                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo"
+                                class="h-5 w-auto" />
                             <span class="font-theme font-medium">SK Lepaga</span>
                         </a>
                         <button id="menu-toggle-btn" type="button"
                             class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
                             aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16" />
+                                <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
@@ -114,6 +121,7 @@
                 style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
                 <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
                     <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
+
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">CALENDAR</h2>
@@ -194,14 +202,17 @@
                 </div>
             </aside>
 
+
             <section id="schedules-container" class="w-full bg-white dark:bg-[#242424] pt-16 pb-10 md:pt-24 md:pb-16">
                 <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 md:mb-12 text-center font-theme">
+                    <h2
+                        class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 md:mb-12 text-center font-theme">
                         Upcoming Schedules 🗓️
                     </h2>
 
                     <div id="schedules-list" class="space-y-6">
-                        <p id="loading-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400">Loading schedules...</p>
+                        <p id="loading-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400">Loading
+                            schedules...</p>
                     </div>
 
                     <p id="no-schedules" class="text-center text-lg text-gray-500 dark:text-gray-400 hidden mt-10">
@@ -214,8 +225,7 @@
                 class="footer relative bg-white dark:bg-[#242424] text-gray-700 dark:text-gray-300 antialiased pt-12 pb-6 border-t border-gray-100 dark:border-gray-800">
                 <div class="footer-tint absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500">
                 </div>
-                <div
-                    class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+                <div class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
                     <div class="flex flex-col items-center space-y-4 mb-10 text-center">
                         <a href="index.html"
                             class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
@@ -246,7 +256,10 @@
             <div class="flex justify-between items-start mb-4 border-b pb-2">
                 <h3 id="modal-title" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
                 </button>
             </div>
             <p id="modal-date" class="text-sm text-[#5c5cff] font-medium mb-4"></p>
@@ -254,11 +267,7 @@
         </div>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
     <script type="module">
         import {
@@ -266,11 +275,9 @@
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import {
             getFirestore,
-            collection,
-            query,
-            where,
-            orderBy,
-            getDocs
+            doc,
+            getDoc,
+            enableIndexedDbPersistence // <-- For Caching
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
         // 1. Firebase Configuration (MUST be the same as your Admin Panel)
@@ -287,6 +294,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- Firestore Caching Implementation ---
+        try {
+            await enableIndexedDbPersistence(db);
+            console.log("Firestore offline persistence enabled.");
+        } catch (err) {
+            if (err.code === 'failed-precondition') {
+                console.log("Persistence failed: multiple tabs open, or browser doesn't support it.");
+            } else if (err.code === 'unimplemented') {
+                console.log("Persistence not supported on this device.");
+            }
+        }
+
         // Global variable to store all fetched schedules for quick modal lookup
         let allSchedules = [];
 
@@ -295,7 +314,7 @@
         const loadingSchedules = document.getElementById('loading-schedules');
         const noSchedules = document.getElementById('no-schedules');
 
-        // Modal Elements (NOW EXIST IN THE HTML)
+        // Modal Elements
         const scheduleModal = document.getElementById('schedule-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalDate = document.getElementById('modal-date');
@@ -315,10 +334,7 @@
 
             modalTitle.textContent = schedule.title;
             modalDate.textContent = `Scheduled for: ${fullDate}`;
-            // Use innerHTML instead of textContent if you expect line breaks/formatting from context
-            // or use a utility class like whitespace-pre-wrap on the modal-context element (added above)
             modalContext.textContent = schedule.context;
-
             scheduleModal.classList.add('open');
             document.body.style.overflow = 'hidden'; // Prevent scrolling the body
         };
@@ -331,7 +347,7 @@
         // 3. Content Renderer Function
         function createScheduleCard(schedule, isFeatured = false) {
             // Parse the date Published from the Admin Panel's input (YYYY-MM-DD format)
-            const date = new Date(schedule.datePublished + 'T00:00:00'); // Append T00:00:00 to treat as UTC midnight for consistent parsing
+            const date = new Date(schedule.datePublished + 'T00:00:00');
             const month = date.toLocaleString('en-US', {
                 month: 'short'
             });
@@ -367,32 +383,43 @@
             `;
         }
 
-        // 4. Main Fetch and Render Function (Uses Caching and Server Timestamps)
+        // 4. Main Fetch and Render Function (FIXED TO USE contentJson/data)
         async function fetchAndRenderSchedules() {
             try {
-                // 1. Define the query: Filter by 'schedules', order by event date (asc), and only future or today's dates.
+                // 1. Define the document reference for the content JSON
+                const docRef = doc(db, "contentJson", "data");
+
+                // 2. Fetch the pre-processed data (consistent with the News page)
+                const docSnap = await getDoc(docRef);
+
+                if (!docSnap.exists()) {
+                    throw new Error("Content data is empty or not yet processed in Firestore's contentJson/data document.");
+                }
+
+                const data = docSnap.data();
                 const today = new Date().toISOString().substring(0, 10);
 
-                const q = query(
-                    collection(db, "content"),
-                    where("category", "==", "schedules"),
-                    where("datePublished", ">=", today),
-                    orderBy("datePublished", "asc"),
-                    orderBy("timestamp", "desc")
-                );
+                // 3. Filter and Sort the content array locally
+                const allUpcomingSchedules = data.content
+                    .filter(item => {
+                        // Filter by category 'schedules'
+                        if (item.category !== 'schedules') return false;
 
-                // 2. Fetch data (uses Firebase local cache first)
-                const querySnapshot = await getDocs(q);
-
-                allSchedules = []; // Clear and repopulate the global cache
-                querySnapshot.forEach((doc) => {
-                    allSchedules.push({
-                        id: doc.id,
-                        ...doc.data()
+                        // Filter by future or today's date (YYYY-MM-DD comparison)
+                        return item.datePublished >= today;
+                    })
+                    // Sort by datePublished Ascending (next upcoming event first)
+                    .sort((a, b) => {
+                        if (a.datePublished < b.datePublished) return -1;
+                        if (a.datePublished > b.datePublished) return 1;
+                        // If dates are the same, sort by timestamp Descending (newer document first)
+                        return b.timestamp - a.timestamp;
                     });
-                });
 
-                // 3. Render
+
+                allSchedules = allUpcomingSchedules; // Cache the filtered results globally
+
+                // 4. Render
                 loadingSchedules.classList.add('hidden');
 
                 if (allSchedules.length === 0) {
@@ -415,7 +442,7 @@
 
             } catch (error) {
                 console.error("Error fetching schedules:", error);
-                loadingSchedules.textContent = "Failed to load schedules. Please try again later. (Error)";
+                loadingSchedules.textContent = "Failed to load schedules. Please check data/rules. (Error)";
                 loadingSchedules.classList.remove('hidden');
                 noSchedules.classList.add('hidden');
             }
@@ -442,7 +469,6 @@
         // Run the fetch function when the page loads
         document.addEventListener('DOMContentLoaded', fetchAndRenderSchedules);
     </script>
-    
     <script src="navbar\navbar.js"></script>
     <script src="pages/index.js"></script>
     <script src="animations\index.js"></script>
@@ -451,12 +477,22 @@
     <script src="animations/global.js"></script>
     <script src="animations/scroll.js"></script>
     <script src="controlers/carousel.js"></script>
-    
+
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
     <script>
-        // Initialize ScrollTrigger
-        if (typeof gsap !== 'undefined') {
-            gsap.registerPlugin(ScrollTrigger);
-        }
+        // Note: Any GSAP logic placed here will run ONLY on the initial page load (DOMContentLoaded).
+        gsap.registerPlugin(ScrollTrigger);
     </script>
 </body>
+
 </html>
