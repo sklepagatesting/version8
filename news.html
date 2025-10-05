@@ -1,42 +1,46 @@
-
-  <!DOCTYPE html>
-  <html lang="en">
-
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>News Update</title>
 
-    <!-- Preconnect to Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Preload the font -->
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2"
-      crossorigin="anonymous">
-    <!-- Load the font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet">
-    <!-- FontFaceObserver Script -->
+      rel="stylesheet"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
-
-
-
-    <link rel="prefetch" href="home.html" as="document">
-
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="navbar\navbar.css">
-    <link rel="stylesheet" href="font\font.css">
-    <link rel="stylesheet" href="animations/global.css">
-    <link rel="stylesheet" href="pages\index.css">
-    <link rel="stylesheet" href="controlers\scroll.css">
-      <link rel="stylesheet" href="controlers\carousel.css">
-    <link rel="stylesheet" href="sections/hero.css">
-    <link rel="stylesheet" href="sections\carousel.css">
-
+    <link rel="prefetch" href="home.html" as="document" />
+    <link rel="stylesheet" href="navbar\navbar.css" />
+    <link rel="stylesheet" href="font\font.css" />
+    <link rel="stylesheet" href="animations/global.css" />
+    <link rel="stylesheet" href="pages\index.css" />
+    <link rel="stylesheet" href="controlers\scroll.css" />
+    <link rel="stylesheet" href="sections/hero.css" />
+    <link rel="stylesheet" href="sections\carousel.css" />
     <style>
+      :root {
+        --nav-height: 3rem;
+      }
+
+      html,
+      body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
       body.preload {
         visibility: hidden;
         opacity: 0;
@@ -44,623 +48,570 @@
 
       body {
         transition: opacity 0.2s ease-in;
+        overflow-x: hidden;
       }
-    </style>
+      /* Main content container fills the entire viewport. */
+      .main-content {
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
 
-  </head>
+      .images-container {
+        flex-grow: 1;
+        z-index: 10;
+        width: 100%;
+        position: relative;
 
-  <body class="preload">
-    <main id="swup" class="transition-fade">
-      <div class="main-content text-container">
+        display: flex;
+        flex-direction: column; /* Allows hero and carousel to stack */
+        align-items: center;
 
-  <!-- 🌐 NAVIGATION BAR (Smaller) -->
-  <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full">
-    <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
-      <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
-        <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
-          <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
-          <span class="font-theme font-medium">SK Lepaga</span>
-        </a>
-        <button id="menu-toggle-btn" type="button"
-          class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
-          aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </nav>
+        padding-top: calc(var(--nav-height) + 1rem);
+      }
 
+      #hero-news-image {
+        flex-grow: 1; /* Hero image takes up max space */
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1rem; /* Padding for small screens */
+      }
 
-
-    <!-- 🧭 SIDEBAR -->
-    <aside id="sidebar-multi-level-sidebar"
-      class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
-      style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
-
-      <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
-        <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
-
-          <!-- Menu Item 1 -->
-          <div class="sidebar-menu-item flex flex-col items-center">
-            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-              <h2 class="subtext-title">CALENDAR</h2>
-              <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-              <a href="#" class="subtext submenu-link inline-block">Happening Now</a>
-              <a href="#" class="subtext submenu-link inline-block">Upcoming Activities</a>
-              <br>
-            </div>
-          </div>
-
-          <!-- Menu Item 2 -->
-          <div class="sidebar-menu-item flex flex-col items-center">
-            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-              <h2 class="font-theme subtext-title">NEWS</h2>
-              <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">Featured News</a>
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">All Articles</a>
-              <br>
-            </div>
-          </div>
-
-          <!-- Menu Item 3 -->
-          <div class="sidebar-menu-item flex flex-col items-center">
-            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-              <h2 class="subtext-title">ABOUT</h2>
-              <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">What is SK</a>
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">SK Officials</a>
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">About Developers</a>
-              <br>
-            </div>
-          </div>
-
-          <!-- Menu Item 4 -->
-          <div class="sidebar-menu-item flex flex-col items-center">
-            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-              <h2 class="subtext-title">CONTACT</h2>
-              <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-              <a href="pages/article1.html" class="subtext submenu-link block text-[#FFFFF]">Send a message</a>
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">Send a feedback</a>
-              <a href="#" class="subtext submenu-link block text-[#FFFFF]">Schedule a meetup</a>
-              <br>
-            </div>
-          </div>
-
-          <!-- Menu Item 5 -->
-          <div class="sidebar-menu-item flex flex-col items-center">
-            <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
-              <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
-              <svg class="w-5 h-5 stroke-white transition-transform duration-300" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center">
-              <br>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </aside>
-
-
-    <div class="fly-in-slow w-full relative overflow-hidden" style="aspect-ratio: 4/3;">
-    <img 
-        loading="lazy" 
-        decoding="async" 
-        width="3000" 
-        height="2000" 
-        alt="President Trump Executive Order Signing" 
-        src="https://www.whitehouse.gov/wp-content/uploads/2025/04/POTUS-EO-Signing-2.png" 
-        class="absolute inset-0 w-full h-full object-cover" 
-    />
-</div>
-
-    <!-- IMAGE CARD -->
-    <section class="font-theme px-4 py-8 antialiased md:py-16 bg-white dark:bg-[#242424]">
-      <div class="max-w-screen-xl mx-auto">
-
-    <div class="text-container">
-    <h1 class="text-line subtext-title mt-4">EVENTS</h1>
-    </div>
-      <!--<h2 class="rise subtext-title mt-4"></h2>--> 
-
-        <div class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 lg:grid-cols-2">
-
-          <!-- Image 1 -->
-  <a href="navbar.html"
-    class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10 scale-up"
-    data-dark-border="#242424">
-    <img src="https://sklepagatesting.github.io/resources/Images/treeplanting.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Environment</span><span class="opacity-70">· 20 Jul</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-      <span class="underlines subtext text-white">Tree Planting Activity</span>
-    </div>
-  </a>
-
-
-
-
-                  <!-- Image 2 -->
-  <a href="navbar.html"
-    class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10"
-    data-dark-border="#242424">
-    <img src="https://sklepagatesting.github.io/resources/Images/basketball.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover " />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Sports</span><span class="opacity-70">· 20 Jul</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-      <span class="underlines subtext text-white">Basketball Tournament</span>
-    </div>
-  </a>
-
-                  <!-- Image 3 -->
-  <a href="navbar.html"
-    class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10"
-    data-dark-border="#242424">
-    <img src="https://sklepagatesting.github.io/resources/Images/volleyball.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover " />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Sports</span><span class="opacity-70">· 20 Jul</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-      <span class="underlines subtext text-white">Volleyball Tournament</span>
-    </div>
-  </a>
-
-                          <!-- Image 4 -->
-  <a href="navbar.html"
-    class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10"
-    data-dark-border="#242424">
-    <img src="https://sklepagatesting.github.io/resources/Images/outreach.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover " />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Social</span><span class="opacity-70">· 20 Jul</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-      <span class="underlines subtext text-white">Outreach Program</span>
-    </div>
-  </a>
-
-      </div>
-    </section>
-
-
-
-  <!-- CARD CAROUSEL -->
-    <section class="font-theme px-4 py-8 antialiased md:py-16 bg-white dark:bg-[#242424]">
-      <div class="max-w-screen-xl mx-auto">
-  <div class="text-container">
-    <h1 class="text-line subtext-title mb-4">EXPLORE MORE</h1>
-    </div>
-  <div class="text-container">
-    <h1 class="rise subtext">NEWS AND ARTICLES</h1>
-    </div>
-      </div>
-  <div class="mt-8 w-full relative overflow-hidden">
-
-    <div class="w-full max-w-screen-xl mx-auto relative overflow-hidden">
-    <div id="carouselCards" class="right-in-slow flex gap-6 flex-nowrap min-w-0 overflow-x-auto scroll-smooth no-scrollbar transition-all duration-700 ease-in-out cursor-grab active:cursor-grabbing">
-
-      <!-- Card 1 --> 
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Politics</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">50th Anniversary Celebration</span>
-    </div>
-  </a>
-
-  <!-- Card 3 -->    
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Anniversary</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">This is a sample of longer title</span>
-    </div>
-  </a>
-
-  <!-- Card 4 -->    
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Politics</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">This is a sample of even longer title to test how it would fit.</span>
-    </div>
-  </a>
-
-    <!-- Card 5 -->    
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Politics</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">Anniversary Celebration</span>
-    </div>
-  </a>
-
-  <!-- Card 6 -->    
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Politics</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">Anniversary Celebration</span>
-    </div>
-  </a>
-
-  <!-- Card 7 -->    
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Politics</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">Anniversary Celebration</span>
-    </div>
-  </a>
-
-  <!-- Card 8 -->    
-  <a href="navbar.html" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-    <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-        <span>Politics</span><span class="opacity-70">· 04 Aug</span>
-      </span>
-    </div>
-    <div class="absolute top-4 right-4 z-20 md:top-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div class="flex items-center justify-center w-8 h-8 rounded-full shadow-md bg-[#242424] dark:bg-[#fff]">
-        <svg class="w-6 h-6 text-[#fff] dark:text-[#242424] rotate-[45deg]" fill="none" viewBox="0 0 24 24">
-          <path d="M12 6v13m0-13 4 4m-4-4-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="underlines subtext text-white">Anniversary Celebration</span>
-    </div>
-  </a>
-
-  </div>
+      .hero-image-wrapper {
+        width: 100%;
+        height: 100%;
+        max-width: 900px; /* Constrain max size */
+        max-height: 50vh; /* Constrain max size by height */
+        display: block;
+        overflow: hidden;
+      }
       
-  <div class="flex justify-end mt-4 gap-3">
-
-  <!-- Prev Button -->
-  <button id="prevArrow"
-    class="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white focus:outline-none opacity-100 transition-opacity duration-300 disabled:opacity-40 disabled:pointer-events-none">
-    <svg class="w-4 h-4 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" fill="none">
-      <path d="M7 1L3 5l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span class="sr-only">Previous</span>
-  </button>
-
-
-    <!-- Next Button -->
-    <button id="nextArrow"
-      class="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white focus:outline-none">
-      <svg class="w-4 h-4 mx-auto" xmlns="http://www.wZSS3.org/2000/svg" viewBox="0 0 10 10" fill="none">
-        <path d="M3 9l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="sr-only">Next</span>
-    </button>
-  </div>
-    
-
-    <!-- Hide Scrollbar CSS -->
-    <style>
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
+      .hero-image-wrapper img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
       }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+
+      .video-titles-container {
+        z-index: 20;
+        background: transparent;
+        padding: 2rem;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      .carousel-image {
+        width: clamp(200px, 40vw, 400px);
+        aspect-ratio: 16 / 9;
+        height: auto;
+        max-height: 40vh;
+        object-fit: cover;
+      }
+
+      .video-reel {
+        width: clamp(100px, 30vw, 300px);
+      }
+      /* Ensure nav and aside are always on top */
+      #navbar,
+      #sidebar-multi-level-sidebar {
+        z-index: 30 !important;
+      }
+
+      /* Prevent any potential overflow */
+      * {
+        box-sizing: border-box;
       }
     </style>
-  </section>
+  </head>
+  <body class="preload">
+    <main id="swup">
+      <div class="main-content text-container">
+        <nav
+          id="navbar"
+          class="duration-300 fixed inset-x-0 top-0 z-50 h-12 w-full"
+        >
+          <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
+            <div
+              class="flex items-center justify-between h-full max-w-screen-xl mx-auto"
+            >
+              <a
+                href=""
+                class="relative z-60 pointer-events-auto flex items-center space-x-2"
+              >
+                <img
+                  src="https://sklepagatesting.github.io/resources/Images/sklogo.webp"
+                  alt="Logo"
+                  class="h-5 w-auto"
+                />
+                <span class="font-theme font-medium">SK Lepaga</span>
+              </a>
+              <button
+                id="menu-toggle-btn"
+                type="button"
+                class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none"
+                aria-controls="sidebar-multi-level-sidebar"
+                aria-expanded="false"
+              >
+                <svg
+                  class="w-7 h-7"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    id="menu-icon-path"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </nav>
 
+        <aside
+          id="sidebar-multi-level-sidebar"
+          class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
+          style="height: calc(100vh - 3rem); overflow-y: auto"
+          aria-label="Sidebar"
+        >
+          <div
+            class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto"
+          >
+            <div
+              id="sidebar-menu"
+              class="font-theme space-y-5 flex flex-col items-center justify-center"
+            >
+              <div class="sidebar-menu-item flex flex-col items-center">
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
+                  <h2 class="subtext-title">CALENDAR</h2>
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="font-theme sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a href="#" class="subtext submenu-link inline-block"
+                    >Happening Now</a
+                  >
+                  <a href="#" class="subtext submenu-link inline-block"
+                    >Upcoming Activities</a
+                  >
+                  <br />
+                </div>
+              </div>
+              <div class="sidebar-menu-item flex flex-col items-center">
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
+                  <h2 class="font-theme subtext-title">NEWS</h2>
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >Featured News</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >All Articles</a
+                  >
+                  <br />
+                </div>
+              </div>
+              <div class="sidebar-menu-item flex flex-col items-center">
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
+                  <h2 class="subtext-title">ABOUT</h2>
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >What is SK</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >SK Officials</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >About Developers</a
+                  >
+                  <br />
+                </div>
+              </div>
+              <div class="sidebar-menu-item flex flex-col items-center">
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
+                  <h2 class="subtext-title">CONTACT</h2>
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <a
+                    href="authentication.html"
+                    class="subtext submenu-link block text-[#FFFFF]"
+                    >Real-time Chat</a
+                  >
+                  <a
+                    href="contactbeta.html"
+                    class="subtext submenu-link block text-[#FFFFF]"
+                    >Send a message</a
+                  >
+                  <a href="#" class="subtext submenu-link block text-[#FFFFF]"
+                    >Schedule a meetup</a
+                  >
+                  <br />
+                </div>
+              </div>
+              <div class="sidebar-menu-item flex flex-col items-center">
+                <button
+                  class="sidebar-menu-header flex items-center space-x-2 focus:outline-none"
+                >
+                  <h2 href="pages/article1.html" class="subtext-title">
+                    SITE MAP
+                  </h2>
+                  <svg
+                    class="w-5 h-5 stroke-white transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="sidebar-menu-body max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out mt-3 space-y-1 text-center flex flex-col items-center"
+                >
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
 
+        <section
+          class="clipp-section images-container w-full flex flex-col justify-between bg-white overflow-hidden bg-white dark:bg-[#242424]"
+        >
+          <div
+            id="hero-news-image"
+            class="w-full h-full p-4 flex items-center justify-center"
+          >
+            <p class="text-gray-500">Loading latest news...</p>
+          </div>
 
+          <div class="w-full pb-4 px-0">
+            <div class="overflow-hidden relative w-full">
+              <div id="scroller" class="flex w-max will-change-transform">
+                <p class="text-gray-500 p-4">Loading other news...</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-<footer class="footer relative bg-white dark:bg-[#242424] text-gray-700 dark:text-gray-300 antialiased pt-12 pb-6 border-t border-gray-100 dark:border-gray-800">
-  <!-- Gradient overlay -->
-  <div class="footer-tint absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500"></div>
+        <section class="video-titles-container w-full bg-transparent mt-0 pt-0">
+          <div class="w-full flex flex-col-reverse md:flex-row">
+            <div class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative">
+              <div class="flex flex-col justify-end">
+                <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
+                <div class="w-full max-w-sm">
+                  <video
+                    id="playReel"
+                    src="https://sklepagatesting.github.io/resources/Images/reel.mp4"
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    class="video-reel shadow-lg object-cover aspect-video cursor-pointer"
+                  ></video>
+                </div>
+              </div>
+            </div>
+            <div id="videoOverlayBg" class="video-overlay-bg"></div>
 
-  <div class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-
-    <div class="flex flex-col items-center space-y-4 mb-10 text-center">
-      <a href="index.html" class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" data-transition>HOME</a>
-      <a href="/calendar" class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" data-transition>CALENDAR</a>
-      <a href="/news" class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" data-transition>NEWS</a>
-      <a href="/about" class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" data-transition>ABOUT</a>
-      <a href="/contact" class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" data-transition>CONTACT</a>
-      <a href="/sitemap" class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" data-transition>SITE MAP</a>
-    </div>
-
-    <hr class="w-24 border-t border-gray-300 dark:border-gray-700 mb-8" />
-
-    <div class="flex space-x-8 mb-10">
-      <!-- Facebook -->
-      <a href="#" class="social-icon text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transform hover:scale-110 transition-transform duration-300"
-         data-tint="rgba(59, 130, 246, 0.5)" aria-label="Facebook">
-        <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2V12h2.5l-.4 3h-2.1v7A10 10 0 0 0 22 12"/>
-        </svg>
-      </a>
-
-      <!-- Email -->
-      <a href="mailto:info@example.com" class="social-icon text-gray-500 hover:text-red-600 dark:hover:text-red-400 transform hover:scale-110 transition-transform duration-300"
-         data-tint="rgba(239, 68, 68, 0.5)" aria-label="Email">
-        <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
-          <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-
-      <!-- Phone -->
-      <a href="tel:5551234567" class="social-icon text-gray-500 hover:text-green-600 dark:hover:text-green-400 transform hover:scale-110 transition-transform duration-300"
-         data-tint="rgba(34, 197, 94, 0.5)" aria-label="Phone">
-        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 5a2 2 0 0 1 2-2h3.3a1 1 0 0 1 .95.68l1.2 3.66a1 1 0 0 1-.27 1.04l-1.9 1.9a16.06 16.06 0 0 0 6.87 6.87l1.9-1.9a1 1 0 0 1 1.04-.27l3.7 1.2a1 1 0 0 1 .68.95V20a2 2 0 0 1-2 2h-1C10.6 22 2 13.4 2 3V2Z"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="text-sm space-y-2 text-center">
-      <p class="context text-gray-600 dark:text-gray-400 font-medium">Developed by <strong>Your Company Name</strong></p>
-      <p class="context text-gray-500 dark:text-gray-500">
-        &copy; <strong id="current-year">2024</strong> All Rights Reserved.
-      </p>
-    </div>
-  </div>
-</footer>
-
-<style>
-  .footer-tint {
-    background: linear-gradient(to top, var(--tint-color, transparent) 70%, transparent 100%);
-  }
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-
-    const tintLayer = document.querySelector('.footer-tint');
-    const icons = document.querySelectorAll('.social-icon');
-
-    icons.forEach(icon => {
-      icon.addEventListener('mouseenter', () => {
-        tintLayer.style.setProperty('--tint-color', icon.getAttribute('data-tint'));
-        tintLayer.classList.add('opacity-100');
-      });
-      icon.addEventListener('mouseleave', () => {
-        tintLayer.classList.remove('opacity-100');
-      });
-    });
-  });
-</script>
-
-
+            <div
+              class="w-full md:w-5/8 flex flex-col justify-end sm:text-left md:text-left"
+            >
+              <div>
+                <div class="text-container">
+                  <h2 class="text-line context font-theme mb-2">
+                    Latest Headline Context
+                  </h2>
+                </div>
+                <div class="text-container">
+                  <h1 class="text-line subtext-title font-theme">Latest</h1>
+                </div>
+                <div class="text-container">
+                  <h1 class="text-line subtext-title font-theme">
+                    News Article
+                  </h1>
+                </div>
+                <div class="text-container mb-4">
+                  <h1 class="text-line subtext-title font-theme">Title</h1>
+                </div>
+                <div class="text-container mb-4">
+                  <p class="text-line subtext font-theme">Article Subtitle</p>
+                </div>
+                <div class="text-container">
+                  <a
+                    href="#"
+                    class="text-line context inline-block w-fit font-theme border-b border-black hover:opacity-75 transition"
+                    data-transition
+                    rel="nofollow noopener"
+                  >
+                    Explore All Work
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
+    </main>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
 
+    <script src="navbar\navbar.js"></script>
+    <script src="pages/index.js"></script>
+    <script src="animations\globalindex.js"></script>
+    <script src="font\font.js"></script>
+    <script src="loader\loaders.js"></script>
+    <script src="loader\others.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+    <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
 
-      <!-- Script to wait for the font to load before showing the page -->
-
-      <script src="https://cdn.tailwindcss.com"></script>
-      <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
-
-
-      <script src="navbar\navbar.js"></script>
-
-      <script src="pages/index.js"></script>
-      <script src="animations\index.js"></script>
-      <script src="font\font.js"></script>
-      <script src="loader\others.js"></script>
-      <script src="animations/global.js"></script>
-      <script src="animations/scroll.js"></script>
-          <script src="controlers/carousel.js"></script>
-
-
-
-
-
-      <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
-      <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-      <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-
-
-
-
-      <script>
-        // On DOM load
-        window.addEventListener("DOMContentLoaded", () => {
-          gsap.utils.toArray(".clipp-section").forEach((section, index) => {
-            gsap.to(section, {
-              clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
-              duration: 0.7,
-              ease: "power2.out",
-            });
+    <script>
+      // GSAP Animation for section reveal
+      window.addEventListener('DOMContentLoaded', () => {
+        gsap.utils.toArray('.clipp-section').forEach((section, index) => {
+          gsap.to(section, {
+            clipPath: 'inset(0% 0% 0% 0%)', // Reveal fully
+            duration: 0.7,
+            ease: 'power2.out',
           });
         });
+      });
+    </script>
 
+    <script>
+      // Helper function to extract a simple value from the complex Firestore REST API response structure
+      const extractValue = (field) => {
+        if (!field) return null;
+        if (field.stringValue) return field.stringValue;
+        if (field.integerValue) return parseInt(field.integerValue);
+        return null;
+      };
 
+      async function fetchAndRenderNews() {
+        const JSON_URL =
+          'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
+        const scroller = document.getElementById('scroller');
+        const heroImageContainer = document.getElementById('hero-news-image');
 
-        document.addEventListener("DOMContentLoaded", () => {
-          const target = document.querySelector(".zoom.parallax");
+        // Target text elements to update with Hero details
+        const contextLine = document.querySelector('.text-line.context');
+        const titleLines = document.querySelectorAll('.text-line.subtext-title');
+        const subtextLine = document.querySelector('.text-line.subtext');
+        const exploreLink = document.querySelector('.text-line.context[data-transition]');
 
-          gsap.fromTo(
-            target,
-            { scale: 0, transformOrigin: "bottom left" },
-            {
-              scale: 1,
-              duration: 2,
-              ease: "power2.inOut" // slow at start, smooth acceleration, slow at end
+        if (!scroller || !heroImageContainer) return;
+
+        // Reset display while loading
+        scroller.innerHTML = '<p class="text-gray-500 p-4">Loading news...</p>';
+        heroImageContainer.innerHTML =
+          '<p class="text-gray-500 p-4">Loading latest news...</p>';
+
+        try {
+          const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;
+          const response = await fetch(cacheBustingURL, {
+            cache: 'no-cache',
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP status ${response.status}`);
+          }
+
+          let data = await response.json();
+          let contentArray = [];
+          const rawContentValues = data.fields?.content?.arrayValue?.values;
+
+          if (rawContentValues && Array.isArray(rawContentValues)) {
+            contentArray = rawContentValues
+              .map((item) => {
+                const fields = item.mapValue?.fields;
+                if (!fields) return null;
+
+                return {
+                  id: extractValue(fields.id) || 'default',
+                  title: extractValue(fields.title),
+                  slug: extractValue(fields.slug),
+                  context: extractValue(fields.context),
+                  image: extractValue(fields.image),
+                  category: extractValue(fields.category),
+                  timestamp: extractValue(fields.timestamp),
+                };
+              })
+              .filter((item) => item !== null);
+          } else {
+            console.warn('No content array found in Firestore document.');
+          }
+
+          // 1. Filter for 'news' and sort by timestamp (newest first)
+          const newsContent = contentArray
+            .filter((item) => item.category === 'news')
+            .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+          if (newsContent.length === 0) {
+            heroImageContainer.innerHTML =
+              "<p class='text-gray-500 p-4'>No news articles found.</p>";
+            scroller.innerHTML = '';
+            return;
+          }
+
+          // 2. Separate Hero (Latest) and Carousel (Next 4)
+          const heroArticle = newsContent[0];
+          // Take the next 4 articles for the carousel, starting from index 1
+          const carouselArticles = newsContent.slice(1, 5);
+
+          // --- RENDER HERO SECTION (Image and Text Details) ---
+          if (heroArticle) {
+            const linkHref = heroArticle.slug
+              ? `newsarticle.html?slug=${heroArticle.slug}`
+              : `newsarticle.html?id=${heroArticle.id}`;
+
+            // A. Inject the Hero Image
+            heroImageContainer.innerHTML = `
+              <a href="${linkHref}" data-transition rel="nofollow noopener" class="hero-image-wrapper shadow-lg">
+                  <img 
+                      src="${heroArticle.image}" 
+                      alt="${heroArticle.title}" 
+                  />
+              </a>
+            `;
+
+            // B. Inject Hero Text Details into the fixed text area
+            if (contextLine)
+              contextLine.textContent = heroArticle.context || 'Latest News Update';
+            
+            // Assuming your default text setup requires three lines for the title/heading area
+            if (titleLines[0]) titleLines[0].textContent = 'LATEST';
+            if (titleLines[1]) titleLines[1].textContent = heroArticle.title.split(' ')[0] || '';
+            if (titleLines[2]) titleLines[2].textContent = heroArticle.title.split(' ').slice(1).join(' ') || 'NEWS';
+            
+            if (subtextLine) subtextLine.textContent = heroArticle.title;
+            if (exploreLink) {
+              exploreLink.textContent = 'Read Full Article →';
+              exploreLink.href = linkHref;
             }
-          );
-        });
-      </script>
+          } else {
+            heroImageContainer.innerHTML =
+              "<p class='text-gray-500 p-4'>No latest news article found.</p>";
+          }
 
+          // --- RENDER CAROUSEL SECTION (Next 4 News Items) ---
+          if (carouselArticles.length > 0) {
+            const carouselHTML = carouselArticles
+              .map((item) => {
+                const linkHref = item.slug
+                  ? `newsarticle.html?slug=${item.slug}`
+                  : `newsarticle.html?id=${item.id}`;
 
-    </main>
+                return `
+                  <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+                      <div class="zoom overflow-hidden relative carousel-image">
+                          <img
+                              src="${item.image}"
+                              alt="${item.title}"
+                              class="w-full h-full object-cover"
+                          />
+                      </div>
+                      <div class="w-full pt-2 overflow-hidden">
+                          <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                              ${item.title}
+                          </p>
+                      </div>
+                  </a>
+              `;
+              })
+              .join('');
+
+            scroller.innerHTML = carouselHTML;
+          } else {
+            scroller.innerHTML =
+              "<p class='text-gray-500 p-4'>No other news available for the carousel.</p>";
+          }
+        } catch (error) {
+          console.error('Failed to load and render content from JSON:', error);
+          heroImageContainer.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check **Firebase Security Rules**. (${error.message})</p>`;
+          scroller.innerHTML = '';
+        }
+      }
+      // Run the function when the DOM content is fully loaded
+      window.addEventListener('DOMContentLoaded', fetchAndRenderNews);
+    </script>
   </body>
-
-  </html>
+</html>
