@@ -47,7 +47,8 @@
                 <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
                     <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
                         <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
-                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
+                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo"
+                                class="h-5 w-auto" />
                             <span class="font-theme font-medium">SK Lepaga</span>
                         </a>
                         <button id="menu-toggle-btn" type="button"
@@ -61,6 +62,7 @@
                     </div>
                 </div>
             </nav>
+
 
             <aside id="sidebar-multi-level-sidebar"
                 class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
@@ -148,78 +150,55 @@
                                 <br>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </aside>
 
-            <div class="fly-in-slow w-full relative overflow-hidden" style="aspect-ratio: 4/3;">
-                <a href="${latestNews.url}" class="absolute inset-0 block">
+            <div id="hero-section" class="fly-in-slow w-full relative overflow-hidden" style="aspect-ratio: 4/3;">
+                <a href="${latestArticle.url}" class="absolute inset-0 block">
                     <img loading="lazy" decoding="async" width="3000" height="2000"
-                        alt="${latestNews.title}" src="${latestNews.imageUrl}"
+                        alt="${latestArticle.title}" src="${latestArticle.imageUrl}"
                         class="absolute inset-0 w-full h-full object-cover" />
-                    </a>
+                    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
+                        <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
+                            <span>${latestArticle.category}</span><span class="opacity-70">· ${latestArticle.date}</span>
+                        </span>
+                        <h1 class="underlines subtext-title text-white mt-2">${latestArticle.title}</h1>
+                    </div>
+                </a>
                 </div>
 
             <section class="font-theme px-4 py-8 antialiased md:py-16 bg-white dark:bg-[#242424]">
                 <div class="max-w-screen-xl mx-auto">
-                    <div class="text-container">
-                        <h1 class="text-line subtext-title mt-4">FEATURED NEWS</h1>
-                    </div>
-                    <div class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 lg:grid-cols-2">
 
-                        <div id="featured-news-container">
-                            <a href="#" class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10 scale-up" data-dark-border="#242424">
-                                <img src="images/placeholder1.jpg" alt="News Image 1" class="absolute inset-0 w-full h-full object-cover" />
-                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-                                <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-                                        <span>Politics</span><span class="opacity-70">· 21 Jul</span>
-                                    </span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-                                    <span class="underlines subtext text-white">Placeholder Article Title 1</span>
-                                </div>
-                            </a>
-                             <a href="#" class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10" data-dark-border="#242424">
-                                <img src="images/placeholder2.jpg" alt="News Image 2" class="absolute inset-0 w-full h-full object-cover " />
-                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-                                <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-                                        <span>Community</span><span class="opacity-70">· 20 Jul</span>
-                                    </span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-                                    <span class="underlines subtext text-white">Placeholder Article Title 2</span>
-                                </div>
-                            </a>
-                            <a href="#" class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10" data-dark-border="#242424">
-                                <img src="images/placeholder3.jpg" alt="News Image 3" class="absolute inset-0 w-full h-full object-cover " />
-                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-                                <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-                                        <span>Health</span><span class="opacity-70">· 19 Jul</span>
-                                    </span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-                                    <span class="underlines subtext text-white">Placeholder Article Title 3</span>
-                                </div>
-                            </a>
-                            <a href="#" class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10" data-dark-border="#242424">
-                                <img src="images/placeholder4.jpg" alt="News Image 4" class="absolute inset-0 w-full h-full object-cover " />
-                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
-                                <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
-                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-                                        <span>Youth</span><span class="opacity-70">· 18 Jul</span>
-                                    </span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
-                                    <span class="underlines subtext text-white">Placeholder Article Title 4</span>
-                                </div>
-                            </a>
-                        </div>
+                    <div class="text-container">
+                        <h1 class="text-line subtext-title mt-4">FEATURED ARTICLES</h1>
+                    </div>
+
+                    <div id="featured-news-container" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 lg:grid-cols-2">
+
+                        <a href="${featuredArticle1.url}"
+                            class="zoom card-container tilt-hover relative h-96 p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] shadow-[0px_4px_12px_rgba(0,0,0,0.1)] z-10 scale-up"
+                            data-dark-border="#242424">
+                            <img src="${featuredArticle1.imageUrl}" alt="${featuredArticle1.title}"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#000000] to-transparent"></div>
+                            <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6">
+                                <span
+                                    class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
+                                    <span>${featuredArticle1.category}</span><span class="opacity-70">· ${featuredArticle1.date}</span>
+                                </span>
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6">
+                                <span class="underlines subtext text-white">${featuredArticle1.title}</span>
+                            </div>
+                        </a>
                         </div>
                 </div>
             </section>
+
 
             <section class="font-theme px-4 py-8 antialiased md:py-16 bg-white dark:bg-[#242424]">
                 <div class="max-w-screen-xl mx-auto">
@@ -227,44 +206,39 @@
                         <h1 class="text-line subtext-title mb-4">EXPLORE MORE</h1>
                     </div>
                     <div class="text-container">
-                        <h1 class="rise subtext">ARCHIVE ARTICLES</h1>
+                        <h1 class="rise subtext">ARCHIVED NEWS</h1>
                     </div>
                 </div>
                 <div class="mt-8 w-full relative overflow-hidden">
+
                     <div class="w-full max-w-screen-xl mx-auto relative overflow-hidden">
                         <div id="carouselCards"
                             class="right-in-slow flex gap-6 flex-nowrap min-w-0 overflow-x-auto scroll-smooth no-scrollbar transition-all duration-700 ease-in-out cursor-grab active:cursor-grabbing">
 
-                            </a>
-                            `).join('')}
-                            -->
-
-                            <a href="#" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-                                <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-                                        <span>Archive</span><span class="opacity-70">· 04 Aug</span>
+                            <a href="${archiveArticle.url}"
+                                class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
+                                <img src="${archiveArticle.imageUrl}" alt="${archiveArticle.title}"
+                                    class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
+                                <div
+                                    class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                </div>
+                                <div
+                                    class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span
+                                        class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
+                                        <span>${archiveArticle.category}</span><span class="opacity-70">· ${archiveArticle.date}</span>
                                     </span>
                                 </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span class="underlines subtext text-white">Older Article Title 1</span>
-                                </div>
-                            </a>
-                            <a href="#" class="zoom card-containers tilt-hover relative h-[576px] p-4 md:p-6 rounded-[20px] overflow-hidden block bg-white dark:bg-[#242424] z-10 w-[85%] sm:w-[300px] hover:cursor-pointer hover:shadow-md transition-shadow duration-300 group">
-                                <img src="images\sample.jpg" alt="Logo" class="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:blur-[1px]" />
-                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <div class="absolute top-4 left-4 z-20 md:top-5 md:left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-xs subtext rounded-full shadow-md bg-[#242424] text-white dark:bg-white dark:text-black">
-                                        <span>Archive</span><span class="opacity-70">· 03 Aug</span>
-                                    </span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span class="underlines subtext text-white">Older Article Title 2</span>
+                                <div
+                                    class="absolute bottom-4 left-4 right-4 z-20 md:bottom-6 md:left-6 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span class="underlines subtext text-white">${archiveArticle.title}</span>
                                 </div>
                             </a>
                             </div>
+
+
                         <div class="flex justify-end mt-4 gap-3">
+
                             <button id="prevArrow"
                                 class="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white focus:outline-none opacity-100 transition-opacity duration-300 disabled:opacity-40 disabled:pointer-events-none">
                                 <svg class="w-4 h-4 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"
@@ -274,6 +248,8 @@
                                 </svg>
                                 <span class="sr-only">Previous</span>
                             </button>
+
+
                             <button id="nextArrow"
                                 class="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white focus:outline-none">
                                 <svg class="w-4 h-4 mx-auto" xmlns="http://www.wZSS3.org/2000/svg" viewBox="0 0 10 10"
@@ -285,6 +261,8 @@
                             </button>
                         </div>
                     </div>
+
+
                     <style>
                         .no-scrollbar::-webkit-scrollbar {
                             display: none;
@@ -297,84 +275,65 @@
                     </style>
             </section>
 
-            <footer
-                class="footer relative bg-white dark:bg-[#242424] text-gray-700 dark:text-gray-300 antialiased pt-12 pb-6 border-t border-gray-100 dark:border-gray-800">
-                <div class="footer-tint absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500">
-                </div>
-                <div
-                    class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-                    <div class="flex flex-col items-center space-y-4 mb-10 text-center">
-                        <a href="index.html"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>HOME</a>
-                        <a href="/calendar"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>CALENDAR</a>
-                        <a href="/news"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>NEWS</a>
-                        <a href="/about"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>ABOUT</a>
-                        <a href="/contact"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>CONTACT</a>
-                        <a href="/sitemap"
-                            class="relative subtext-title uppercase transition-colors duration-300 hover:text-black dark:hover:text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-                            data-transition>SITE MAP</a>
-                    </div>
-                </div>
-            </footer>
 
         </div>
-    </main>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
-    <script src="navbar\navbar.js"></script>
-    <script src="pages/index.js"></script>
-    <script src="animations\index.js"></script>
-    <script src="font\font.js"></script>
-    <script src="loader\loader.js"></script>
-    <script src="animations/global.js"></script>
-    <script src="animations/scroll.js"></script>
-    <script src="controlers/carousel.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
-    <script>
-        // On DOM load
-        window.addEventListener("DOMContentLoaded", () => {
-            gsap.utils.toArray(".clipp-section").forEach((section, index) => {
-                gsap.to(section, {
-                    clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
-                    duration: 0.7,
-                    ease: "power2.out",
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
+
+
+        <script src="navbar\navbar.js"></script>
+        <script src="pages/index.js"></script>
+        <script src="animations\index.js"></script>
+        <script src="font\font.js"></script>
+        <script src="loader\loader.js"></script>
+        <script src="animations/global.js"></script>
+        <script src="animations/scroll.js"></script>
+        <script src="controlers/carousel.js"></script>
+
+
+        <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
+        <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
+        <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+
+        <script>
+            // On DOM load
+            window.addEventListener("DOMContentLoaded", () => {
+                gsap.utils.toArray(".clipp-section").forEach((section, index) => {
+                    gsap.to(section, {
+                        clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
+                        duration: 0.7,
+                        ease: "power2.out",
+                    });
                 });
             });
-        });
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const target = document.querySelector(".zoom.parallax");
-            gsap.fromTo(
-                target,
-                { scale: 0, transformOrigin: "bottom left" },
-                {
-                    scale: 1,
-                    duration: 2,
-                    ease: "power2.inOut" // slow at start, smooth acceleration, slow at end
-                }
-            );
-        });
-    </script>
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const target = document.querySelector(".zoom.parallax");
+
+                gsap.fromTo(
+                    target,
+                    { scale: 0, transformOrigin: "bottom left" },
+                    {
+                        scale: 1,
+                        duration: 2,
+                        ease: "power2.inOut" // slow at start, smooth acceleration, slow at end
+                    }
+                );
+            });
+        </script>
+    </main>
 </body>
 
 </html>
