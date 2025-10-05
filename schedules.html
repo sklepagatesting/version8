@@ -1,23 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News & Articles</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2"
-        crossorigin="anonymous">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-        rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-
-    <link rel="prefetch" href="home.html" as="document">
-
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="navbar\navbar.css">
     <link rel="stylesheet" href="font\font.css">
     <link rel="stylesheet" href="animations/global.css">
@@ -27,7 +18,7 @@
     <link rel="stylesheet" href="sections/hero.css">
     <link rel="stylesheet" href="sections\carousel.css">
 
-<style>
+    <style>
         body.preload {
             visibility: hidden;
             opacity: 0;
@@ -41,7 +32,6 @@
         .flat-card {
             background-color: #ffffff;
             border-radius: 12px;
-            /* Using Tailwind classes for padding/shadow */
         }
 
         .dark .flat-card {
@@ -62,6 +52,8 @@
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
+            /* Ensure it closes on click outside */
+            cursor: pointer; 
         }
 
         .modal-overlay.open {
@@ -75,13 +67,15 @@
             padding: 1.5rem;
             border-radius: 12px;
             max-width: 90%;
+            width: 500px; /* Set a max width for desktop view */
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
             transform: scale(0.95);
             transition: transform 0.3s ease-in-out;
+            cursor: default; /* Reset cursor for content */
         }
-        
+
         .dark .modal-content {
             background-color: #242424;
             color: #d1d5db;
@@ -91,9 +85,7 @@
             transform: scale(1);
         }
     </style>
-
 </head>
-
 <body>
     <main id="swup" class="transition-fade content-hidden">
         <div class="main-content text-container">
@@ -102,8 +94,7 @@
                 <div class="w-full h-full bg-white dark:bg-[#242424] px-3">
                     <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto">
                         <a href="" class="relative z-60 pointer-events-auto flex items-center space-x-2">
-                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo"
-                                class="h-5 w-auto" />
+                            <img src="https://sklepagatesting.github.io/resources/Images/sklogo.webp" alt="Logo" class="h-5 w-auto" />
                             <span class="font-theme font-medium">SK Lepaga</span>
                         </a>
                         <button id="menu-toggle-btn" type="button"
@@ -118,13 +109,11 @@
                 </div>
             </nav>
 
-
             <aside id="sidebar-multi-level-sidebar"
                 class="fixed top-12 left-0 z-30 w-[100vw] hidden transition-[max-height] duration-500 bg-white dark:bg-[#242424]"
                 style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">
                 <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">
                     <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">
-
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">CALENDAR</h2>
@@ -140,7 +129,6 @@
                                 <br>
                             </div>
                         </div>
-
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="font-theme subtext-title">NEWS</h2>
@@ -156,7 +144,6 @@
                                 <br>
                             </div>
                         </div>
-
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">ABOUT</h2>
@@ -173,7 +160,6 @@
                                 <br>
                             </div>
                         </div>
-
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 class="subtext-title">CONTACT</h2>
@@ -191,7 +177,6 @@
                                 <br>
                             </div>
                         </div>
-
                         <div class="sidebar-menu-item flex flex-col items-center">
                             <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">
                                 <h2 href="pages/article1.html" class="subtext-title">SITE MAP</h2>
@@ -205,14 +190,11 @@
                                 <br>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </aside>
 
-
-
- <section id="schedules-container" class="w-full bg-white dark:bg-[#242424] pt-16 pb-10 md:pt-24 md:pb-16">
+            <section id="schedules-container" class="w-full bg-white dark:bg-[#242424] pt-16 pb-10 md:pt-24 md:pb-16">
                 <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 md:mb-12 text-center font-theme">
                         Upcoming Schedules 🗓️
@@ -226,12 +208,7 @@
                         No upcoming schedules posted at the moment. Check back soon!
                     </p>
                 </div>
-
-
-
-
-
-
+            </section>
 
             <footer
                 class="footer relative bg-white dark:bg-[#242424] text-gray-700 dark:text-gray-300 antialiased pt-12 pb-6 border-t border-gray-100 dark:border-gray-800">
@@ -264,10 +241,26 @@
         </div>
     </main>
 
+    <div id="schedule-modal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content flat-card" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-start mb-4 border-b pb-2">
+                <h3 id="modal-title" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <p id="modal-date" class="text-sm text-[#5c5cff] font-medium mb-4"></p>
+            <div id="modal-context" class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap"></div>
+        </div>
+    </div>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
-     <script type="module">
+    <script type="module">
         import {
             initializeApp
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -302,7 +295,7 @@
         const loadingSchedules = document.getElementById('loading-schedules');
         const noSchedules = document.getElementById('no-schedules');
 
-        // Modal Elements
+        // Modal Elements (NOW EXIST IN THE HTML)
         const scheduleModal = document.getElementById('schedule-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalDate = document.getElementById('modal-date');
@@ -322,8 +315,10 @@
 
             modalTitle.textContent = schedule.title;
             modalDate.textContent = `Scheduled for: ${fullDate}`;
+            // Use innerHTML instead of textContent if you expect line breaks/formatting from context
+            // or use a utility class like whitespace-pre-wrap on the modal-context element (added above)
             modalContext.textContent = schedule.context;
-            
+
             scheduleModal.classList.add('open');
             document.body.style.overflow = 'hidden'; // Prevent scrolling the body
         };
@@ -332,7 +327,6 @@
             scheduleModal.classList.remove('open');
             document.body.style.overflow = '';
         };
-
 
         // 3. Content Renderer Function
         function createScheduleCard(schedule, isFeatured = false) {
@@ -350,14 +344,14 @@
 
             return `
                 <div class="schedule-card flat-card p-6 md:p-8 rounded-xl flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 transition-all duration-300 hover:shadow-xl hover:cursor-pointer ${featuredClass}"
-                     data-slug="${schedule.slug}" 
-                     title="Click to view full details">
+                     data-slug="${schedule.slug}"
+                      title="Click to view full details">
                     <div class="flex-shrink-0 text-center w-full sm:w-24">
                         <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase leading-none">${month}</p>
                         <h3 class="text-5xl font-extrabold text-[#5c5cff] leading-none my-1">${day}</h3>
                         <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 leading-none">${year}</p>
                     </div>
-                    
+
                     <div class="flex-grow">
                         <h3 class="font-bold text-gray-900 dark:text-white mb-2 ${titleSize}">
                             ${schedule.title}
@@ -426,7 +420,6 @@
                 noSchedules.classList.add('hidden');
             }
         }
-
         // 5. Event Listener for Schedule Card Clicks
         schedulesList.addEventListener('click', (e) => {
             const card = e.target.closest('.schedule-card');
@@ -438,7 +431,7 @@
                 }
             }
         });
-        
+
         // 6. Close modal on ESC key press
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && scheduleModal.classList.contains('open')) {
@@ -449,7 +442,7 @@
         // Run the fetch function when the page loads
         document.addEventListener('DOMContentLoaded', fetchAndRenderSchedules);
     </script>
-
+    
     <script src="navbar\navbar.js"></script>
     <script src="pages/index.js"></script>
     <script src="animations\index.js"></script>
@@ -458,25 +451,12 @@
     <script src="animations/global.js"></script>
     <script src="animations/scroll.js"></script>
     <script src="controlers/carousel.js"></script>
-
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
+    
     <script>
-        // Note: Any GSAP logic placed here will run ONLY on the initial page load (DOMContentLoaded).
-        // The dynamic animation logic is now correctly placed inside renderNewsContent via initializeDynamicAnimations().
-
         // Initialize ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+        }
     </script>
 </body>
-
 </html>
