@@ -27,10 +27,7 @@
     <link rel="stylesheet" href="sections\carousel.css">
 
     <style>
-        /*
-        * Removed .preload and body logic.
-        * New class to hide content while data loads.
-        */
+        /* New classes for controlled visibility */
         .content-hidden {
             opacity: 0;
         }
@@ -308,7 +305,7 @@
                 console.log("Persistence not supported on this device.");
             }
         }
-        
+
         // --- Helper Function ---
         const formatDate = (dateString) => {
             if (!dateString) return 'Date N/A';
@@ -321,15 +318,39 @@
             }
         };
 
+        // --- GSAP ANIMATION FUNCTION ---
+        // This function should be called AFTER the featured/carousel articles are rendered.
+        function initializeDynamicAnimations() {
+            // Re-initializes animations for dynamically loaded elements
+            
+            // Example animation for featured articles (using a class from the HTML template: scale-up)
+            gsap.utils.toArray(".scale-up").forEach(element => {
+                 gsap.from(element, { 
+                     opacity: 0, 
+                     scale: 0.9,
+                     y: 20, 
+                     duration: 0.7, 
+                     ease: "power2.out",
+                     scrollTrigger: {
+                         trigger: element,
+                         start: "top bottom-=100", // Start animation 100px before the element hits bottom of viewport
+                     }
+                 });
+             });
+            
+            // Re-initialize any animation logic linked to 'data-transition' if applicable 
+            // to dynamically generated content that the static script can't see.
+        }
+
         // --- Main Rendering Logic ---
         async function renderNewsContent() {
-            const mainContainer = document.getElementById('swup'); // The main container
+            const mainContainer = document.getElementById('swup');
             const heroSection = document.getElementById('hero-section');
             const featuredContainer = document.getElementById('featured-news-container');
             const carouselContainer = document.getElementById('carouselCards');
 
             try {
-                // 1. Fetch the Pre-processed JSON from Firestore - attempts to read from cache first
+                // 1. Fetch the Pre-processed JSON from Firestore (using cache/server check)
                 const docRef = doc(db, "contentJson", "data");
                 const docSnap = await getDoc(docRef);
 
@@ -347,9 +368,7 @@
                 if (allNews.length === 0) {
                     heroSection.innerHTML = '<div class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900"><p class="text-gray-600 font-medium">No News articles published yet.</p></div>';
                     featuredContainer.innerHTML = '';
-                    carouselContainer.innerHTML = '<div class="text-gray-500 text-center w-full">No older news articles in the archive.</div>';
-                    mainContainer.classList.remove('content-hidden');
-                    mainContainer.classList.add('content-visible');
+                    carouselContainer.innerHTML = '';
                     return;
                 }
 
@@ -417,6 +436,9 @@
                     carouselContainer.innerHTML = '<div class="text-gray-500 text-center w-full">No older news articles in the archive.</div>';
                 }
 
+                // 7. Initialize Animations for the new elements
+                initializeDynamicAnimations();
+
             } catch (error) {
                 console.error("Error fetching and rendering news:", error);
                 // Display error message
@@ -424,7 +446,7 @@
                 featuredContainer.innerHTML = '';
                 carouselContainer.innerHTML = '';
             } finally {
-                // Ensure content is visible after attempting to load
+                // Fade in the content only after the rendering attempt (success or failure)
                 mainContainer.classList.remove('content-hidden');
                 mainContainer.classList.add('content-visible');
             }
@@ -454,42 +476,12 @@
     <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
-
     <script>
-        // NOTE: The previous GSAP logic for .clipp-section and .zoom.parallax was targeting elements
-        // that aren't present in the main content and is not required for the "wait for hero" logic
-        // which is now handled by the Firestore script's 'finally' block.
-        // I've kept the original GSAP snippets below, but they likely won't function
-        // as intended without the corresponding CSS classes and elements.
-        
-        // On DOM load
-        window.addEventListener("DOMContentLoaded", () => {
-            gsap.utils.toArray(".clipp-section").forEach((section, index) => {
-                gsap.to(section, {
-                    clipPath: "inset(0% 0% 0% 0%)", // Reveal fully
-                    duration: 0.7,
-                    ease: "power2.out",
-                });
-            });
-        });
+        // Note: Any GSAP logic placed here will run ONLY on the initial page load (DOMContentLoaded).
+        // The dynamic animation logic is now correctly placed inside renderNewsContent via initializeDynamicAnimations().
 
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const target = document.querySelector(".zoom.parallax");
-
-            // Check if the target exists before animating
-            if (target) {
-                gsap.fromTo(
-                    target,
-                    { scale: 0, transformOrigin: "bottom left" },
-                    {
-                        scale: 1,
-                        duration: 2,
-                        ease: "power2.inOut" // slow at start, smooth acceleration, slow at end
-                    }
-                );
-            }
-        });
+        // Initialize ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
     </script>
 </body>
 
