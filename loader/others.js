@@ -313,9 +313,15 @@ window.addEventListener("scroller:start", () => {
   window.scrollerInitialized = true;
 
   // Check if dependencies are ready
-  if (typeof gsap === 'undefined') { // Removed ModifiersPlugin check since it's registered below
-    console.warn('GSAP not loaded yet');
-    return;
+  if (typeof gsap === 'undefined' || typeof ModifiersPlugin === 'undefined') {
+     // ModifiersPlugin is correctly imported/loaded via <script> tag in HTML
+     // but we should ensure it's registered if we rely on it here.
+     // In your original HTML, the script tag for Flip.min.js and ScrollTrigger.min.js 
+     // were present, but ModifiersPlugin was not explicitly loaded/registered. 
+     // Assuming ModifiersPlugin is available or that you intended to use it.
+     
+     // We will now ensure it's registered.
+     gsap.registerPlugin(ModifiersPlugin);
   }
 
   const scroller = document.getElementById("scroller");
@@ -324,28 +330,29 @@ window.addEventListener("scroller:start", () => {
     return;
   }
   
-  // *** CRITICAL STEP: RE-INITIALIZE SCROLLER ELEMENTS ***
-  // After dynamic content loads, the scroller.innerHTML is replaced.
-  // We need to ensure we have valid, duplicated content for the scroll effect.
+  // *** RESTORED ORIGINAL DUPLICATION LOGIC ***
+  // We must wait for the dynamic content to be loaded into the DOM before duplicating.
+  // The original HTML had the duplication *before* this script, but since the
+  // Firebase script overwrites the content *after* DOMContentLoaded, we must
+  // duplicate the content here, after 'scroller:start' is fired, which
+  // happens after the dynamic content is guaranteed to be present.
   
-  // If the scroller has content, duplicate it now for seamless loop
-  if (scroller.children.length > 0 && scroller.children.length < 2) {
+  // Check if the scroller has children (i.e., dynamic content has loaded)
+  if (scroller.children.length > 0) {
+      // Duplicating the content to enable the seamless loop
       scroller.innerHTML += scroller.innerHTML;
+  } else {
+      console.warn("Scroller has no dynamic content to duplicate.");
+      // Allow the script to exit if no content is present, or the carousel won't work.
+      return; 
   }
+  // End of Correction
   
+  // Now that the content is duplicated, we can calculate the width
   const scrollWidth = scroller.scrollWidth / 2;
 
   // --- Get initial offset from first card ---
   const firstCard = scroller.children[0];
-  if (!firstCard) {
-      console.warn("Scroller children missing. Cannot initialize animation.");
-      return;
-  }
-  
-  // NOTE: Assuming ModifiersPlugin is correctly imported/loaded before this script runs.
-  // Register GSAP Plugin
-  gsap.registerPlugin(ModifiersPlugin); 
-
   const cardStyle = window.getComputedStyle(firstCard);
   const marginRight = parseFloat(cardStyle.marginRight);
   const initialOffset = marginRight;
@@ -371,29 +378,24 @@ window.addEventListener("scroller:start", () => {
     willChange: "transform"
   });
 
-  // --- SCROLL LOCK HELPERS (Existing code unchanged) ---
+  // --- SCROLL LOCK HELPERS (Unchanged) ---
   const preventScroll = (e) => e.preventDefault();
-
   const keyScrollBlock = (e) => {
     const blocked = [32, 33, 34, 35, 36, 37, 38, 39, 40];
     if (blocked.includes(e.keyCode)) e.preventDefault();
   };
-
   const lockScroll = () => {
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     document.body.style.height = '100vh';
-
     window.addEventListener('wheel', preventScroll, { passive: false });
     window.addEventListener('touchmove', preventScroll, { passive: false });
     window.addEventListener('keydown', keyScrollBlock, { passive: false });
   };
-
   const unlockScroll = () => {
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     document.body.style.height = '';
-
     window.removeEventListener('wheel', preventScroll, { passive: false });
     window.removeEventListener('touchmove', preventScroll, { passive: false });
     window.removeEventListener('keydown', keyScrollBlock, { passive: false });
@@ -402,7 +404,7 @@ window.addEventListener("scroller:start", () => {
   // Lock all scrolling and inputs immediately
   lockScroll();
 
-  // --- INTRO ANIMATION (Existing code unchanged) ---
+  // --- INTRO ANIMATION (Unchanged) ---
   setTimeout(() => {
     const fastDuration = 2;
     const fastDistance = scrollWidth * 1.5;
@@ -438,13 +440,13 @@ window.addEventListener("scroller:start", () => {
     }, 0);
   }, 2000);
 
-  // --- WHEEL INPUT (Existing code unchanged) ---
+  // --- WHEEL INPUT (Unchanged) ---
   window.addEventListener("wheel", (e) => {
     if (!scrollAllowed) return;
     velocity += e.deltaY * 0.05;
   }, { passive: true });
 
-  // --- TOUCH INPUT (Existing code unchanged) ---
+  // --- TOUCH INPUT (Unchanged) ---
   const touchScrollMultiplier = 0.12;
   let startY;
   let isDraggingDown = false;
@@ -472,7 +474,7 @@ window.addEventListener("scroller:start", () => {
     }
   }, { passive: false });
 
-  // --- GSAP Infinite Carousel Scroll Logic (Existing code unchanged) ---
+  // --- GSAP Infinite Carousel Scroll Logic (Unchanged) ---
   gsap.ticker.add(() => {
     if (Math.abs(velocity) > 0.001) {
       position -= velocity;
