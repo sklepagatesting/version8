@@ -183,8 +183,8 @@
                     return;                
                 }
 
-                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase News ID                
-                const JSON_URL = 'https://firestore.googleapis.com/v1/news/sklepaga-8790e/databases/(default)/documents/contentJson/data';
+                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase Project ID                
+                const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
 
                 try {                    
                     const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;                    
