@@ -42,14 +42,9 @@
         #countdown-timer {
             padding: 0;
             margin: 1rem auto; /* Use auto margins for centering */
-            color: var(--color-text-primary, #1f2937);
-            font-size: 1.125rem; /* text-lg */
             text-align: center;
             /* width: 100%; Removed this as it can interfere with centering small content */
             max-width: fit-content; /* Helps center the timer content */
-        }
-        .dark #countdown-timer { 
-             color: var(--color-text-primary-dark, #ffffff);
         }
         </style>
 </head>
@@ -96,7 +91,7 @@
                             <h1 id="schedule-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>
                         </div>
                         
-                        <div id="countdown-timer" class="font-theme max-w-5xl mx-auto text-lg"></div>
+                        <div id="countdown-timer" class="font-theme max-w-5xl mx-auto context"></div>
 
                         <div class="max-w-screen-xl mx-auto">
                             <a href="#">
