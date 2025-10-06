@@ -24,7 +24,7 @@
         }
 
         .dark .flat-card {
-            background-color: #ffffff;
+            background-color: #1f2937; /* Adjusted for better dark mode consistency */
             box-shadow: 0 1px 3px rgba(255, 255, 255, 0.06), 0 1px 2px rgba(255, 255, 255, 0.04);
         }
 
@@ -49,12 +49,12 @@
         }
 
         .dark .date-block {
-            background-color: #f9fafb;
-            color: #6b7280;
-            border: 1px solid #e5e7eb;
+            background-color: #2d2d2d; /* Adjusted for dark mode */
+            color: #f3f4f6; /* Adjusted for dark mode - font-theme is white in dark mode */
+            border: 1px solid #374151; /* Adjusted for dark mode */
         }
 
-        /* Modal specific styles */
+        /* Modal specific styles - No hover color/bg changes needed here, but applying font-theme */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -102,19 +102,41 @@
             color: #f3f4f6;
         }
 
+        /* Schedule List Item Hover Corrections */
         .schedule-list-item {
             border-left: 3px solid transparent;
             transition: all 0.2s ease;
         }
 
+        /* Light Mode Hover: Light background, vibrant border, text color remains black (default font-theme) or blue (title) */
         .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            background-color: #f3f4f6;
+            background-color: #f3f4f6; /* Very light gray bg for hover */
+        }
+        
+        /* Apply text color change to all elements within the list item on hover in light mode */
+        .schedule-list-item:hover .font-theme {
+            /* Black text is the default font-theme color, but this ensures it's not overridden by parent */
+            color: #1f2937 !important; 
         }
 
+        /* Dark Mode Hover: Darker background, vibrant border, text color remains white (default font-theme) or blue (title) */
         .dark .schedule-list-item:hover {
-            background-color: #333333;
+            border-left-color: #5c5cff;
+            background-color: #2d2d2d; /* Darker gray bg for hover */
         }
+        
+        /* Apply text color change to all elements within the list item on hover in dark mode */
+        .dark .schedule-list-item:hover .font-theme {
+            /* White text is the default dark mode font-theme color, but this ensures it's not overridden */
+            color: #f3f4f6 !important; 
+        }
+
+        /* Title specific hover color for the blue link effect in the list item */
+        .schedule-list-item:hover .schedule-title-link {
+            color: #5c5cff !important;
+        }
+
 
         /* Smooth scrollbar */
         .modal-content::-webkit-scrollbar {
@@ -265,21 +287,22 @@
             const cardSlug = schedule.slug;
 
             if (isFeatured) {
+                // Featured Card: The font-theme elements are mostly set, but the date block needs correction.
                 return `
                     <div class="schedule-card flat-card flex flex-col sm:flex-row p-6 sm:p-8 mb-12 w-full transform hover:scale-[1.01] transition-all duration-300 hover:cursor-pointer"
                          data-slug="${cardSlug}">
                         
                         <div class="date-block mr-0 mb-6 sm:mb-0 sm:mr-8">
-                            <p class="font-theme font-bold text-sm leading-none tracking-wider text-gray-600">${monthShort}</p>
-                            <h3 class="font-theme font-extrabold text-6xl leading-none my-2 text-gray-900">${day}</h3>
-                            <p class="font-theme font-semibold text-base leading-none text-gray-600">${year}</p>
+                            <p class="font-theme font-bold text-sm leading-none tracking-wider text-gray-600 dark:text-gray-300">${monthShort}</p>
+                            <h3 class="font-theme font-extrabold text-6xl leading-none my-2 text-gray-900 dark:text-white">${day}</h3>
+                            <p class="font-theme font-semibold text-base leading-none text-gray-600 dark:text-gray-300">${year}</p>
                         </div>
 
                         <div class="flex-grow flex flex-col justify-center">
-                            <h3 class="font-theme font-extrabold text-2xl sm:text-3xl lg:text-4xl mb-3 leading-tight">
+                            <h3 class="font-theme font-extrabold text-2xl sm:text-3xl lg:text-4xl text-gray-900 dark:text-white mb-3 leading-tight">
                                 ${schedule.title}
                             </h3>
-                            <p class="font-theme text-sm mb-4 line-clamp-2 opacity-70">
+                            <p class="font-theme text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                                 ${schedule.context.substring(0, 120)}...
                             </p>
                             <a href="schedulesarticle.html?slug=${cardSlug}" 
@@ -292,19 +315,20 @@
                     </div>
                 `;
             } else {
+                // List Item Card: Corrected text colors and added a specific class for the title's hover effect
                 return `
                     <div class="schedule-card schedule-list-item flex items-center py-4 px-4 rounded-lg hover:cursor-pointer transition-all duration-200"
                          data-slug="${cardSlug}">
                         
-                        <p class="font-theme text-sm font-semibold w-40 flex-shrink-0 opacity-60">
+                        <p class="font-theme text-sm font-semibold text-gray-600 dark:text-gray-400 w-40 flex-shrink-0">
                             ${fullDate}
                         </p>
                         
-                        <h4 class="font-theme font-bold text-base flex-grow hover:text-[#5c5cff] transition-colors duration-200">
+                        <h4 class="font-theme schedule-title-link font-bold text-base text-gray-900 dark:text-white flex-grow transition-colors duration-200">
                             ${schedule.title}
                         </h4>
                         
-                        <svg class="w-5 h-5 flex-shrink-0 ml-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-5 h-5 text-gray-400 flex-shrink-0 ml-2 font-theme" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         
                         <a href="schedulesarticle.html?slug=${cardSlug}" 
                            onclick="event.stopPropagation()" 
@@ -356,7 +380,8 @@
                     listItemsHtml += createScheduleCard(schedule, false);
                 });
                 
-                schedulesHtml += `<div class="space-y-1 mt-8 bg-white dark:bg-[#2d2d2d] rounded-xl p-2 border border-gray-100 dark:border-gray-800">${listItemsHtml}</div>`;
+                // Added font-theme to the list wrapper for consistency
+                schedulesHtml += `<div class="space-y-1 mt-8 bg-white dark:bg-[#1f2937] rounded-xl p-2 border border-gray-100 dark:border-gray-800 font-theme">${listItemsHtml}</div>`;
 
                 schedulesList.innerHTML = schedulesHtml;
 
