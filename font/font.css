@@ -3,148 +3,83 @@
   src: url('path/to/Inter.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-display: swap; /* <-- Add this */
+  font-display: swap;
 }
 
-
-
-/* FONTS COLOR*/
-
+/* FONT COLOR THEME */
 .font-theme {
   color: #242424;
 }
-
 @media (prefers-color-scheme: dark) {
   .font-theme {
     color: #ffffff;
   }
 }
-
-/* Ensure only child elements inherit font-theme's color */
+/* Only child inherits */
 .font-theme * {
   color: inherit;
 }
 
-/* Headings */
+/* Headings structure baseline fix */
 :is([class*="u-text-style-"], h1, h2, h3, h4, h5, h6, blockquote) {
-	display: flow-root;
+  display: flow-root;
 }
 :is([class*="u-text-style-"], h1, h2, h3, h4, h5, h6, blockquote)::before {
-	content: "";
-	display: table;
-	margin-bottom: calc(-0.3h + 0.34em);
+  content: "";
+  display: table;
+  margin-bottom: calc(-0.3h + 0.34em);
 }
 :is([class*="u-text-style-"], h1, h2, h3, h4, h5, h6, blockquote)::after {
-	content: "";
-	display: table;
-	margin-bottom: calc(-0.3h + 0.39em);
+  content: "";
+  display: table;
+  margin-bottom: calc(-0.3h + 0.39em);
 }
-
-
 
 /* HERO HEADING */
 .hero-heading {
-  font-family: "Inter", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 
-  font-size: clamp(40px, 6vw, 120px); /* Mobile → Desktop fluid scaling */
-  line-height: 1.1;                   /* Balanced for display text */
-  font-weight: 600;                   /* Use supported weights: 500, 600, 700 */
-  letter-spacing: -0.03em;            /* Scales automatically with font size */
-  text-align: center;
-
-  margin: 0;
-  padding: 0;
-}
-
-
-.subtext-title {
-  font-size: 30px; /* Mobile base */
-  line-height: 0.8;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  font-family: "Inter", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  padding: 0;
-}
-
-.subtext-title {
-  font-size: clamp(30px, 3vw, 40px);
+  font-size: clamp(40px, 6vw, 120px);
   line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* SUBTEXT TITLE */
+.subtext-title {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 650;
+  font-size: clamp(35px, 3.5vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin: 0;
+  padding: 0;
 }
 
-
-@media (min-width: 1024px) {
-  .subtext-title {
-    font-size: clamp(40px, 4vw, 60px);
-    line-height: 1.05;
-    font-weight: 700;
-  }
-}
-
-
+/* SUBTEXT */
 .subtext {
-  font-size: clamp(17px, 1.7vw, 20px); /* Mobile base */
-  line-height: 1.06;
-  font-weight: 400;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 450;
+  font-size: clamp(25px, 2.2vw, 35px);
+  line-height: 1.15;
   letter-spacing: -0.02em;
-  font-family: "Inter", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
 }
 
-@media (min-width: 768px) {
-  .subtext {
-    font-size: clamp(20px, 2.5vw, 25px);
-    line-height: 1.16  ;
-      font-weight: 450;
-    letter-spacing: -0.02em;
-  }
-}
-
-@media (min-width: 1024px) {
-  .subtext {
-    font-size: clamp(30px, 3vw, 25px);
-    line-height: 1.1;
-      font-weight: 500;
-    letter-spacing: -0.04em;
-  }
-}
-
-
+/* CONTEXT (smaller paragraphs or metadata) */
 .context {
-  font-size: 12px; /* Mobile first */
-  line-height: 1.09;
-  font-weight: 300;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 350;
+  font-size: clamp(18px, 1.3vw, 25px);
+  line-height: 1.2;
   letter-spacing: -0.011em;
-  font-family: "Inter", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
 }
-
-@media (min-width: 768px) {
-  .context {
-    font-size: 20px;
-    line-height: 1.19;
-      font-weight: 350;
-  }
-}
-
-@media (min-width: 1024px) {
-  .context {
-    font-size: 24px;
-    line-height: 1.2;
-      font-weight: 400;
-  }
-}
-
-
