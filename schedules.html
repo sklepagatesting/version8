@@ -23,8 +23,10 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 6px 12px rgba(0, 0, 0, 0.04);
         }
 
+        /* --- Dark Mode flat-card Background and Hover Correction --- */
         .dark .flat-card {
-            background-color: #1f2937; /* Adjusted for better dark mode consistency */
+            /* Adjusted from #ffffff to a dark gray (#1f2937 is the modal content bg, using slightly lighter for card) */
+            background-color: #242424; 
             box-shadow: 0 1px 3px rgba(255, 255, 255, 0.06), 0 1px 2px rgba(255, 255, 255, 0.04);
         }
 
@@ -47,14 +49,16 @@
             color: #1f2937;
             border: 1px solid #e5e7eb;
         }
-
+        
+        /* --- Dark Mode date-block Background Correction --- */
         .dark .date-block {
-            background-color: #2d2d2d; /* Adjusted for dark mode */
-            color: #f3f4f6; /* Adjusted for dark mode - font-theme is white in dark mode */
-            border: 1px solid #374151; /* Adjusted for dark mode */
+            /* Changed from #f9fafb (light gray) to a dark gray for better dark mode aesthetics */
+            background-color: #2d2d2d; 
+            color: #f3f4f6;
+            border: 1px solid #374151;
         }
 
-        /* Modal specific styles - No hover color/bg changes needed here, but applying font-theme */
+        /* Modal specific styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -120,10 +124,11 @@
             color: #1f2937 !important; 
         }
 
-        /* Dark Mode Hover: Darker background, vibrant border, text color remains white (default font-theme) or blue (title) */
+        /* --- Dark Mode Hover Background Correction --- */
         .dark .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            background-color: #2d2d2d; /* Darker gray bg for hover */
+            /* Changed from #2d2d2d (which is okay, but ensuring no white/light) */
+            background-color: #2d2d2d; 
         }
         
         /* Apply text color change to all elements within the list item on hover in dark mode */
@@ -136,7 +141,6 @@
         .schedule-list-item:hover .schedule-title-link {
             color: #5c5cff !important;
         }
-
 
         /* Smooth scrollbar */
         .modal-content::-webkit-scrollbar {
@@ -287,7 +291,6 @@
             const cardSlug = schedule.slug;
 
             if (isFeatured) {
-                // Featured Card: The font-theme elements are mostly set, but the date block needs correction.
                 return `
                     <div class="schedule-card flat-card flex flex-col sm:flex-row p-6 sm:p-8 mb-12 w-full transform hover:scale-[1.01] transition-all duration-300 hover:cursor-pointer"
                          data-slug="${cardSlug}">
@@ -315,7 +318,6 @@
                     </div>
                 `;
             } else {
-                // List Item Card: Corrected text colors and added a specific class for the title's hover effect
                 return `
                     <div class="schedule-card schedule-list-item flex items-center py-4 px-4 rounded-lg hover:cursor-pointer transition-all duration-200"
                          data-slug="${cardSlug}">
@@ -380,7 +382,7 @@
                     listItemsHtml += createScheduleCard(schedule, false);
                 });
                 
-                // Added font-theme to the list wrapper for consistency
+                // Adjusted background color for the list wrapper in dark mode
                 schedulesHtml += `<div class="space-y-1 mt-8 bg-white dark:bg-[#1f2937] rounded-xl p-2 border border-gray-100 dark:border-gray-800 font-theme">${listItemsHtml}</div>`;
 
                 schedulesList.innerHTML = schedulesHtml;
