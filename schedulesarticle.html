@@ -38,20 +38,17 @@
         #schedule-context {
             white-space: pre-wrap;
         }
-        /* Simple structure for countdown to fit the design */
+        /* UPDATED: Remove all container styling from the timer, ensure centering */
         #countdown-timer {
-            padding: 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            padding: 0;
             margin: 1rem 0;
-            background-color: #f9fafb;
-            color: #5c5cff;
-            font-weight: bold;
+            color: var(--color-text-primary, #1f2937); /* Adjust as needed for your theme files */
+            font-size: 1.125rem; /* text-lg */
             text-align: center;
+            width: 100%;
         }
         .dark #countdown-timer {
-            background-color: #1f2937;
-            border-color: #374151;
+             color: var(--color-text-primary-dark, #ffffff); /* Adjust as needed for your theme files */
         }
     </style>
 </head>
@@ -101,7 +98,7 @@
                             <h1 id="schedule-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>
                         </div>
                         
-                        <div id="countdown-timer" class="max-w-3xl mx-auto mb-8 text-lg"></div>
+                        <div id="countdown-timer" class="max-w-5xl mx-auto text-lg"></div>
 
                         <div class="max-w-screen-xl mx-auto">
                             <a href="#">
@@ -163,14 +160,14 @@
                 return null;
             };
 
-            // Countdown Logic (Updated to use simple text output)
+            // Countdown Logic (Plain text output)
             function updateCountdown(targetDate) {
                 const countdownTimer = document.getElementById('countdown-timer');
                 const now = new Date().getTime();
                 const distance = targetDate - now;
 
                 if (distance < 0) {
-                    countdownTimer.textContent = 'This schedule date has passed.';
+                    countdownTimer.innerHTML = '<span class="text-red-500 font-semibold">This schedule date has passed.</span>';
                     return;
                 }
 
@@ -179,7 +176,7 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                countdownTimer.innerHTML = `Event starts in: <strong>${days}</strong> days, <strong>${hours}</strong> hours, <strong>${minutes}</strong> minutes, and <strong>${seconds}</strong> seconds.`;
+                countdownTimer.innerHTML = `<span class="font-theme font-medium text-gray-700 dark:text-gray-300">Event starts in: </span><strong>${days}</strong> days, <strong>${hours}</strong> hours, <strong>${minutes}</strong> minutes, and <strong>${seconds}</strong> seconds.`;
             }
 
             // GSAP Animation Logic (Identical to Article Page)
@@ -273,7 +270,6 @@
 
 
                         document.getElementById('page-title').textContent = scheduleData.title || 'SK Lepaga Schedule';
-                        // Using 'SCHEDULES' as the category text for consistency with the badge
                         document.getElementById('schedule-category').textContent = 'SCHEDULES'; 
                         document.getElementById('schedule-title').textContent = scheduleData.title || 'Untitled Schedule';
 
@@ -283,6 +279,7 @@
 
 
                         document.getElementById('schedule-image').src = scheduleData.image;
+                        // STRCITLY IDENTICAL: Removed the 'rounded-2xl' class from the JS section for source element as well
                         document.querySelector('#schedule-image-container source').srcset = scheduleData.image;
 
                         // Using textContent and relying on CSS white-space: pre-wrap
