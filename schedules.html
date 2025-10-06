@@ -39,13 +39,43 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* Modal Styles */
+        /* Modal Overlay and Content Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .modal-content {
             /* Inherits background-color from .flat-card */
             padding: 2rem;
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 560px; /* Max width for modal */
+            width: 90%; /* Responsive width */
+            max-height: 90vh; /* Max height for modal */
+            overflow-y: auto; /* Enable scrolling for long content */
+            transform: translateY(20px); /* Initial state for animation */
+            transition: transform 0.3s ease;
         }
+        .modal-overlay.open .modal-content {
+            transform: translateY(0); /* Final state for animation */
+        }
+
 
         /* Schedule List Item Styles (Light Mode) */
         .schedule-list-item {
@@ -54,20 +84,19 @@
         }
         .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            /* Subtle gray hover background */
             background-color: #f3f4f6;
-            /* **Removed font color change on hover** */
+            /* No font color change on hover */
         }
 
-        /* Title hover color for blue link effect (Applies to both themes) - KEPT */
-        .schedule-list-item:hover .schedule-title-link {
+        /* Removed blue hover text for schedule title link */
+        /* .schedule-list-item:hover .schedule-title-link {
             color: #5c5cff !important;
-        }
+        } */
+
 
         /* --- DARK MODE STYLES (Using .dark prefix for theme toggles) --- */
 
         .dark .flat-card {
-            /* Applied requested #454545 for card BG (including modal) */
             background-color: #454545;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
         }
@@ -84,9 +113,8 @@
         /* Dark Mode List Item Hover */
         .dark .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            /* Subtle dark background hover against the body's #242424 */
             background-color: #374151; 
-            /* **Removed font color change on hover** */
+            /* No font color change on hover */
         }
 
         /* Smooth scrollbar */
@@ -107,7 +135,6 @@
 
         /* --- Media Query for Precedence --- */
         @media (prefers-color-scheme: dark) {
-            /* Ensures system preference is honored for new colors */
             body:not(.light) .flat-card { background-color: #454545; }
             body:not(.light) .modal-content { background-color: #454545; }
             body:not(.light) .date-block { background-color: #1f2937; border: 1px solid #374151; }
@@ -330,14 +357,15 @@
                 let listItemsHtml = '';
 
                 // Featured Card
-                schedulesHtml += createScheduleCard(allSchedules[0], true);
+                if (allSchedules.length > 0) {
+                    schedulesHtml += createScheduleCard(allSchedules[0], true);
+                }
 
-                // List Items
+                // List Items (start from second item if featured card exists)
                 allSchedules.slice(1).forEach(schedule => {
                     listItemsHtml += createScheduleCard(schedule, false);
                 });
                 
-                // **Removed schedule-list-container class and its background**
                 schedulesHtml += `<div class="space-y-1 mt-8 p-2 font-theme rounded-xl">${listItemsHtml}</div>`;
 
                 schedulesList.innerHTML = schedulesHtml;
@@ -353,7 +381,7 @@
         schedulesList.addEventListener('click', (e) => {
             const card = e.target.closest('.schedule-card');
             
-            if (card && e.target.tagName !== 'A') {
+            if (card && e.target.tagName !== 'A') { // Prevent modal from opening if an <a> tag inside the card is clicked
                 const slug = card.dataset.slug;
                 const schedule = allSchedules.find(s => s.slug === slug);
                 if (schedule) {
