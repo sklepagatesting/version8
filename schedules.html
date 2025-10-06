@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -110,11 +109,11 @@
 
         .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            background-color: #f9fafb;
+            background-color: #f3f4f6;
         }
 
         .dark .schedule-list-item:hover {
-            background-color: #2d2d2d;
+            background-color: #333333;
         }
 
         /* Smooth scrollbar */
@@ -277,10 +276,10 @@
                         </div>
 
                         <div class="flex-grow flex flex-col justify-center">
-                            <h3 class="font-theme font-extrabold text-2xl sm:text-3xl lg:text-4xl text-gray-900 dark:text-gray-900 mb-3 leading-tight">
+                            <h3 class="font-theme font-extrabold text-2xl sm:text-3xl lg:text-4xl mb-3 leading-tight">
                                 ${schedule.title}
                             </h3>
-                            <p class="font-theme text-sm text-gray-600 dark:text-gray-600 mb-4 line-clamp-2">
+                            <p class="font-theme text-sm mb-4 line-clamp-2 opacity-70">
                                 ${schedule.context.substring(0, 120)}...
                             </p>
                             <a href="schedulesarticle.html?slug=${cardSlug}" 
@@ -297,15 +296,15 @@
                     <div class="schedule-card schedule-list-item flex items-center py-4 px-4 rounded-lg hover:cursor-pointer transition-all duration-200"
                          data-slug="${cardSlug}">
                         
-                        <p class="font-theme text-sm font-semibold text-gray-600 dark:text-gray-400 w-40 flex-shrink-0">
+                        <p class="font-theme text-sm font-semibold w-40 flex-shrink-0 opacity-60">
                             ${fullDate}
                         </p>
                         
-                        <h4 class="font-theme font-bold text-base text-gray-900 dark:text-white flex-grow hover:text-[#5c5cff] dark:hover:text-[#5c5cff] transition-colors duration-200">
+                        <h4 class="font-theme font-bold text-base flex-grow hover:text-[#5c5cff] transition-colors duration-200">
                             ${schedule.title}
                         </h4>
                         
-                        <svg class="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-5 h-5 flex-shrink-0 ml-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         
                         <a href="schedulesarticle.html?slug=${cardSlug}" 
                            onclick="event.stopPropagation()" 
