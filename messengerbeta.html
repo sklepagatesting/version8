@@ -42,7 +42,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: relative; /* Added for menu positioning */
+            position: relative;
+            /* Added for menu positioning */
         }
 
         .chat-header .font-semibold {
@@ -56,7 +57,7 @@
         .chat-header .text-sm {
             font-size: 0.875rem;
         }
-        
+
         /* New Styles for Dropdown Menu */
         .menu-button {
             background: none;
@@ -88,8 +89,10 @@
             min-width: 150px;
             margin-top: 4px;
             display: none;
-            list-style: none; /* Remove list style */
-            padding: 0; /* Remove default padding */
+            list-style: none;
+            /* Remove list style */
+            padding: 0;
+            /* Remove default padding */
             margin-block-start: 0;
             margin-block-end: 0;
         }
@@ -117,8 +120,8 @@
         .dropdown-item.text-red-600 {
             color: #dc2626;
         }
-        /* End New Styles for Dropdown Menu */
 
+        /* End New Styles for Dropdown Menu */
 
         .messages {
             flex: 1;
@@ -378,35 +381,24 @@
 
 <body>
     <div class="chat-app" id="chatApp">
-        <div class="chat-header">
-            <span class="font-semibold">Support Chat</span>
-            <div>
-                <button id="menuButton" class="menu-button" aria-label="Menu">
-                    <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
+        <div class="chat-header"> <span class="font-semibold">Support Chat</span>
+            <div> <button id="menuButton" class="menu-button" aria-label="Menu"> <svg class="menu-icon" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
                         </path>
-                    </svg>
-                </button>
+                    </svg> </button>
                 <ul id="dropdownMenu" class="dropdown-menu">
-                    <li>
-                        <button class="dropdown-item text-red-600" id="deleteConversationButton">
-                            Delete Conversation
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="logout()" class="dropdown-item">
-                            Sign Out
-                        </button>
-                    </li>
+                    <li> <button class="dropdown-item text-red-600" id="deleteConversationButton"> Delete Conversation
+                        </button> </li>
+                    <li> <button onclick="logout()" class="dropdown-item"> Sign Out </button> </li>
                 </ul>
             </div>
-            </div>
+        </div>
         <div class="messages" id="messagesContainer">
-            <div class="message-placeholder">
-                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <div class="message-placeholder"> <svg xmlns="http://www.w3.org/2000/svg"
+                    class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                         d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V4a2 2 0 012-2h4.586A2 2 0 0115 2.586L17 4.586V8z" />
                 </svg>
@@ -415,18 +407,14 @@
             </div>
             <div id="typingIndicatorContainer"></div>
         </div>
-        <form id="messageForm" class="chat-input-wrapper">
-            <textarea id="messageInput" placeholder="Type a message..." autocomplete="off" class="context"></textarea>
-            <button type="submit" aria-label="Send Message">&#10148;</button>
-        </form>
+        <form id="messageForm" class="chat-input-wrapper"> <textarea id="messageInput" placeholder="Type a message..."
+                autocomplete="off" class="context"></textarea> <button type="submit"
+                aria-label="Send Message">&#10148;</button> </form>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    <script>
-        (function () {
+    <script>        (function () {
             emailjs.init("O3lW73xpbv35YItw4"); // Replace with your EmailJS public key
-        })();
-    </script>
+        })();    </script>
     <script type="module">
         import {
             initializeApp
@@ -437,12 +425,13 @@
             doc,
             onSnapshot,
             getDoc,
+            getDocs, // Added getDocs
             setDoc,
             updateDoc,
             arrayUnion,
             serverTimestamp,
             FieldValue,
-            deleteDoc // Added deleteDoc
+            deleteDoc
         } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
         import {
             getAuth,
@@ -478,7 +467,6 @@
         const dropdownMenu = document.getElementById("dropdownMenu");
         const deleteConversationButton = document.getElementById("deleteConversationButton");
 
-
         // Menu Toggle Logic
         menuButton.addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent the body click listener from immediately closing it
@@ -499,20 +487,20 @@
                     try {
                         // Delete the conversation document
                         await deleteDoc(currentConversationRef);
-                        
+
                         // Clear the chat interface
                         messagesContainer.innerHTML = '';
                         messagesContainer.appendChild(messagesPlaceholder);
                         messagesContainer.appendChild(typingIndicatorContainer);
                         messagesPlaceholder.style.display = 'flex';
-                        
+
                         // Close menu and show a message
                         dropdownMenu.classList.remove('open');
                         alert("Conversation deleted successfully. You can start a new one by sending a message.");
-                        
+
                         // Prevent further operations on the deleted ref
                         currentConversationRef = null;
-                        
+
                         // Refresh the page to ensure all listeners/state are reset if needed, 
                         // but for a smooth UX, just resetting the UI is better.
                         // We will rely on setupUserChat logic to recreate ref if they send a new message.
@@ -524,8 +512,7 @@
             }
         });
 
-
-        // New function to send email only if a new one hasn't been sent in the last hour
+        // ⭐ UPDATED FUNCTION: Now fetches admin emails and uses the 'to_email' parameter
         const sendEmailIfNeeded = async (conversationId, message, user) => {
             const convRef = doc(db, "conversations", conversationId);
             const convSnap = await getDoc(convRef);
@@ -540,92 +527,76 @@
             } else {
                 const lastEmail = convData.lastEmailSentAt.toDate();
                 const diffHours = (now - lastEmail) / (1000 * 60 * 60);
-                if (diffHours >= 1) {
+                if (diffHours >= 1) { // 1-hour throttle
                     shouldSend = true;
                 }
             }
 
             if (shouldSend) {
-                await emailjs.send("service_h72d2xw", "template_9g05rdg", {
-                    title: "New Message in Messenger",
-                    name: user.displayName || "Guest",
-                    time: now.toLocaleString(),
-                    message: message,
-                    email: user.email || "no-reply@test",
+                // NEW: Fetch all admin emails from the 'admin' collection
+                const adminDocs = await getDocs(collection(db, "admin"));
+                const adminEmails = [];
+                adminDocs.forEach(doc => {
+                    const data = doc.data();
+                    if (data.email) {
+                        adminEmails.push(data.email);
+                    }
                 });
 
-                await updateDoc(convRef, {
-                    lastEmailSentAt: serverTimestamp(),
-                });
+                const toEmailList = adminEmails.join(","); // Comma-separated list for EmailJS
 
-                console.log("✅ Email sent");
+                if (toEmailList.length > 0) {
+                    await emailjs.send("service_h72d2xw", "template_9g05rdg", {
+                        title: "New Message in Messenger",
+                        name: user.displayName || "Guest",
+                        time: now.toLocaleString(),
+                        message: message,
+                        to_email: toEmailList, // ⭐ NEW RECIPIENT FIELD
+                        email: user.email || "no-reply@test", // Sender's email
+                    });
+
+                    await updateDoc(convRef, {
+                        lastEmailSentAt: serverTimestamp(),
+                    });
+
+                    console.log("✅ Email sent to admins:", toEmailList);
+                } else {
+                    console.log("⚠️ No admin emails found. Skipping email notification.");
+                }
             } else {
                 console.log("⏳ Skipped, email already sent within last hour");
             }
         };
 
-        function escapeHtml(text) {
-            if (typeof text !== 'string') return "";
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
-                .replace(/'/g, "&#39;");
-        }
+        function escapeHtml(text) { if (typeof text !== 'string') return ""; return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
 
         function formatTimestamp(date) {
-            if (!date) return '';
-            const d = date.toDate ? date.toDate() : new Date(date);
+            if (!date) return ''; const d = date.toDate ? date.toDate() : new Date(date);
 
             // Always format in Asia/Manila (PHT)
-            const optionsTime = {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-                timeZone: 'Asia/Manila'
-            };
-            const optionsDate = {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-                timeZone: 'Asia/Manila'
-            };
+            const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Manila' };
+            const optionsDate = { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Manila' };
 
             const today = new Date();
-            const todayPH = new Date(today.toLocaleString('en-US', {
-                timeZone: 'Asia/Manila'
-            }));
-            const dPH = new Date(d.toLocaleString('en-US', {
-                timeZone: 'Asia/Manila'
-            }));
+            const todayPH = new Date(today.toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+            const dPH = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
 
             const isToday = dPH.toDateString() === todayPH.toDateString();
             const yesterdayPH = new Date(todayPH);
             yesterdayPH.setDate(todayPH.getDate() - 1);
             const isYesterday = dPH.toDateString() === yesterdayPH.toDateString();
 
-            if (isToday) {
-                return dPH.toLocaleTimeString('en-US', optionsTime);
-            } else if (isYesterday) {
-                return 'Yesterday, ' + dPH.toLocaleTimeString('en-US', optionsTime);
-            } else {
-                return dPH.toLocaleDateString('en-US', optionsDate) + ', ' + dPH.toLocaleTimeString('en-US',
-                    optionsTime);
-            }
+            if (isToday) { return dPH.toLocaleTimeString('en-US', optionsTime); } else if (isYesterday) { return 'Yesterday, ' + dPH.toLocaleTimeString('en-US', optionsTime); } else { return dPH.toLocaleDateString('en-US', optionsDate) + ', ' + dPH.toLocaleTimeString('en-US', optionsTime); }
         }
 
-        function scrollToBottom() {
-            requestAnimationFrame(() => {
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            });
-        }
+        function scrollToBottom() { requestAnimationFrame(() => { messagesContainer.scrollTop = messagesContainer.scrollHeight; }); }
 
-        const sentIcon =
-            `<svg class="w-4 h-4 text-gray-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
-        const readIcon =
-            `<svg class="w-4 h-4 text-blue-500 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.707 7.293-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L10 12.586l4.293-4.293a1 1 0 011.414 1.414z"/></svg>`;
+        const sentIcon = `<svg class="w-4 h-4 text-gray-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
+        const readIcon = `<svg class="w-4 h-4 text-blue-500 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.707 7.293-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L10 12.586l4.293-4.293a1 1 0 011.414 1.414z"/></svg>`;
 
         function renderMessages(allMessages) {
             // Clear all messages before re-rendering
-            messagesContainer.querySelectorAll('.message-row:not(#typingIndicatorContainer .message-row)').forEach(el =>
-                el.remove());
+            messagesContainer.querySelectorAll('.message-row:not(#typingIndicatorContainer .message-row)').forEach(el => el.remove());
 
             const fragment = document.createDocumentFragment();
             for (let i = 0; i < allMessages.length; i++) {
@@ -648,8 +619,7 @@
                 if (i > 0) {
                     lastMessageTime = allMessages[i - 1].time;
                 }
-                const showTime = !lastMessageTime || (msg.time.toDate().getTime() - lastMessageTime.toDate().getTime() >
-                    300000);
+                const showTime = !lastMessageTime || (msg.time.toDate().getTime() - lastMessageTime.toDate().getTime() > 300000);
 
                 if (showTime || (isSender && isLastMessage)) {
                     const timeEl = document.createElement("div");
@@ -706,7 +676,6 @@
                     status: 'sent'
                 };
 
-
                 if (docSnap.exists()) {
                     await updateDoc(currentConversationRef, {
                         messages: arrayUnion(newMessage),
@@ -755,7 +724,7 @@
                     typingIndicatorContainer.innerHTML = "";
                     return;
                 }
-                
+
                 if (messagesPlaceholder) {
                     if (docSnap.data().messages?.length > 0) {
                         messagesPlaceholder.style.display = 'none';
@@ -788,7 +757,7 @@
                         return msg;
                     });
                     // Only update if currentConversationRef is still valid (not deleted)
-                    if(currentConversationRef) {
+                    if (currentConversationRef) {
                         updateDoc(currentConversationRef, {
                             messages: updatedMessages
                         });
@@ -825,8 +794,7 @@
                 e.preventDefault();
                 messageForm.requestSubmit();
             }
-        });
-    </script>
+        });    </script>
 </body>
 
 </html>
