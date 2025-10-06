@@ -23,10 +23,10 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 6px 12px rgba(0, 0, 0, 0.04);
         }
 
-        /* --- Dark Mode flat-card Background and Hover Correction --- */
+        /* --- Dark Mode flat-card Background Correction (Featured Card) --- */
         .dark .flat-card {
-            /* Adjusted from #ffffff to a dark gray (#1f2937 is the modal content bg, using slightly lighter for card) */
-            background-color: #242424; 
+            /* Changed from pure white or light gray to a suitable dark gray */
+            background-color: #1f2937; 
             box-shadow: 0 1px 3px rgba(255, 255, 255, 0.06), 0 1px 2px rgba(255, 255, 255, 0.04);
         }
 
@@ -50,9 +50,8 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* --- Dark Mode date-block Background Correction --- */
+        /* Dark Mode date-block Background Correction */
         .dark .date-block {
-            /* Changed from #f9fafb (light gray) to a dark gray for better dark mode aesthetics */
             background-color: #2d2d2d; 
             color: #f3f4f6;
             border: 1px solid #374151;
@@ -101,7 +100,9 @@
             transform: scale(1);
         }
 
+        /* --- Dark Mode Modal Background Correction --- */
         .dark .modal-content {
+            /* This was already dark gray, but confirming it's not white. */
             background-color: #1f2937;
             color: #f3f4f6;
         }
@@ -112,28 +113,23 @@
             transition: all 0.2s ease;
         }
 
-        /* Light Mode Hover: Light background, vibrant border, text color remains black (default font-theme) or blue (title) */
+        /* Light Mode Hover: Light background */
         .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            background-color: #f3f4f6; /* Very light gray bg for hover */
+            background-color: #f3f4f6;
         }
         
-        /* Apply text color change to all elements within the list item on hover in light mode */
         .schedule-list-item:hover .font-theme {
-            /* Black text is the default font-theme color, but this ensures it's not overridden by parent */
             color: #1f2937 !important; 
         }
 
-        /* --- Dark Mode Hover Background Correction --- */
+        /* Dark Mode Hover Background: Dark background */
         .dark .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            /* Changed from #2d2d2d (which is okay, but ensuring no white/light) */
             background-color: #2d2d2d; 
         }
         
-        /* Apply text color change to all elements within the list item on hover in dark mode */
         .dark .schedule-list-item:hover .font-theme {
-            /* White text is the default dark mode font-theme color, but this ensures it's not overridden */
             color: #f3f4f6 !important; 
         }
 
@@ -382,7 +378,6 @@
                     listItemsHtml += createScheduleCard(schedule, false);
                 });
                 
-                // Adjusted background color for the list wrapper in dark mode
                 schedulesHtml += `<div class="space-y-1 mt-8 bg-white dark:bg-[#1f2937] rounded-xl p-2 border border-gray-100 dark:border-gray-800 font-theme">${listItemsHtml}</div>`;
 
                 schedulesList.innerHTML = schedulesHtml;
