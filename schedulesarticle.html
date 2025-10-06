@@ -25,6 +25,7 @@
         body {
             transition: opacity 0.2s ease-in;
         }
+        /* IDENTICAL STRUCTURE: Article content container style */
         #schedule-content-container {
             min-height: 50vh;
             display: flex;
@@ -33,116 +34,24 @@
             justify-content: center;
             text-align: center;
         }
-        /* IMPLEMENTED FIX: Use pre-wrap CSS for line breaks and secure textContent in JS */
+        /* IDENTICAL STRUCTURE: Ensure the body text wraps correctly */
         #schedule-context {
-            white-space: pre-wrap; 
+            white-space: pre-wrap;
         }
-
-        /* Schedule-specific styling */
-        .schedule-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, #5c5cff 0%, #4a4aee 100%);
-            color: white;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(92, 92, 255, 0.3);
-        }
-
-        .schedule-date-highlight {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 1.5rem;
-            background: linear-gradient(135deg, #f0f0ff 0%, #e8e8ff 100%);
-            border-left: 4px solid #5c5cff;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-            text-align: left; /* Ensure text inside is left-aligned */
-        }
-
-        .dark .schedule-date-highlight {
-            background: linear-gradient(135deg, #2d2d3d 0%, #25253d 100%);
-        }
-
-        .schedule-icon {
-            width: 2rem;
-            height: 2rem;
-            color: #5c5cff;
-        }
-
-        .countdown-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .countdown-item {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.75rem;
+        /* Simple structure for countdown to fit the design */
+        #countdown-timer {
             padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 1rem 0;
+            background-color: #f9fafb;
+            color: #5c5cff;
+            font-weight: bold;
             text-align: center;
         }
-
-        .dark .countdown-item {
-            background: #2d2d2d;
-            border-color: #3d3d3d;
-        }
-
-        .countdown-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #5c5cff;
-            line-height: 1;
-        }
-
-        .countdown-label {
-            font-size: 0.75rem;
-            color: #6b7280;
-            margin-top: 0.5rem;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .info-card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        .dark .info-card {
-            background: #2d2d2d;
-            border-color: #3d3d3d;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f3f4f6;
-        }
-
-        .dark .info-row {
-            border-bottom-color: #3d3d3d;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-icon {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 1.5rem;
-            color: #5c5cff;
+        .dark #countdown-timer {
+            background-color: #1f2937;
+            border-color: #374151;
         }
     </style>
 </head>
@@ -180,39 +89,23 @@
 
             <section id="schedule-content-container" class="font-theme px-4 py-8 sm:py-16 bg-white dark:bg-[#242424]">
                 <p id="loading-message" class="subtext-title text-gray-500">Loading schedule details...</p>
+                
                 <div id="schedule-data" class="hidden w-full">
                     <div class="max-w-screen-xl mx-auto px-4 pb-6 sm:pb-8 pt-10 sm:pt-24">
-                        <div class="text-container text-center">
-                            <div class="schedule-badge mx-auto mb-6">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                <span>UPCOMING SCHEDULE</span>
-                            </div>
+                        
+                        <div class="text-container">
+                            <h2 id="schedule-category" class="rise subtext text-gray-400 mt-4">SCHEDULES</h2>
                         </div>
-                        <div class="text-container text-center">
-                            <h1 id="schedule-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-8 sm:mb-12"></h1>
+                        
+                        <div class="text-container">
+                            <h1 id="schedule-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>
                         </div>
+                        
+                        <div id="countdown-timer" class="max-w-3xl mx-auto mb-8 text-lg"></div>
 
-                        <div id="countdown-section" class="max-w-2xl mx-auto mb-8">
-                            <div class="countdown-container" id="countdown-timer"></div>
-                        </div>
-
-                        <div class="max-w-3xl mx-auto">
-                            <div class="schedule-date-highlight">
-                                <svg class="schedule-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                <div>
-                                    <div class="font-semibold font-theme text-lg text-gray-900 dark:text-white" id="schedule-date-full"></div>
-                                    <div class="text-sm text-gray-600 dark:text-gray-400" id="schedule-date-day"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="max-w-screen-xl mx-auto my-8">
+                        <div class="max-w-screen-xl mx-auto">
                             <a href="#">
-                                <div id="schedule-image-container" class="zoom flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing rounded-2xl" data-dark-border="#242424">
+                                <div id="schedule-image-container" class="zoom flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing" data-dark-border="#242424">
                                     <picture>
                                         <source media="(max-width: 767px)" srcset="">
                                         <img id="schedule-image" src="" alt="Schedule Image" class="w-full h-auto object-cover">
@@ -221,47 +114,23 @@
                             </a>
                         </div>
 
-                        <div class="max-w-4xl mx-auto py-6 sm:py-12">
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold font-theme mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
-                                    Event Details
-                                </h3>
-
-                                <div class="info-row">
-                                    <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                    <div class="flex-grow">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">Organized by</div>
-                                        <div class="font-semibold font-theme text-gray-900 dark:text-white" id="schedule-author"></div>
+                        <div class="container max-w-5xl py-6 sm:py-12">
+                            <div class="grid gap-2 sm:grid-cols-2 text-left">
+                                
+                                <div>
+                                    <div class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400">
+                                        <h3 id="schedule-author-display" class="rise context font-bold"></h3>
+                                        <span id="schedule-date-display" class="context text-gray-500 font-theme"></span>
                                     </div>
                                 </div>
-
-                                <div class="info-row">
-                                    <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <div class="flex-grow">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">Posted on</div>
-                                        <div class="font-semibold font-theme text-gray-900 dark:text-white" id="schedule-posted-date"></div>
+                                
+                                <div class="relative px-4 space-y-6">
+                                    <div class="space-y-10 sm:space-y-8 relative px-4 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300 dark:before:bg-gray-700">
+                                        <div id="schedule-context-wrapper" class="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] before:bg-violet-600 dark:before:bg-violet-400">
+                                            <p id="schedule-context" class="left-in-slow context font-theme text-justify text-gray-700 dark:text-gray-300"></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="mt-8 space-y-6">
-                                <div class="border-l-4 border-[#5c5cff] pl-6 py-2">
-                                    <h3 class="text-2xl font-bold font-theme mb-4 text-gray-900 dark:text-white">About This Event</h3>
-                                    <p id="schedule-context" class="context font-theme text-gray-700 dark:text-gray-300 leading-relaxed text-lg"></p>
-                                </div>
-                            </div>
-
-                            <div class="mt-12 text-center">
-                                <a href="schedules.html" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-[#2d2d2d] border-2 border-gray-300 dark:border-gray-600 font-theme rounded-lg hover:bg-gray-50 dark:hover:bg-[#333333] transition-all duration-200 font-semibold text-gray-900 dark:text-white">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                                    </svg>
-                                    Back to Schedules
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -294,14 +163,14 @@
                 return null;
             };
 
-            // Countdown Logic
+            // Countdown Logic (Updated to use simple text output)
             function updateCountdown(targetDate) {
                 const countdownTimer = document.getElementById('countdown-timer');
                 const now = new Date().getTime();
                 const distance = targetDate - now;
 
                 if (distance < 0) {
-                    countdownTimer.innerHTML = '<div class="col-span-full text-center text-gray-500 dark:text-gray-400">This event has passed</div>';
+                    countdownTimer.textContent = 'This schedule date has passed.';
                     return;
                 }
 
@@ -310,27 +179,10 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                countdownTimer.innerHTML = `
-                    <div class="countdown-item">
-                        <div class="countdown-number">${days}</div>
-                        <div class="countdown-label">Days</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div class="countdown-number">${hours}</div>
-                        <div class="countdown-label">Hours</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div class="countdown-number">${minutes}</div>
-                        <div class="countdown-label">Minutes</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div class="countdown-number">${seconds}</div>
-                        <div class="countdown-label">Seconds</div>
-                    </div>
-                `;
+                countdownTimer.innerHTML = `Event starts in: <strong>${days}</strong> days, <strong>${hours}</strong> hours, <strong>${minutes}</strong> minutes, and <strong>${seconds}</strong> seconds.`;
             }
 
-            // GSAP Animation Logic (Copied from Article Page)
+            // GSAP Animation Logic (Identical to Article Page)
             function runAnimations() {
                 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                     gsap.registerPlugin(ScrollTrigger);
@@ -341,7 +193,6 @@
                 if (target) {
                     gsap.fromTo(
                         target, {
-                            // Changed to match the article page's starting point (scale 0 for dramatic entry)
                             scale: 0.95,
                             opacity: 0
                         }, {
@@ -366,6 +217,7 @@
                     return;
                 }
 
+                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase Project ID
                 const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
 
                 try {
@@ -412,26 +264,28 @@
                                 day: 'numeric'
                             }) :
                             'N/A';
-                        const dateFormatted = scheduleDate.toLocaleDateString('en-US', {
+                        const fullDateFormatted = scheduleDate.toLocaleDateString('en-US', {
+                            weekday: 'long',
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         });
-                        const dayFormatted = scheduleDate.toLocaleDateString('en-US', {
-                            weekday: 'long'
-                        });
+
 
                         document.getElementById('page-title').textContent = scheduleData.title || 'SK Lepaga Schedule';
+                        // Using 'SCHEDULES' as the category text for consistency with the badge
+                        document.getElementById('schedule-category').textContent = 'SCHEDULES'; 
                         document.getElementById('schedule-title').textContent = scheduleData.title || 'Untitled Schedule';
-                        document.getElementById('schedule-date-full').textContent = dateFormatted;
-                        document.getElementById('schedule-date-day').textContent = dayFormatted;
-                        document.getElementById('schedule-author').textContent = scheduleData.author || 'SK Lepaga';
-                        document.getElementById('schedule-posted-date').textContent = postedDate;
+
+                        // Populating the identical Metadata fields
+                        document.getElementById('schedule-author-display').textContent = `Scheduled Event`;
+                        document.getElementById('schedule-date-display').textContent = `Date: ${fullDateFormatted} | Posted on: ${postedDate}`;
+
 
                         document.getElementById('schedule-image').src = scheduleData.image;
                         document.querySelector('#schedule-image-container source').srcset = scheduleData.image;
-                        
-                        // IMPLEMENTED FIX: Use textContent and rely on CSS white-space: pre-wrap
+
+                        // Using textContent and relying on CSS white-space: pre-wrap
                         document.getElementById('schedule-context').textContent = scheduleData.context || 'Schedule details are missing.';
 
                         // Start countdown
@@ -456,5 +310,4 @@
         </script>
     </main>
 </body>
-
 </html>
