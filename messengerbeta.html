@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -41,6 +42,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative; /* Added for menu positioning */
         }
 
         .chat-header .font-semibold {
@@ -54,6 +56,69 @@
         .chat-header .text-sm {
             font-size: 0.875rem;
         }
+        
+        /* New Styles for Dropdown Menu */
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            color: #000;
+        }
+
+        .menu-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 1rem;
+            z-index: 10;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-width: 150px;
+            margin-top: 4px;
+            display: none;
+            list-style: none; /* Remove list style */
+            padding: 0; /* Remove default padding */
+            margin-block-start: 0;
+            margin-block-end: 0;
+        }
+
+        .dropdown-menu.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: pointer;
+            text-align: left;
+            border: none;
+            width: 100%;
+            background: none;
+            display: block;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-item.text-red-600 {
+            color: #dc2626;
+        }
+        /* End New Styles for Dropdown Menu */
+
 
         .messages {
             flex: 1;
@@ -310,34 +375,34 @@
         }
     </style>
 </head>
+
 <body>
     <div class="chat-app" id="chatApp">
         <div class="chat-header">
             <span class="font-semibold">Support Chat</span>
-            <div class="relative">
-                <button id="menuButton"
-                    class="p-1 rounded-full text-gray-700 hover:bg-gray-100 focus:outline-none"
-                    style="display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem;">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" aria-hidden="true">
+            <div>
+                <button id="menuButton" class="menu-button" aria-label="Menu">
+                    <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
+                        </path>
                     </svg>
                 </button>
-                
-                <div id="dropdownMenu"
-                    class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 hidden"
-                    role="menu" aria-orientation="vertical" aria-labelledby="menuButton">
-                    <div class="py-1" role="none">
-                        <a href="#" onclick="deleteConversationAndLogout(); return false;"
-                            class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Delete
-                            Conversation</a>
-                        <a href="#" onclick="logout(); return false;"
-                            class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Sign Out</a>
-                    </div>
-                </div>
+                <ul id="dropdownMenu" class="dropdown-menu">
+                    <li>
+                        <button class="dropdown-item text-red-600" id="deleteConversationButton">
+                            Delete Conversation
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="logout()" class="dropdown-item">
+                            Sign Out
+                        </button>
+                    </li>
+                </ul>
             </div>
-        </div>
+            </div>
         <div class="messages" id="messagesContainer">
             <div class="message-placeholder">
                 <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none"
@@ -358,16 +423,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
-        (function() {
+        (function () {
             emailjs.init("O3lW73xpbv35YItw4"); // Replace with your EmailJS public key
         })();
     </script>
     <script type="module">
-        // FIX: Reverting to a known stable Firebase version (10.0.0) and removing the unused FieldValue import.
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-        import { getFirestore, collection, doc, onSnapshot, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-        
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            onSnapshot,
+            getDoc,
+            setDoc,
+            updateDoc,
+            arrayUnion,
+            serverTimestamp,
+            FieldValue,
+            deleteDoc // Added deleteDoc
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import {
+            getAuth,
+            signOut,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
             authDomain: "sklepaga-8790e.firebaseapp.com",
@@ -391,32 +473,57 @@
         const typingIndicatorContainer = document.getElementById("typingIndicatorContainer");
         const messagesPlaceholder = document.querySelector('.message-placeholder');
 
-        // Menu elements
-        const menuButton = document.getElementById('menuButton');
-        const dropdownMenu = document.getElementById('dropdownMenu');
+        // New Menu Elements
+        const menuButton = document.getElementById("menuButton");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const deleteConversationButton = document.getElementById("deleteConversationButton");
 
-        // Function to toggle the dropdown menu
-        function toggleMenu() {
-            dropdownMenu.classList.toggle('hidden');
-        }
 
-        // Function to close the dropdown menu
-        function closeMenu() {
-            dropdownMenu.classList.add('hidden');
-        }
-
-        // Event listener to toggle the menu when the three dots are clicked
+        // Menu Toggle Logic
         menuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMenu();
+            e.stopPropagation(); // Prevent the body click listener from immediately closing it
+            dropdownMenu.classList.toggle('open');
         });
 
-        // Event listener to close the menu when clicking outside
+        // Close menu if clicked outside
         document.addEventListener('click', (e) => {
-            if (!dropdownMenu.contains(e.target) && !menuButton.contains(e.target)) {
-                closeMenu();
+            if (dropdownMenu.classList.contains('open') && !dropdownMenu.contains(e.target) && e.target !== menuButton) {
+                dropdownMenu.classList.remove('open');
             }
         });
+
+        // Delete Conversation Logic
+        deleteConversationButton.addEventListener('click', async () => {
+            if (currentConversationRef && currentUser) {
+                if (confirm("Are you sure you want to delete this conversation? This action cannot be undone.")) {
+                    try {
+                        // Delete the conversation document
+                        await deleteDoc(currentConversationRef);
+                        
+                        // Clear the chat interface
+                        messagesContainer.innerHTML = '';
+                        messagesContainer.appendChild(messagesPlaceholder);
+                        messagesContainer.appendChild(typingIndicatorContainer);
+                        messagesPlaceholder.style.display = 'flex';
+                        
+                        // Close menu and show a message
+                        dropdownMenu.classList.remove('open');
+                        alert("Conversation deleted successfully. You can start a new one by sending a message.");
+                        
+                        // Prevent further operations on the deleted ref
+                        currentConversationRef = null;
+                        
+                        // Refresh the page to ensure all listeners/state are reset if needed, 
+                        // but for a smooth UX, just resetting the UI is better.
+                        // We will rely on setupUserChat logic to recreate ref if they send a new message.
+                    } catch (error) {
+                        console.error("Error deleting conversation:", error);
+                        alert("Failed to delete conversation: " + error.message);
+                    }
+                }
+            }
+        });
+
 
         // New function to send email only if a new one hasn't been sent in the last hour
         const sendEmailIfNeeded = async (conversationId, message, user) => {
@@ -450,6 +557,7 @@
                 await updateDoc(convRef, {
                     lastEmailSentAt: serverTimestamp(),
                 });
+
                 console.log("✅ Email sent");
             } else {
                 console.log("⏳ Skipped, email already sent within last hour");
@@ -458,7 +566,8 @@
 
         function escapeHtml(text) {
             if (typeof text !== 'string') return "";
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
         }
 
         function formatTimestamp(date) {
@@ -497,7 +606,8 @@
             } else if (isYesterday) {
                 return 'Yesterday, ' + dPH.toLocaleTimeString('en-US', optionsTime);
             } else {
-                return dPH.toLocaleDateString('en-US', optionsDate) + ', ' + dPH.toLocaleTimeString('en-US', optionsTime);
+                return dPH.toLocaleDateString('en-US', optionsDate) + ', ' + dPH.toLocaleTimeString('en-US',
+                    optionsTime);
             }
         }
 
@@ -507,12 +617,15 @@
             });
         }
 
-        const sentIcon = `<svg class="w-4 h-4 text-gray-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
-        const readIcon = `<svg class="w-4 h-4 text-blue-500 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.707 7.293-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L10 12.586l4.293-4.293a1 1 0 011.414 1.414z"/></svg>`;
+        const sentIcon =
+            `<svg class="w-4 h-4 text-gray-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
+        const readIcon =
+            `<svg class="w-4 h-4 text-blue-500 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.707 7.293-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L10 12.586l4.293-4.293a1 1 0 011.414 1.414z"/></svg>`;
 
         function renderMessages(allMessages) {
             // Clear all messages before re-rendering
-            messagesContainer.querySelectorAll('.message-row:not(#typingIndicatorContainer .message-row)').forEach(el => el.remove());
+            messagesContainer.querySelectorAll('.message-row:not(#typingIndicatorContainer .message-row)').forEach(el =>
+                el.remove());
 
             const fragment = document.createDocumentFragment();
             for (let i = 0; i < allMessages.length; i++) {
@@ -535,7 +648,8 @@
                 if (i > 0) {
                     lastMessageTime = allMessages[i - 1].time;
                 }
-                const showTime = !lastMessageTime || (msg.time.toDate().getTime() - lastMessageTime.toDate().getTime() > 300000);
+                const showTime = !lastMessageTime || (msg.time.toDate().getTime() - lastMessageTime.toDate().getTime() >
+                    300000);
 
                 if (showTime || (isSender && isLastMessage)) {
                     const timeEl = document.createElement("div");
@@ -551,11 +665,9 @@
                     }
                     content.appendChild(timeEl);
                 }
-
                 row.appendChild(content);
                 fragment.appendChild(row);
             }
-
             messagesContainer.insertBefore(fragment, typingIndicatorContainer);
         }
 
@@ -577,9 +689,15 @@
         messageForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const text = messageInput.value.trim();
-            if (!text || !currentConversationRef) return;
+            if (!text || !currentUser) return; // Ensure currentUser exists even if currentConversationRef is null
 
             try {
+                const conversationId = `conv_${currentUser.uid}`;
+                // Re-establish currentConversationRef if it was cleared (e.g., after deletion)
+                if (!currentConversationRef) {
+                    currentConversationRef = doc(db, "conversations", conversationId);
+                }
+
                 const docSnap = await getDoc(currentConversationRef);
                 const newMessage = {
                     author: currentUser.displayName,
@@ -588,7 +706,6 @@
                     status: 'sent'
                 };
 
-                const conversationId = `conv_${currentUser.uid}`;
 
                 if (docSnap.exists()) {
                     await updateDoc(currentConversationRef, {
@@ -629,36 +746,49 @@
             currentConversationRef = doc(db, "conversations", conversationId);
 
             onSnapshot(currentConversationRef, async (docSnap) => {
+                if (!docSnap.exists()) {
+                    // Conversation was deleted
+                    if (messagesPlaceholder) {
+                        messagesPlaceholder.style.display = 'flex';
+                    }
+                    messagesContainer.querySelectorAll('.message-row:not(#typingIndicatorContainer .message-row)').forEach(el => el.remove());
+                    typingIndicatorContainer.innerHTML = "";
+                    return;
+                }
+                
                 if (messagesPlaceholder) {
-                    if (docSnap.exists() && (docSnap.data().messages?.length > 0)) {
+                    if (docSnap.data().messages?.length > 0) {
                         messagesPlaceholder.style.display = 'none';
                     } else {
                         messagesPlaceholder.style.display = 'flex';
                     }
                 }
 
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    renderMessages(data.messages || []);
+                const data = docSnap.data();
+                renderMessages(data.messages || []);
 
-                    // Proper typing indicator rendering
-                    if (data.adminTyping) {
-                        typingIndicatorContainer.innerHTML = `<div class="message-row receiver"><div class="message-content"><div class="chat-bubble receiver typing-indicator"><span></span><span></span><span></span></div></div></div>`;
-                    } else {
-                        typingIndicatorContainer.innerHTML = "";
-                    }
+                // Proper typing indicator rendering
+                if (data.adminTyping) {
+                    typingIndicatorContainer.innerHTML =
+                        `<div class="message-row receiver"><div class="message-content"><div class="chat-bubble receiver typing-indicator"><span></span><span></span><span></span></div></div></div>`;
+                } else {
+                    typingIndicatorContainer.innerHTML = "";
+                }
 
-                    // Mark unread admin messages as read
-                    const unreadAdminMessages = (data.messages || []).filter(msg => msg.author !== user.displayName && msg.status !== 'read');
-                    if (unreadAdminMessages.length > 0) {
-                        const updatedMessages = (data.messages || []).map(msg => {
-                            if (msg.author !== user.displayName && msg.status !== 'read') {
-                                return { ...msg,
-                                    status: 'read'
-                                };
-                            }
-                            return msg;
-                        });
+                // Mark unread admin messages as read
+                const unreadAdminMessages = (data.messages || []).filter(msg => msg.author !== user.displayName && msg.status !== 'read');
+                if (unreadAdminMessages.length > 0) {
+                    const updatedMessages = (data.messages || []).map(msg => {
+                        if (msg.author !== user.displayName && msg.status !== 'read') {
+                            return {
+                                ...msg,
+                                status: 'read'
+                            };
+                        }
+                        return msg;
+                    });
+                    // Only update if currentConversationRef is still valid (not deleted)
+                    if(currentConversationRef) {
                         updateDoc(currentConversationRef, {
                             messages: updatedMessages
                         });
@@ -668,39 +798,7 @@
             });
         }
 
-        /**
-         * Deletes the current user's conversation document from Firestore,
-         * or clears the messages if true deletion fails, and then signs out.
-         */
-        window.deleteConversationAndLogout = async () => {
-            if (!currentUser || !currentConversationRef) {
-                console.error("No user or conversation reference to delete.");
-                closeMenu();
-                window.location.href = "index.html";
-                return;
-            }
-
-            if (confirm("Are you sure you want to delete this conversation? This will permanently remove all messages.")) {
-                try {
-                    // Delete the conversation document using the imported deleteDoc
-                    await deleteDoc(currentConversationRef);
-
-                    console.log("Conversation document deleted.");
-                    closeMenu();
-                    await signOut(auth);
-                    window.location.href = "index.html";
-                } catch (error) {
-                    alert("Failed to delete conversation: " + error.message);
-                    console.error("Delete conversation error:", error);
-                    // Sign out anyway to ensure user leaves the chat
-                    await signOut(auth);
-                    window.location.href = "index.html";
-                }
-            }
-        };
-
         window.logout = async () => {
-            closeMenu(); // Close the menu before signing out
             try {
                 await signOut(auth);
                 window.location.href = "index.html";
@@ -730,4 +828,5 @@
         });
     </script>
 </body>
+
 </html>
