@@ -363,7 +363,7 @@
         })();
     </script>
     <script type="module">
-        // FIX: Changed Firebase version from 11.0.1 to a stable 10.0.0 and removed unused FieldValue import.
+        // FIX: Reverting to a known stable Firebase version (10.0.0) and removing the unused FieldValue import.
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, doc, onSnapshot, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
