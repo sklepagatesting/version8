@@ -133,7 +133,7 @@
 
 @media (min-width: 768px) {
   .context {
-    font-size: 17px;
+    font-size: 20px;
     line-height: 1.19;
       font-weight: 350;
   }
@@ -146,4 +146,5 @@
       font-weight: 400;
   }
 }
+
 
