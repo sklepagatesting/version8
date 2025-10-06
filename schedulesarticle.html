@@ -38,16 +38,17 @@
         #schedule-context {
             white-space: pre-wrap; /* Allows breaking for long lines */
         }
-        /* Style for the plain centered countdown text */
+        /* ADJUSTED: Style for the plain centered countdown text */
         #countdown-timer {
             padding: 0;
-            margin: 1rem 0;
+            margin: 1rem auto; /* Use auto margins for centering */
             color: var(--color-text-primary, #1f2937);
             font-size: 1.125rem; /* text-lg */
             text-align: center;
-            width: 100%;
+            /* width: 100%; Removed this as it can interfere with centering small content */
+            max-width: fit-content; /* Helps center the timer content */
         }
-        .dark #countdown-timer {
+        .dark #countdown-timer { 
              color: var(--color-text-primary-dark, #ffffff);
         }
         </style>
@@ -95,7 +96,7 @@
                             <h1 id="schedule-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>
                         </div>
                         
-                        <div id="countdown-timer" class="max-w-5xl mx-auto text-lg"></div>
+                        <div id="countdown-timer" class="font-theme max-w-5xl mx-auto text-lg"></div>
 
                         <div class="max-w-screen-xl mx-auto">
                             <a href="#">
@@ -155,7 +156,7 @@
                 return null;
             };
 
-            // NEW: Countdown Logic (Plain text output)
+            // Countdown Logic (Plain text output with font-theme)
             function updateCountdown(targetDate) {
                 const countdownTimer = document.getElementById('countdown-timer');
                 const now = new Date().getTime();
@@ -171,6 +172,7 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+                // ADDED font-theme to the parent span for consistent styling
                 countdownTimer.innerHTML = `<span class="font-theme font-medium text-gray-700 dark:text-gray-300">Event starts in: </span><strong>${days}</strong> days, <strong>${hours}</strong> hours, <strong>${minutes}</strong> minutes, and <strong>${seconds}</strong> seconds.`;
             }
 
@@ -182,7 +184,7 @@
                     gsap.registerPlugin(ScrollTrigger);
                 }
 
-                // 1. Initial Image Zoom-In Animation (Uses the original article's GSAP)
+                // Initial Image Zoom-In Animation
                 const target = document.querySelector("#schedule-image-container.zoom");
                 if (target) {
                     gsap.fromTo(
@@ -197,7 +199,7 @@
                     );
                 }
 
-                // 2. Initial Page Reveal (Re-using your existing logic)
+                // Initial Page Reveal (Re-using your existing logic)
                 document.body.classList.remove('preload');
             }
 
@@ -228,9 +230,9 @@
                         for (const item of rawContentValues) {
                             const fields = item.mapValue?.fields;
                             const itemSlug = extractValue(fields?.slug);
-                            const itemCategory = extractValue(fields?.category); // Assuming you want to filter by category
+                            const itemCategory = extractValue(fields?.category); 
 
-                            // Find the schedule matching the URL slug AND category (optional: check category == 'schedules')
+                            // Find the schedule matching the URL slug AND category
                             if (itemSlug === slug && itemCategory === 'schedules') {
                                 scheduleData = {
                                     title: extractValue(fields?.title),
@@ -238,8 +240,8 @@
                                     image: extractValue(fields?.image),
                                     context: extractValue(fields?.context),
                                     author: extractValue(fields?.author),
-                                    datePublished: extractValue(fields?.datePublished), // This is the event date
-                                    timestamp: extractValue(fields?.timestamp), // This is the post creation date
+                                    datePublished: extractValue(fields?.datePublished), // Event date
+                                    timestamp: extractValue(fields?.timestamp), // Post date (now ignored in display)
                                 };
                                 break;
                             }
@@ -252,21 +254,16 @@
                         const scheduleDate = new Date(scheduleData.datePublished + 'T00:00:00');
                         const fullEventDateFormatted = scheduleDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
                         
-                        // Use timestamp for the post date
-                        const postDateFormatted = scheduleData.timestamp
-                            ? new Date(scheduleData.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-                            : 'Date N/A';
-
                         document.getElementById('page-title').textContent = scheduleData.title || 'SK Lepaga Schedule';
                         document.getElementById('schedule-category').textContent = scheduleData.category?.toUpperCase() || 'SCHEDULES';
                         document.getElementById('schedule-title').textContent = scheduleData.title || 'Untitled Schedule';
 
                         document.getElementById('schedule-image').src = scheduleData.image;
-                        document.querySelector('#schedule-image-container source').srcset = scheduleData.image; // For mobile source
+                        document.querySelector('#schedule-image-container source').srcset = scheduleData.image;
 
-                        // Populate Metadata for Schedule
-                        document.getElementById('schedule-author-display').textContent = `Organizer: ${scheduleData.author || 'SK Lepaga'}`;
-                        document.getElementById('schedule-date-display').textContent = `Event Date: ${fullEventDateFormatted} | Posted: ${postDateFormatted}`;
+                        // ADJUSTED: Populate Metadata for Schedule
+                        document.getElementById('schedule-author-display').textContent = ``; // Removed organizer
+                        document.getElementById('schedule-date-display').textContent = `Date: ${fullEventDateFormatted}`; // Only event date
 
                         // Start the countdown
                         updateCountdown(scheduleDate.getTime());
