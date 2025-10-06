@@ -47,7 +47,7 @@
             text-align: center;
             width: 100%;
         }
-        .dark #countdown-timer {
+        .dark #countdown-timer { 
              color: var(--color-text-primary-dark, #ffffff); /* Adjust as needed for your theme files */
         }
     </style>
@@ -188,6 +188,7 @@
                 // Initial Image Zoom-In Animation
                 const target = document.querySelector("#schedule-image-container.zoom");
                 if (target) {
+                    // Uses the same scale/opacity animation as the original article page
                     gsap.fromTo(
                         target, {
                             scale: 0.95,
@@ -277,9 +278,7 @@
                         document.getElementById('schedule-author-display').textContent = `Scheduled Event`;
                         document.getElementById('schedule-date-display').textContent = `Date: ${fullDateFormatted}`;
 
-
                         document.getElementById('schedule-image').src = scheduleData.image;
-                        // STRCITLY IDENTICAL: Removed the 'rounded-2xl' class from the JS section for source element as well
                         document.querySelector('#schedule-image-container source').srcset = scheduleData.image;
 
                         // Using textContent and relying on CSS white-space: pre-wrap
