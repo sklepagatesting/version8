@@ -11,41 +11,20 @@
         rel="stylesheet">
     <link rel="stylesheet" href="font\font.css">
     <style>
-        /* Modal overlay */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(4px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            cursor: pointer;
-        }
+        /* Base (Light) Theme Styles */
 
-        .modal-overlay.open {
-            display: flex;
-            opacity: 1;
-        }
-
-        /* Light Mode Styles */
+        /* Card Styles */
         .flat-card {
             background-color: #ffffff;
             border-radius: 16px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
         }
-
         .flat-card:hover {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 6px 12px rgba(0, 0, 0, 0.04);
         }
 
+        /* Date Block Styles */
         .date-block {
             background-color: #f9fafb;
             border-radius: 12px;
@@ -60,51 +39,40 @@
             border: 1px solid #e5e7eb;
         }
 
+        /* Modal Styles */
         .modal-content {
-            background-color: #ffffff;
+            /* Inherits background-color from .flat-card */
             padding: 2rem;
             border-radius: 16px;
-            max-width: 90%;
-            width: 560px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            transform: scale(0.95);
-            transition: transform 0.3s ease-in-out;
-            cursor: default;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .modal-overlay.open .modal-content {
-            transform: scale(1);
-        }
-
+        /* Schedule List Item Styles (Light Mode) */
         .schedule-list-item {
             border-left: 3px solid transparent;
             transition: all 0.2s ease;
         }
-
         .schedule-list-item:hover {
             border-left-color: #5c5cff;
+            /* Subtle gray hover background */
             background-color: #f3f4f6;
+            /* **Removed font color change on hover** */
         }
 
-        .schedule-list-container {
-            background-color: #ffffff;
-            border: 1px solid #f3f4f6;
-        }
-
+        /* Title hover color for blue link effect (Applies to both themes) - KEPT */
         .schedule-list-item:hover .schedule-title-link {
             color: #5c5cff !important;
         }
 
-        /* Dark Mode Styles */
+        /* --- DARK MODE STYLES (Using .dark prefix for theme toggles) --- */
+
         .dark .flat-card {
+            /* Applied requested #454545 for card BG (including modal) */
             background-color: #454545;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
         }
-
         .dark .flat-card:hover {
+            background-color: #454545; /* Maintaining consistency */
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
@@ -112,38 +80,38 @@
             background-color: #1f2937;
             border: 1px solid #374151;
         }
-
-        .dark .modal-content {
-            background-color: #454545;
-        }
-
+        
+        /* Dark Mode List Item Hover */
         .dark .schedule-list-item:hover {
             border-left-color: #5c5cff;
-            background-color: #1f2937;
-        }
-
-        .dark .schedule-list-container {
-            background-color: #454545;
-            border: 1px solid #374151;
+            /* Subtle dark background hover against the body's #242424 */
+            background-color: #374151; 
+            /* **Removed font color change on hover** */
         }
 
         /* Smooth scrollbar */
         .modal-content::-webkit-scrollbar {
             width: 8px;
         }
-
         .modal-content::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
         }
-
         .modal-content::-webkit-scrollbar-thumb {
             background: #5c5cff;
             border-radius: 10px;
         }
-
         .dark .modal-content::-webkit-scrollbar-track {
             background: #1f2937;
+        }
+
+        /* --- Media Query for Precedence --- */
+        @media (prefers-color-scheme: dark) {
+            /* Ensures system preference is honored for new colors */
+            body:not(.light) .flat-card { background-color: #454545; }
+            body:not(.light) .modal-content { background-color: #454545; }
+            body:not(.light) .date-block { background-color: #1f2937; border: 1px solid #374151; }
+            body:not(.light) .schedule-list-item:hover { background-color: #374151; }
         }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -155,14 +123,14 @@
 
             <nav class="fixed top-0 left-0 w-full h-14 bg-white dark:bg-[#242424] z-50 shadow-sm border-b border-gray-100 dark:border-gray-800">
                 <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-full">
-                    <h1 class="text-xl font-bold font-theme">SK Lepaga</h1>
+                    <h1 class="text-xl font-bold font-theme text-gray-900 dark:text-white">SK Lepaga</h1>
                 </div>
             </nav>
 
             <section id="schedules-container" class="w-full py-12 md:py-20">
                 <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12 md:mb-16">
-                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold font-theme mb-3 uppercase tracking-tight">
+                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold font-theme text-gray-900 dark:text-white mb-3 uppercase tracking-tight">
                             Schedules
                         </h2>
                         <p class="text-gray-600 dark:text-gray-400 font-theme text-lg">Stay updated with upcoming events</p>
@@ -183,7 +151,7 @@
     <div id="schedule-modal" class="modal-overlay" onclick="closeModal()">
         <div class="modal-content flat-card" onclick="event.stopPropagation()">
             <div class="flex justify-between items-start mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 id="modal-title" class="text-2xl font-bold font-theme pr-4"></h3>
+                <h3 id="modal-title" class="text-2xl font-bold font-theme text-gray-900 dark:text-white pr-4"></h3>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
@@ -195,7 +163,7 @@
                      See Full Details
                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                  </a>
-             </div>
+               </div>
         </div>
     </div>
     <script type="module">
@@ -278,24 +246,24 @@
             if (isFeatured) {
                 return `
                     <div class="schedule-card flat-card flex flex-col sm:flex-row p-6 sm:p-8 mb-12 w-full transform hover:scale-[1.01] transition-all duration-300 hover:cursor-pointer"
-                         data-slug="${cardSlug}">
+                            data-slug="${cardSlug}">
                         
                         <div class="date-block mr-0 mb-6 sm:mb-0 sm:mr-8">
                             <p class="font-theme font-bold text-sm leading-none tracking-wider text-gray-600 dark:text-gray-300">${monthShort}</p>
-                            <h3 class="font-theme font-extrabold text-6xl leading-none my-2">${day}</h3>
+                            <h3 class="font-theme font-extrabold text-6xl leading-none my-2 text-gray-900 dark:text-white">${day}</h3>
                             <p class="font-theme font-semibold text-base leading-none text-gray-600 dark:text-gray-300">${year}</p>
                         </div>
 
                         <div class="flex-grow flex flex-col justify-center">
-                            <h3 class="font-theme font-extrabold text-2xl sm:text-3xl lg:text-4xl mb-3 leading-tight">
+                            <h3 class="font-theme font-extrabold text-2xl sm:text-3xl lg:text-4xl text-gray-900 dark:text-white mb-3 leading-tight">
                                 ${schedule.title}
                             </h3>
                             <p class="font-theme text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                                 ${schedule.context.substring(0, 120)}...
                             </p>
                             <a href="schedulesarticle.html?slug=${cardSlug}" 
-                               onclick="event.stopPropagation()" 
-                               class="font-theme text-sm font-semibold text-[#5c5cff] hover:text-[#4a4aee] transition-colors duration-200 inline-flex items-center gap-1">
+                                onclick="event.stopPropagation()" 
+                                class="font-theme text-sm font-semibold text-[#5c5cff] hover:text-[#4a4aee] transition-colors duration-200 inline-flex items-center gap-1">
                                 Know more
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </a>
@@ -305,21 +273,21 @@
             } else {
                 return `
                     <div class="schedule-card schedule-list-item flex items-center py-4 px-4 rounded-lg hover:cursor-pointer transition-all duration-200"
-                         data-slug="${cardSlug}">
+                            data-slug="${cardSlug}">
                         
                         <p class="font-theme text-sm font-semibold text-gray-600 dark:text-gray-400 w-40 flex-shrink-0">
                             ${fullDate}
                         </p>
                         
-                        <h4 class="font-theme schedule-title-link font-bold text-base flex-grow transition-colors duration-200">
+                        <h4 class="font-theme schedule-title-link font-bold text-base text-gray-900 dark:text-white flex-grow transition-colors duration-200">
                             ${schedule.title}
                         </h4>
                         
                         <svg class="w-5 h-5 text-gray-400 flex-shrink-0 ml-2 font-theme" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         
                         <a href="schedulesarticle.html?slug=${cardSlug}" 
-                           onclick="event.stopPropagation()" 
-                           class="sr-only"></a>
+                            onclick="event.stopPropagation()" 
+                            class="sr-only"></a>
                     </div>
                 `;
             }
@@ -361,13 +329,16 @@
                 let schedulesHtml = '';
                 let listItemsHtml = '';
 
+                // Featured Card
                 schedulesHtml += createScheduleCard(allSchedules[0], true);
 
+                // List Items
                 allSchedules.slice(1).forEach(schedule => {
                     listItemsHtml += createScheduleCard(schedule, false);
                 });
                 
-                schedulesHtml += `<div class="schedule-list-container space-y-1 mt-8 rounded-xl p-2 font-theme">${listItemsHtml}</div>`;
+                // **Removed schedule-list-container class and its background**
+                schedulesHtml += `<div class="space-y-1 mt-8 p-2 font-theme rounded-xl">${listItemsHtml}</div>`;
 
                 schedulesList.innerHTML = schedulesHtml;
 
