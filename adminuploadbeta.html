@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,19 +110,34 @@
                     <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author / Publisher</label>
                     <input type="text" id="author" required class="w-full form-input-flat text-gray-800">
                 </div>
-
+                
                 <div class="border p-4 rounded-lg bg-gray-50 space-y-3">
                     <p class="text-sm font-semibold text-gray-800 border-b pb-2">Image Management 🖼️ (Powered by ImgBB)</p>
 
-                    <div>
-                        <label for="image-upload" class="block text-sm font-medium text-gray-700 mb-1" id="image-label">
-                            1. Image File (Upload) <span id="current-image-status" class="text-xs text-gray-500 italic ml-2"></span>
+                    <fieldset class="mb-4 pt-2">
+                        <legend class="text-sm font-medium text-gray-700 mb-2">Select Image Source</legend>
+                        <div class="flex flex-row space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="image-source" value="upload" required class="form-radio" id="radio-upload" checked>
+                                <span class="ml-1 text-gray-700">Image File Upload</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="image-source" value="url" required class="form-radio" id="radio-url">
+                                <span class="ml-1 text-gray-700">Image URL (Paste Link)</span>
+                            </label>
+                        </div>
+                        <p id="current-image-status" class="text-xs text-gray-500 italic mt-1 ml-6">(No image linked)</p>
+                    </fieldset>
+
+                    <div id="image-upload-section">
+                        <label for="image-upload" class="block text-sm font-medium text-gray-700 mb-1">
+                            Image File
                         </label>
                         <input type="file" id="image-upload" accept="image/*" class="w-full form-input-flat p-2">
-                        <p class="text-xs text-gray-400 mt-1">Select a new file to upload. Max 32MB (ImgBB limit). This takes precedence over a URL.</p>
+                        <p class="text-xs text-gray-400 mt-1">Select a new file to upload. Max 32MB (ImgBB limit).</p>
                     </div>
 
-                    <div>
+                    <div id="upload-progress-container">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Upload Progress</label>
                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                             <div id="upload-progress-bar" class="bg-[#5c5cff] h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -131,14 +145,15 @@
                         <p id="upload-progress-text" class="text-xs text-gray-500 mt-1">Ready to upload...</p>
                     </div>
 
-                    <div>
+                    <div id="image-url-section" class="hidden">
                         <label for="image-url-input" class="block text-sm font-medium text-gray-700 mb-1">
-                            2. OR - Image URL (Paste a link here)
+                            Image URL
                         </label>
                         <input type="url" id="image-url-input" class="w-full form-input-flat" placeholder="https://example.com/your-hosted-image.jpg">
-                        <p class="text-xs text-gray-400 mt-1">Use this if the image is hosted externally. Leave both 1 & 2 empty to keep existing image.</p>
+                        <p class="text-xs text-gray-400 mt-1">Use this if the image is hosted externally.</p>
                     </div>
                 </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                     <button type="submit" id="submit-btn" data-mode="create" class="action-button bg-[#5c5cff] text-white hover:bg-[#4a4aee] disabled:opacity-50 sm:col-span-1">
                         Publish Content
@@ -217,12 +232,20 @@
         const imageUrlInput = document.getElementById('image-url-input');
         const progressBar = document.getElementById('upload-progress-bar');
         const progressText = document.getElementById('upload-progress-text');
+        
+        // NEW ELEMENTS
+        const radioUpload = document.getElementById('radio-upload');
+        const radioUrl = document.getElementById('radio-url');
+        const imageUploadSection = document.getElementById('image-upload-section');
+        const imageUrlSection = document.getElementById('image-url-section');
+        const uploadProgressContainer = document.getElementById('upload-progress-container');
+
 
         let currentAdminUser = null;        
         let editingDocId = null; 
         let allContent = []; 
         let currentImageUrl = ''; 
-        
+
         // --- Helper Functions ---
         const createBaseSlug = (title) => {
             return title.toLowerCase()
@@ -334,20 +357,45 @@
         const setFormData = (data) => {
             titleInput.value = data.title;
             contextInput.value = data.context;
-            datePublishedInput.value = data.datePublished || new Date().toISOString().substring(0, 10);                                
+            datePublishedInput.value = data.datePublished || new Date().toISOString().substring(0, 10);
             
             const categoryRadio = document.querySelector(`input[name="category"][value="${data.category}"]`);
             if (categoryRadio) {
                 categoryRadio.checked = true;
-            }                                
+            }
+            
             authorInput.value = data.author;
             
             currentImageUrl = data.image || ''; 
-            currentImageStatus.textContent = currentImageUrl ? '(Existing image linked)' : '(No image linked)';
+            currentImageStatus.textContent = currentImageUrl ? `(Existing image: ${currentImageUrl.substring(0, 30)}...)` : '(No image linked)';
 
+            // Set default to upload mode on edit load
+            radioUpload.checked = true;
+            radioUrl.checked = false;
+            
             imageUploadInput.value = '';
             imageUrlInput.value = '';
+            
+            // Ensure correct section is visible on edit load
+            toggleImageInputVisibility('upload');
         };
+        
+        // NEW: Function to toggle visibility of image inputs
+        function toggleImageInputVisibility(mode) {
+            if (mode === 'upload') {
+                imageUploadSection.classList.remove('hidden');
+                uploadProgressContainer.classList.remove('hidden');
+                imageUrlSection.classList.add('hidden');
+                // Clear the hidden input's value
+                imageUrlInput.value = '';
+            } else if (mode === 'url') {
+                imageUploadSection.classList.add('hidden');
+                uploadProgressContainer.classList.add('hidden');
+                imageUrlSection.classList.remove('hidden');
+                // Clear the hidden input's value
+                imageUploadInput.value = '';
+            }
+        }
 
         async function saveContent(data) {
             if (editingDocId) {
@@ -400,7 +448,7 @@
                                 <p class="text-base font-semibold text-gray-800">${d.title} <span class="text-xs font-normal text-gray-500">(${d.category || 'N/A'})</span></p>
                                 <p class="text-sm text-gray-500">
                                     By: ${d.author || 'N/A'} - 
-                                    📅 ${d.datePublished ? new Date(d.datePublished).toLocaleDateString() : 'Date N/A'}
+                                     📅 ${d.datePublished ? new Date(d.datePublished).toLocaleDateString() : 'Date N/A'}
                                     <span class="text-xs text-gray-400 block sm:inline-block">/slug: ${d.slug || 'N/A'}</span>
                                 </p>
                             </div>
@@ -452,19 +500,32 @@
             cancelEditBtn.classList.add('hidden');
             editingDocId = null;
             currentImageUrl = ''; 
-            currentImageStatus.textContent = '';
+            currentImageStatus.textContent = '(No image linked)'; // Reset status text
             
             progressBar.style.width = '0%';
             progressText.textContent = "Ready to upload...";
             
             datePublishedInput.value = new Date().toISOString().substring(0, 10);
             
-            if (currentAdminUser) {                  
+            // Reset image source radio to upload and update visibility
+            radioUpload.checked = true;
+            radioUrl.checked = false;
+            toggleImageInputVisibility('upload');
+            
+            if (currentAdminUser) {
                 authorInput.value = currentAdminUser.email; 
             }
         }
 
         // --- Event Listeners ---
+        
+        // NEW: Radio button change listener
+        document.querySelectorAll('input[name="image-source"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                toggleImageInputVisibility(e.target.value);
+            });
+        });
+
         onAuthStateChanged(auth, async (user) => {
             if (!user) return window.location.href = "index.html";
 
@@ -478,7 +539,7 @@
                     
                     resetForm();
                     renderContentList(); 
-                 } else {
+                  } else {
                     authStatus.textContent = "Access Denied. Redirecting...";
                     authStatus.classList.remove('text-red-500');
                     authStatus.classList.add('text-blue-500');
@@ -497,12 +558,15 @@
                 alert("Please select a Category.");
                 return;
             }
-
+            
             const isEditMode = submitBtn.dataset.mode === 'edit';
-            const file = imageUploadInput.files[0];
-            const directUrl = imageUrlInput.value.trim();
+            const selectedSource = document.querySelector('input[name="image-source"]:checked').value;
+            
+            const file = selectedSource === 'upload' ? imageUploadInput.files[0] : null;
+            const directUrl = selectedSource === 'url' ? imageUrlInput.value.trim() : '';
+            
             let finalImageUrl = currentImageUrl;
-
+            
             if (!file && !directUrl && !currentImageUrl) {
                 alert("Content requires an image. Please select a file or paste a URL.");
                 return;
@@ -517,16 +581,39 @@
                 const formData = getFormData();
                 const uniqueSlug = await generateUniqueSlug(formData.title, editingDocId);
                 
-                if (file) {
+                // --- Image Logic Update ---
+                if (selectedSource === 'upload' && file) {
+                    // Upload new file
                     finalImageUrl = await uploadImageToImgBB(file);
-                } else if (directUrl) {
+                } else if (selectedSource === 'url' && directUrl) {
+                    // Use new direct URL
                     finalImageUrl = directUrl;
-                } 
-
+                } else if (isEditMode) {
+                    // In edit mode, if no new file/url is provided, check if the current image should be kept
+                    // If no new image source is provided in the currently selected mode, use the existing one.
+                    // If a different mode was selected, finalImageUrl would have been cleared in toggleImageInputVisibility,
+                    // but since we keep currentImageUrl, we should ensure we only keep it if the user
+                    // explicitly didn't choose a *new* source in the *selected* mode.
+                    
+                    // For simplicity, we just check if we have a finalImageUrl from the start
+                    // and if not, we throw an error, as checked above.
+                    // This means if an editor switches from URL to Upload, but doesn't upload a file,
+                    // they will get an error, forcing them to provide an image in the selected mode, 
+                    // which is good for data integrity.
+                    
+                } else {
+                     // In create mode, if we reach here without file or directUrl, something is wrong, 
+                     // but the initial check should catch it.
+                     if (!finalImageUrl) {
+                         throw new Error("Image source missing. Cannot save content without an image URL.");
+                     }
+                }
+                
                 if (!finalImageUrl) {
                      throw new Error("Image source missing. Cannot save content without an image URL.");
                 }
-
+                // --- End Image Logic Update ---
+                
                 const finalData = { 
                     ...formData, 
                     slug: uniqueSlug,
@@ -551,7 +638,7 @@
                 progressText.textContent = "Ready to upload...";
             }
         });
-        
+
         cancelEditBtn.addEventListener('click', resetForm); 
 
         contentListEl.addEventListener('click', (e) => {
@@ -564,7 +651,7 @@
         });
 
         categoryFilter.addEventListener('change', renderContentList);
-        
+
         datePublishedInput.value = new Date().toISOString().substring(0, 10);
     </script>
 </body>
