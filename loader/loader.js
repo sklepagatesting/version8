@@ -1,6 +1,15 @@
+// page-transition.js (Updated with cleanup for bfcache)
+
+// --- Inject transition elements and styles early ---
 (function injectTransitionElements() {
   const style = document.createElement("style");
   style.innerHTML = `
+    html, body {
+      /* Added to ensure background color is set for transition */
+      background: white; 
+      margin: 0;
+      padding: 0;
+    }
     #page-transition {
       position: fixed;
       bottom: 0;
@@ -43,6 +52,14 @@
   document.body.insertBefore(overlayDiv, document.body.firstChild);
 })();
 
+// --- Cleanup function for when the page loads/restores ---
+function cleanupTransitionElements() {
+    const transitionEl = document.getElementById("page-transition");
+    const overlayEl = document.getElementById("page-overlay");
+    if (transitionEl) transitionEl.style.display = 'none';
+    if (overlayEl) overlayEl.style.display = 'none';
+}
+
 function setupPageTransition() {
   const transitionEl = document.getElementById("page-transition");
   const overlayEl = document.getElementById("page-overlay");
@@ -80,6 +97,7 @@ function setupPageTransition() {
         overlayEl.style.background = "rgba(0,0,0,0.5)";
       });
 
+      // Navigate after the transition time
       setTimeout(() => {
         window.location.href = href;
       }, 1000);
@@ -87,4 +105,18 @@ function setupPageTransition() {
   });
 }
 
+// Attach the main setup
 document.addEventListener('DOMContentLoaded', setupPageTransition);
+
+// --- Solution: Cleanup on Load and Restore ---
+
+// 1. Cleanup immediately when the DOM loads (for a fresh navigation)
+document.addEventListener('DOMContentLoaded', cleanupTransitionElements);
+
+// 2. Cleanup when the page is restored from the browser's Back/Forward cache (bfcache)
+window.addEventListener('pageshow', (event) => {
+    // Check if the page was restored from bfcache
+    if (event.persisted) { 
+        cleanupTransitionElements();
+    }
+});
