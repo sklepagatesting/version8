@@ -463,6 +463,20 @@
         }
       }
 
+      // *** NEW FUNCTION: Title Truncation Logic *** function truncateTitle(title, maxLength = 35) {    
+        if (title.length > maxLength) {      
+          // Find the last space before the limit      
+          let truncated = title.substring(0, maxLength);      
+          const lastSpace = truncated.lastIndexOf(' ');            
+          // If a space is found, cut there and add '...'      
+          if (lastSpace !== -1) {        
+            truncated = truncated.substring(0, lastSpace);      
+          }      
+          return truncated.trim() + '...';    
+        }    
+        return title;  
+      }
+
       // 3. Main Fetch and Render Function
       async function fetchAndRenderProjects() {
         const scroller = document.getElementById('scroller');
@@ -509,6 +523,14 @@
                 ? `article.html?slug=${item.slug}`
                 : `article.html?id=${item.id}`;
 
+              const displayedTitle = truncateTitle(item.title, 35);
+              
+              /*
+                CORRECTED HOVER EFFECT LOGIC:
+                The inner div provides `overflow-hidden` to clip the title.
+                The <p> element uses `sm:translate-y-full` for the default (hidden) state 
+                and `sm:group-hover:translate-y-0` for the hover (visible) state.
+              */
               return `
                 <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                     <div class="zoom overflow-hidden relative carousel-image">
@@ -518,9 +540,9 @@
                             class="w-full h-full object-cover"
                         />
                     </div>
-                    <div class="pt-2 overflow-hidden carousel-image">
-                        <p class="context font-theme truncate sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
-                            ${item.title}
+                    <div class="w-full pt-2 overflow-hidden">
+                        <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                            ${displayedTitle}
                         </p>
                     </div>
                 </a>
