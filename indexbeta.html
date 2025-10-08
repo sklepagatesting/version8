@@ -472,8 +472,6 @@
     const mobileMaxLength = 25;
     
     // Determine the current max length based on screen width.
-    // Assuming a 'sm' (small) breakpoint of 640px, or similar mobile size.
-    // If you need a different breakpoint, change the number here.
     const isMobile = window.innerWidth < 640;
     const maxLength = isMobile ? mobileMaxLength : desktopMaxLength;
     
@@ -482,11 +480,18 @@
       let truncated = title.substring(0, maxLength);
       const lastSpace = truncated.lastIndexOf(' ');
             
-      // If a space is found, cut there and add '...'
+      // If a space is found, cut there
       if (lastSpace !== -1) {
         truncated = truncated.substring(0, lastSpace);
       }
-      return truncated.trim() + '...';
+
+      // *** CONDITIONAL ADDITION OF '...' ***
+      // Add '...' only if it's a mobile view, or if you want to
+      // keep it simple, you could only add '...' on mobile, as requested.
+      // If desktop, the text will just be cut at the word break.
+      const suffix = isMobile ? '...' : '';
+      
+      return truncated.trim() + suffix;
     }
     return title;
   }
@@ -495,8 +500,6 @@
   async function fetchAndRenderProjects() {
     const scroller = document.getElementById('scroller');
     if (!scroller) {
-        // Still resolve the promise even if the element is missing, 
-        // to avoid infinite loading.
         resolveContentLoaded();
         return;
     }
@@ -536,8 +539,7 @@
             ? `article.html?slug=${item.slug}`
             : `article.html?id=${item.id}`;
 
-          // *** APPLICATION OF TRUNCATION (NO LENGTH PASSED) ***
-          // The function now determines the length internally.
+          // Application of truncation
           const truncatedTitle = truncateTitle(item.title);
 
           return `
@@ -562,30 +564,26 @@
       // Insert the new HTML into the scroller
       scroller.innerHTML = projectHTML;
       
-      // Also, re-run the render on resize to handle device rotation or window resizing
-      // This is a good practice for dynamic, responsive content.
+      // Simple Debounce function to limit how often fetchAndRenderProjects runs on resize
+      function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+      }
+
+      const fetchAndRenderProjectsDebounced = debounce(fetchAndRenderProjects);
       window.addEventListener('resize', fetchAndRenderProjectsDebounced);
 
       } catch (error) {
       console.error('Failed to load and render content from Firestore:', error);
       scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check Console for details.</p>`;
     } finally {
-        // *** CRITICAL CHANGE: RESOLVE THE PROMISE HERE ***
-        // This tells the loader that the dynamic content is ready.
+        // CRITICAL CHANGE: RESOLVE THE PROMISE HERE
         resolveContentLoaded();
     }
   }
-  
-  // Simple Debounce function to limit how often fetchAndRenderProjects runs on resize
-  function debounce(func, timeout = 300) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => { func.apply(this, args); }, timeout);
-    };
-  }
-
-  const fetchAndRenderProjectsDebounced = debounce(fetchAndRenderProjects);
 
   // Run the function when the DOM content is fully loaded
   document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
