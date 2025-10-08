@@ -43,14 +43,14 @@
             white-space: pre-wrap; /* Allows breaking for long lines */
         } 
 
-        /* START: COMPREHENSIVE MOBILE PADDING FIX */
+      /* START: COMPREHENSIVE MOBILE PADDING FIX */
 @media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px */
     
     /* FIX 1: Fixes the alignment of text inside the card preview (your image) */
     .left-in-slow.context {
         margin-left: 0 !important;
         padding-left: 0 !important;
-        text-align: left !important;
+        text-align: justify !important;
     }
 
     /* FIX 2: Targets the main content area container. Set it to standard mobile padding (1rem). */
@@ -59,25 +59,35 @@
         padding-right: 1rem !important;
     }
 
-    /* FIX 3: Target the inner wrapper that still has px-4 on mobile. Reset this. */
-    .relative.px-4.space-y-6 {
-        padding-left: 0rem !important;
-        padding-right: 0rem !important;
-    }
+    /* FIX 3: Target the inner wrapper that still has px-4 on mobile. Remove all horizontal padding. */
+    .relative.px-4.space-y-6 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
     
-    /* FIX 4: Target the timeline-specific wrapper. Reset padding. */
+    /* FIX 4: Target the timeline-specific wrapper. Remove all horizontal padding. */
     .space-y-10.sm\:space-y-4.relative.px-4.sm\:before\:absolute {
-        padding-left: 0rem !important;
-        padding-right: 0rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     /* FIX 5: Target the innermost context container to ensure no additional offsets exist. */
     #article-context-wrapper {
         padding-left: 0 !important;
         padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* FIX 6: Ensure the paragraph itself has no extra padding */
+    #article-context {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 }
-        /* END: COMPREHENSIVE MOBILE PADDING FIX */
+        /* END: COMPREHENSIVE MOBILE PADDING FIX */
 </style>
 
 </head>
