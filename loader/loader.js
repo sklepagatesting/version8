@@ -22,11 +22,12 @@
             transform: translateX(-50%) translateY(0) scale(1);
             z-index: 10000;
             pointer-events: none;
+            /* Using a simple ease-in-out for consistency, but a custom curve looks better */
             transition:
-                bottom 1s cubic-bezier(0.86, 0, 0.07, 1), /* Use a strong curve for better effect */
-                width 1s cubic-bezier(0.86, 0, 0.07, 1),
-                height 1s cubic-bezier(0.86, 0, 0.07, 1),
-                transform 1s cubic-bezier(0.86, 0, 0.07, 1);
+                bottom 1s ease-in-out, 
+                width 1s ease-in-out,
+                height 1s ease-in-out,
+                transform 1s ease-in-out;
             display: none;
         }
         #page-overlay {
@@ -51,8 +52,11 @@
     overlayDiv.id = "page-overlay";
 
     // Insert at the beginning of the body
-    document.body.insertBefore(transitionDiv, document.body.firstChild);
-    document.body.insertBefore(overlayDiv, document.body.firstChild);
+    // Using requestAnimationFrame to ensure insertion happens after style application
+    requestAnimationFrame(() => {
+        document.body.insertBefore(transitionDiv, document.body.firstChild);
+        document.body.insertBefore(overlayDiv, document.body.firstChild);
+    });
 })();
 
 // --- 2. Cleanup function for when the page loads/restores ---
@@ -64,7 +68,7 @@ function cleanupTransitionElements() {
 }
 
 // --- 3. Main Transition Setup Function (Globally Accessible for dynamic content) ---
-// This function needs to be exposed on the window object so it can be called 
+// We expose this function on the window object so it can be called 
 // from your Firestore module script after content is rendered.
 window.setupPageTransition = function() {
     const transitionEl = document.getElementById("page-transition");
@@ -89,8 +93,6 @@ window.setupPageTransition = function() {
             const href = link.getAttribute('href');
 
             // --- Reset and Prepare for Animation ---
-            transitionEl.style.display = "none";
-            overlayEl.style.display = "none";
             
             // Temporarily disable transitions for instant reset
             transitionEl.style.transition = "none";
@@ -113,7 +115,7 @@ window.setupPageTransition = function() {
             requestAnimationFrame(() => {
                 // Re-enable transitions
                 transitionEl.style.transition =
-                    "bottom 1s cubic-bezier(0.86, 0, 0.07, 1), width 1s cubic-bezier(0.86, 0, 0.07, 1), height 1s cubic-bezier(0.86, 0, 0.07, 1), transform 1s cubic-bezier(0.86, 0, 0.07, 1)";
+                    "bottom 1s ease-in-out, width 1s ease-in-out, height 1s ease-in-out, transform 1s ease-in-out";
                 overlayEl.style.transition = "background 1s ease-in-out";
 
                 // Animate to full screen
@@ -132,7 +134,7 @@ window.setupPageTransition = function() {
             }, 1000);
         });
     });
-}
+};
 
 // --- 4. Attach Setup and Cleanup Hooks ---
 
