@@ -509,13 +509,6 @@
                 ? `article.html?slug=${item.slug}`
                 : `article.html?id=${item.id}`;
 
-              /*
-                IMPORTANT: The 'truncate' class is added to the <p> tag below.
-                Tailwind's 'truncate' utility combines:
-                - overflow: hidden;
-                - text-overflow: ellipsis;
-                - white-space: nowrap; (This prevents wrapping and fixes the layout)
-              */
               return `
                 <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                     <div class="zoom overflow-hidden relative carousel-image">
@@ -526,7 +519,7 @@
                         />
                     </div>
                     <div class="pt-2 overflow-hidden carousel-image">
-                        <p class="context font-theme truncate translate-y-0 sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                        <p class="context font-theme truncate sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
                             ${item.title}
                         </p>
                     </div>
