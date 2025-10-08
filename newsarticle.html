@@ -1,279 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-    <meta charset="UTF-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title id="page-title">Loading Article...</title>
+    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title id="page-title">Loading Article...</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">    
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/1Pn0EnyXJmdSgbTxHLk.woff2" as="font" type="font/woff2" crossorigin="anonymous">    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
-    <link rel="prefetch" href="home.html" as="document">
+    <link rel="prefetch" href="home.html" as="document">
 
-    <link rel="stylesheet" href="navbar\navbar.css">    
-    <link rel="stylesheet" href="font\font.css">    
-    <link rel="stylesheet" href="animations/global.css">    
-    <link rel="stylesheet" href="pages\index.css">    
-    <link rel="stylesheet" href="controlers\scroll.css">    
-    <link rel="stylesheet" href="sections/hero.css">    
-    <link rel="stylesheet" href="sections\carousel.css">
+    <link rel="stylesheet" href="navbar\navbar.css">    
+    <link rel="stylesheet" href="font\font.css">    
+    <link rel="stylesheet" href="animations/global.css">    
+    <link rel="stylesheet" href="pages\index.css">    
+    <link rel="stylesheet" href="controlers\scroll.css">    
+    <link rel="stylesheet" href="sections/hero.css">    
+    <link rel="stylesheet" href="sections\carousel.css">
 
-    <style>        
-        body.preload {            
-            visibility: hidden;            
-            opacity: 0;        
-        }
-        body {            
-            transition: opacity 0.2s ease-in;        
-        }
-        /* Specific style for the article container to show load failure/success */        
-        #article-content-container {            
-            min-height: 50vh;            
-            display: flex;            
-            flex-direction: column;            
-            align-items: center;            
-            justify-content: center;            
-            text-align: center;        
-        }        
-        /* Ensure the body text wraps correctly */        
-        #article-context, #mobile-article-context {            
-            white-space: pre-wrap; /* Allows breaking for long lines */
-            text-align: left; /* Ensure text is left-aligned in all contexts */
-        } 
+    <style>        
+        body.preload {            
+            visibility: hidden;            
+            opacity: 0;        
+        }
+        body {            
+            transition: opacity 0.2s ease-in;        
+        }
+        /* Specific style for the article container to show load failure/success */        
+        #article-content-container {            
+            min-height: 50vh;            
+            display: flex;            
+            flex-direction: column;            
+            align-items: center;            
+            justify-content: center;            
+            text-align: center;        
+        }        
+        /* Ensure the body text wraps correctly */        
+        #article-context, #mobile-article-context {            
+            white-space: pre-wrap; /* Allows breaking for long lines */
+            text-align: left; /* Ensure text is left-aligned in all contexts */
+        }    
 
-        /* Cleanup existing manual mobile fixes, leaving only text-alignment in place for safety */
+        /* Cleanup existing manual mobile fixes, leaving only text-alignment in place for safety */
 @media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px */
-    .left-in-slow.context {
-        text-align: left !important;
-    }
+    .left-in-slow.context {
+        text-align: left !important;
+    }
 }
 </style>
 
 </head>
-<body class="preload">    
-    <main id="swup">        
-        <div class="main-content text-container">
-            <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-20">                
-                <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto px-8">                    
-                    <a href="index.html" class="flex items-center space-x-8" data-transition>                        
-                        <img src="https://cdn.prod.website-files.com/67ebf279c44c5fad2f90f315/67ebf279c44c5fad2f90f3ee_ctzeuvcjvyq518kr6iga-p-1080.webp" alt="Logo" class="h-5 w-auto" />                        
-                        <span class="font-theme font-medium">SK Lepaga</span>                    
-                    </a>                    
-                    <button id="menu-toggle-btn" type="button" class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none" aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">                        
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">                            
-                            <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />                        
-                        </svg>                    
-                    </button>                
-                </div>            
-            </nav>
+<body class="preload">    
+    <main id="swup">        
+        <div class="main-content text-container">
+            <nav id="navbar" class="duration-300 fixed inset-x-0 top-0 z-50 h-20">                
+                <div class="flex items-center justify-between h-full max-w-screen-xl mx-auto px-8">                    
+                    <a href="index.html" class="flex items-center space-x-8" data-transition>                        
+                        <img src="https://cdn.prod.website-files.com/67ebf279c44c5fad2f90f315/67ebf279c44c5fad2f90f3ee_ctzeuvcjvyq518kr6iga-p-1080.webp" alt="Logo" class="h-5 w-auto" />                        
+                        <span class="font-theme font-medium">SK Lepaga</span>                    
+                    </a>                    
+                    <button id="menu-toggle-btn" type="button" class="font-theme rounded-md hover:bg-[#e8e8e8] dark:hover:bg-[#696969] focus:outline-none" aria-controls="sidebar-multi-level-sidebar" aria-expanded="false">                        
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">                            
+                            <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />                        
+                        </svg>                    
+                    </button>                
+                </div>            
+            </nav>
 
-            <aside id="sidebar-multi-level-sidebar" class="fixed top-20 left-0 z-30 w-[100vw] hidden transition-[height: 100%] duration-500 bg-white dark:bg-[#242424]" style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">                
-                <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">                    
-                    <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">                        
-                        <div class="sidebar-menu-item flex flex-col items-center m-6">                            
-                            <a href="home2.html" data-transition rel="nofollow noopener">                                
-                                <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">                                    
-                                    <h2 class="subtext-title">CALENDAR</h2></button>                            
-                            </a>                        
-                        </div>                    
-                    </div>                
-                </div>            
-            </aside>
+            <aside id="sidebar-multi-level-sidebar" class="fixed top-20 left-0 z-30 w-[100vw] hidden transition-[height: 100%] duration-500 bg-white dark:bg-[#242424]" style="height: calc(100vh - 3rem); overflow-y: auto;" aria-label="Sidebar">                
+                <div class="h-full flex items-center justify-center px-4 py-4 max-w-4xl mx-auto">                    
+                    <div id="sidebar-menu" class="font-theme space-y-5 flex flex-col items-center justify-center">                        
+                        <div class="sidebar-menu-item flex flex-col items-center m-6">                            
+                            <a href="home2.html" data-transition rel="nofollow noopener">                                
+                                <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">                                    
+                                    <h2 class="subtext-title">CALENDAR</h2></button>                            
+                            </a>                        
+                        </div>                    
+                    </div>                
+                </div>            
+            </aside>
 
-                        <section id="article-content-container" class="font-theme **px-4 py-4** sm:py-16 bg-white dark:bg-[#242424]">                
-                <p id="loading-message" class="subtext-title text-gray-500">Loading article content...</p>                
-                <div id="article-data" class="hidden w-full">
-                                        <div class="max-w-screen-xl mx-auto **px-4** pt-6 sm:pt-24 pb-6 sm:pb-8">
-                        <div class="text-container **px-4**">                            
-                            <h2 id="article-category" class="rise subtext text-gray-400 mt-4"></h2>                        
-                        </div>
-                        <div class="text-container **px-4**">                            
-                            <h1 id="article-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>                        
-                        </div>
-                        <div class="max-w-screen-xl mx-auto **px-4**">                            
-                            <a href="#">                                
-                                <div id="article-image-container" class="zoom flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing" data-dark-border="#242424">                                    
-                                    <picture>                                        
-                                        <source media="(max-width: 767px)" srcset="">                                        
-                                        <img id="article-image" src="" alt="Article Image" class="w-full h-auto object-cover">                                    
-                                    </picture>                                
-                                </div>                            
-                            </a>                       
-                        </div>
+            <section id="article-content-container" class="font-theme **sm:px-4 py-4** sm:py-16 bg-white dark:bg-[#242424]">                
+                <p id="loading-message" class="subtext-title text-gray-500">Loading article content...</p>                
+                <div id="article-data" class="hidden w-full">
+                    
+                    <div class="max-w-screen-xl mx-auto **sm:px-4** pt-6 sm:pt-24 pb-6 sm:pb-8">
+                        
+                        <div class="text-container **sm:px-4**">                            
+                            <h2 id="article-category" class="rise subtext text-gray-400 mt-4"></h2>                        
+                        </div>
 
-                                                <div class="container max-w-5xl py-6 sm:py-12">                            
-                            <div class="grid gap-2 sm:grid-cols-2 text-left">
-                                                                <div>                                    
-                                    <div class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400 **px-4 sm:px-0**">                                        
-                                        <h3 id="article-author" class="rise context font-bold">                                            
-                                            </h3>                                        
-                                            <span id="article-date" class="context text-gray-500 font-theme">                                            
-                                                </span>                                    
-                                            </div>                                
-                                        </div>
+                        <div class="text-container **sm:px-4**">                            
+                            <h1 id="article-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>                        
+                        </div>
 
-                                                                <div class="relative px-4 space-y-6 hidden sm:block">                                    
-                                    <div class="space-y-10 sm:space-y-4 relative px-4 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300 dark:before:bg-gray-700">                                        
-                                        <div id="article-context-wrapper" class="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] before:bg-violet-600 dark:before:bg-violet-400">                                            
-                                            <p id="article-context" class="left-in-slow context font-theme text-justify"></p>                                        
-                                        </div>                                    
-                                    </div>                                
-                                </div>
-                            </div>                       
-                        </div>
-            
-                                                <div class="block sm:hidden max-w-5xl mx-auto **px-0** pb-6">
-                            <p id="mobile-article-context" class="left-in-slow context font-theme text-justify"></p>
-                        </div>
+                        <div class="max-w-screen-xl mx-auto **sm:px-4**">                            
+                            <a href="#">                                
+                                <div id="article-image-container" class="zoom flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing" data-dark-border="#242424">                                    
+                                    <picture>                                        
+                                        <source media="(max-width: 767px)" srcset="">                                        
+                                        <img id="article-image" src="" alt="Article Image" class="w-full h-auto object-cover">                                    
+                                    </picture>                                
+                                </div>                            
+                            </a>                        
+                        </div>
 
-                    </div>               
-                </div>           
-            </section>        
-        </div>
+                        
+                        <div class="container max-w-5xl py-6 sm:py-12">                            
+                            <div class="grid gap-2 sm:grid-cols-2 text-left">
+                                
+                                <div>                                    
+                                    <div class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400 px-4 sm:px-0">                                        
+                                        <h3 id="article-author" class="rise context font-bold">                                        
+                                            </h3>                                        
+                                            <span id="article-date" class="context text-gray-500 font-theme">                                        
+                                                </span>                                
+                                        </div>                            
+                                    </div>
 
-        <script src="https://cdn.tailwindcss.com"></script>        
-        <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
+                                
+                                <div class="relative px-4 space-y-6 hidden sm:block">                                    
+                                    <div class="space-y-10 sm:space-y-4 relative px-4 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300 dark:before:bg-gray-700">                                        
+                                        <div id="article-context-wrapper" class="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] before:bg-violet-600 dark:before:bg-violet-400">                                            
+                                            <p id="article-context" class="left-in-slow context font-theme text-justify"></p>                                        
+                                        </div>                                    
+                                    </div>                                
+                                </div>
+                            </div>                        
+                        </div>
+                    
+                        
+                        <div class="block sm:hidden max-w-5xl mx-auto **px-0** pb-6">
+                            <p id="mobile-article-context" class="left-in-slow context font-theme text-justify px-4"></p>
+                        </div>
 
-        <script src="navbar\navbar.js"></script>        
-        <script src="pages/index.js"></script>        
-        <script src="animations\index.js"></script>        
-        <script src="font\font.js"></script>        
-        <script src="loader\loader.js"></script>        
-        <script src="animations/global.js"></script>        
-        <script src="animations/scroll.js"></script>
+                    </div>                
+                </div>            
+            </section>    
+        </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>        
-        <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>        
+        <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
 
-        <script>            
-            // Utility function to extract data from the complex Firestore REST API response            
-            const extractValue = (field) => {                
-                if (!field) return null;                
-                if (field.stringValue) return field.stringValue;                
-                if (field.integerValue) return parseInt(field.integerValue);                
-                if (field.timestampValue) return field.timestampValue;                
-                return null;            
-            };
+        <script src="navbar\navbar.js"></script>        
+        <script src="pages/index.js"></script>        
+        <script src="animations\index.js"></script>        
+        <script src="font\font.js"></script>        
+        <script src="loader\loader.js"></script>        
+        <script src="animations/global.js"></script>        
+        <script src="animations/scroll.js"></script>
 
-            // Function to run GSAP animations after content is loaded            
-            function runAnimations() {                
-                // Ensure ScrollTrigger is registered before use                
-                if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {                    
-                    gsap.registerPlugin(ScrollTrigger);                
-                }
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>        
+        <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
-                // 1. Initial Image Zoom-In Animation                
-                const target = document.querySelector("#article-image-container.zoom");                
-                if (target) {                    
-                    gsap.fromTo(                        
-                        target, {                            
-                            scale: 0,                            
-                            transformOrigin: "bottom left"                        
-                        }, {                            
-                            scale: 1,                            
-                            duration: 2,                            
-                            ease: "power2.inOut"                        
-                        }                    
-                    );                
-                }
+        <script>            
+            // Utility function to extract data from the complex Firestore REST API response            
+            const extractValue = (field) => {                
+                if (!field) return null;                
+                if (field.stringValue) return field.stringValue;                
+                if (field.integerValue) return parseInt(field.integerValue);                
+                if (field.timestampValue) return field.timestampValue;                
+                return null;            
+            };
 
-                // 2. Initial Page Reveal (Re-using your existing logic)                
-                document.body.classList.remove('preload');            
-            }
+            // Function to run GSAP animations after content is loaded            
+            function runAnimations() {                
+                // Ensure ScrollTrigger is registered before use                
+                if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {                    
+                    gsap.registerPlugin(ScrollTrigger);                
+                }
 
-            async function loadArticle() {                
-                const urlParams = new URLSearchParams(window.location.search);                
-                const slug = urlParams.get('slug');
+                // 1. Initial Image Zoom-In Animation                
+                const target = document.querySelector("#article-image-container.zoom");                
+                if (target) {                    
+                    gsap.fromTo(                        
+                        target, {                            
+                            scale: 0,                            
+                            transformOrigin: "bottom left"                        
+                        }, {                            
+                            scale: 1,                            
+                            duration: 2,                            
+                            ease: "power2.inOut"                        
+                        }                    
+                    );                
+                }
 
-                if (!slug) {                    
-                    document.getElementById('loading-message').textContent = "Error: Article slug not found in URL. Check the link from the index page.";                    
-                    return;                
-                }
+                // 2. Initial Page Reveal (Re-using your existing logic)                
+                document.body.classList.remove('preload');            
+            }
 
-                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase Project ID                
-                const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
+            async function loadArticle() {                
+                const urlParams = new URLSearchParams(window.location.search);                
+                const slug = urlParams.get('slug');
 
-                try {                    
-                    const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;                    
-                    const response = await fetch(cacheBustingURL, { cache: 'no-cache' });
+                if (!slug) {                    
+                    document.getElementById('loading-message').textContent = "Error: Article slug not found in URL. Check the link from the index page.";                    
+                    return;                
+                }
 
-                    if (!response.ok) {                        
-                        throw new Error(`HTTP status ${response.status}`);                    
-                    }
+                // IMPORTANT: Replace 'sklepaga-8790e' with your actual Firebase Project ID                
+                const JSON_URL = 'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
 
-                    const data = await response.json();                    
-                    const rawContentValues = data.fields?.content?.arrayValue?.values;                    
-                    let articleData = null;
+                try {                    
+                    const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;                    
+                    const response = await fetch(cacheBustingURL, { cache: 'no-cache' });
 
-                    if (rawContentValues && Array.isArray(rawContentValues)) {                        
-                        for (const item of rawContentValues) {                            
-                            const fields = item.mapValue?.fields;                            
-                            const itemSlug = extractValue(fields?.slug);
+                    if (!response.ok) {                        
+                        throw new Error(`HTTP status ${response.status}`);                    
+                    }
 
-                            // 3. Find the article matching the URL slug                            
-                            if (itemSlug === slug) {                                
-                                articleData = {                                    
-                                    title: extractValue(fields?.title),                                    
-                                    category: extractValue(fields?.category),                                    
-                                    image: extractValue(fields?.image),                                    
-                                    context: extractValue(fields?.context),                                    
-                                    author: extractValue(fields?.author),                                    
-                                    datePublished: extractValue(fields?.datePublished),                                
-                                };                                
-                                break;                            
-                            }                        
-                        }                    
-                    }
+                    const data = await response.json();                    
+                    const rawContentValues = data.fields?.content?.arrayValue?.values;                    
+                    let articleData = null;
 
-                    // 4. Populate the HTML                    
-                    if (articleData) {                        
-                        const dateFormatted = articleData.datePublished                            
-                            ? new Date(articleData.datePublished).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })                            
-                            : 'Date N/A';
+                    if (rawContentValues && Array.isArray(rawContentValues)) {                        
+                        for (const item of rawContentValues) {                            
+                            const fields = item.mapValue?.fields;                            
+                            const itemSlug = extractValue(fields?.slug);
 
-                        document.getElementById('page-title').textContent = articleData.title || 'SK Lepaga Article';                        
-                        document.getElementById('article-category').textContent = articleData.category?.toUpperCase() || 'ANNOUNCEMENT';                        
-                        document.getElementById('article-title').textContent = articleData.title || 'Untitled Article';
+                            // 3. Find the article matching the URL slug                            
+                            if (itemSlug === slug) {                                
+                                articleData = {                                    
+                                    title: extractValue(fields?.title),                                    
+                                    category: extractValue(fields?.category),                                    
+                                    image: extractValue(fields?.image),                                    
+                                    context: extractValue(fields?.context),                                    
+                                    author: extractValue(fields?.author),                                    
+                                    datePublished: extractValue(fields?.datePublished),                                
+                                };                                
+                                break;                            
+                            }                        
+                        }                    
+                    }
 
-                        document.getElementById('article-image').src = articleData.image;                        
-                        document.querySelector('#article-image-container source').srcset = articleData.image; // For mobile source
+                    // 4. Populate the HTML                    
+                    if (articleData) {                        
+                        const dateFormatted = articleData.datePublished                            
+                            ? new Date(articleData.datePublished).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })                            
+                            : 'Date N/A';
 
-                        // --- START: POPULATE ORIGINAL (SM+) CONTAINERS ---
-                        document.getElementById('article-author').textContent = articleData.author || 'SK Lepaga';                        
-                        document.getElementById('article-date').textContent = dateFormatted;
-                        document.getElementById('article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
-                        // --- END: POPULATE ORIGINAL (SM+) CONTAINERS ---
+                        document.getElementById('page-title').textContent = articleData.title || 'SK Lepaga Article';                        
+                        document.getElementById('article-category').textContent = articleData.category?.toUpperCase() || 'ANNOUNCEMENT';                        
+                        document.getElementById('article-title').textContent = articleData.title || 'Untitled Article';
+
+                        document.getElementById('article-image').src = articleData.image;                        
+                        document.querySelector('#article-image-container source').srcset = articleData.image; // For mobile source
+
+                        // --- START: POPULATE ORIGINAL (SM+) CONTAINERS ---
+                        document.getElementById('article-author').textContent = articleData.author || 'SK Lepaga';                        
+                        document.getElementById('article-date').textContent = dateFormatted;
+                        document.getElementById('article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
+                        // --- END: POPULATE ORIGINAL (SM+) CONTAINERS ---
 
 
-                        // --- START: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
-                        // Only the context needs to be populated here, as Author/Date are handled by the main elements.
-                        document.getElementById('mobile-article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
-                        // --- END: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
+                        // --- START: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
+                        // Only the context needs to be populated here, as Author/Date are handled by the main elements.
+                        document.getElementById('mobile-article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
+                        // --- END: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
 
-                        // Hide loading message and show content                        
-                        document.getElementById('loading-message').classList.add('hidden');                        
-                        document.getElementById('article-data').classList.remove('hidden');
+                        // Hide loading message and show content                        
+                        document.getElementById('loading-message').classList.add('hidden');                        
+                        document.getElementById('article-data').classList.remove('hidden');
 
-                        // 5. Run animations after content is rendered                        
-                        runAnimations();
+                        // 5. Run animations after content is rendered                        
+                        runAnimations();
 
-                    } else {                        
-                        document.getElementById('loading-message').textContent = `Article with slug "${slug}" not found.`;                    
-                    }
-                } catch (error) {                    
-                    console.error('Failed to load article:', error);                    
-                    document.getElementById('loading-message').textContent = `Error loading content. Please check the browser console.`;                
-                }            
-            }
+                    } else {                        
+                        document.getElementById('loading-message').textContent = `Article with slug "${slug}" not found.`;                    
+                    }
+                } catch (error) {                    
+                    console.error('Failed to load article:', error);                    
+                    document.getElementById('loading-message').textContent = `Error loading content. Please check the browser console.`;                
+                }            
+            }
 
-            // Start the loading process when the DOM is fully loaded            
-            window.addEventListener('DOMContentLoaded', loadArticle);        
-        </script>    
-    </main>
+            // Start the loading process when the DOM is fully loaded            
+            window.addEventListener('DOMContentLoaded', loadArticle);        
+        </script>    
+    </main>
 </body>
 </html>
