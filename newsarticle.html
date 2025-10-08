@@ -42,7 +42,24 @@
         /* Ensure the body text wraps correctly */        
         #article-context {            
             white-space: pre-wrap; /* Allows breaking for long lines */
-        }    
+        } 
+
+        /* New style block to reduce excessive padding on small screens for the main content area */
+@media (max-width: 639px) { /* Tailwinds's 'sm' breakpoint is 640px */
+    /* Target the container holding the author/date and the main context columns */
+    .container.max-w-5xl {
+        /* Reset or reduce horizontal padding for small screens */
+        padding-left: 1rem; /* Equivalent to px-4 in Tailwinds, which is a standard comfortable mobile padding */
+        padding-right: 1rem; /* Equivalent to px-4 in Tailwinds */
+    }
+
+    /* Target the direct parent of the article context, which has a default px-4 */
+    .relative.px-4.space-y-6 {
+        /* Remove the extra left/right padding added by this div on mobile. */
+        padding-left: 0rem;
+        padding-right: 0rem;
+    }
+}
     </style>
 
 </head>
