@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    
+<head>
+    
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title id="page-title">Loading Article...</title>
@@ -46,9 +47,9 @@
 
         /* Cleanup existing manual mobile fixes, leaving only text-alignment in place for safety */
 @media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px */
-    .left-in-slow.context {
-        text-align: left !important;
-    }
+    .left-in-slow.context {
+        text-align: left !important;
+    }
 }
 </style>
 
@@ -76,8 +77,7 @@
                         <div class="sidebar-menu-item flex flex-col items-center m-6">                            
                             <a href="home2.html" data-transition rel="nofollow noopener">                                
                                 <button class="sidebar-menu-header flex items-center space-x-2 focus:outline-none">                                    
-                                    <h2 class="subtext-title">CALENDAR</h2>                                
-                                </button>                            
+                                    <h2 class="subtext-title">CALENDAR</h2></button>                            
                             </a>                        
                         </div>                    
                     </div>                
@@ -87,14 +87,14 @@
                         <section id="article-content-container" class="font-theme **px-4 py-4** sm:py-16 bg-white dark:bg-[#242424]">                
                 <p id="loading-message" class="subtext-title text-gray-500">Loading article content...</p>                
                 <div id="article-data" class="hidden w-full">
-                                        <div class="max-w-screen-xl mx-auto px-4 **pt-6** sm:pt-24 **pb-6** sm:pb-8">
-                        <div class="text-container">                            
+                                        <div class="max-w-screen-xl mx-auto **px-4** pt-6 sm:pt-24 pb-6 sm:pb-8">
+                        <div class="text-container **px-4**">                            
                             <h2 id="article-category" class="rise subtext text-gray-400 mt-4"></h2>                        
                         </div>
-                        <div class="text-container">                            
+                        <div class="text-container **px-4**">                            
                             <h1 id="article-title" class="text-line subtext-title font-theme mt-6 sm:mt-8 mb-6 sm:mb-8"></h1>                        
                         </div>
-                        <div class="max-w-screen-xl mx-auto">                            
+                        <div class="max-w-screen-xl mx-auto **px-4**">                            
                             <a href="#">                                
                                 <div id="article-image-container" class="zoom flex flex-col mx-auto overflow-hidden relative z-10 image-parallax-sizing" data-dark-border="#242424">                                    
                                     <picture>                                        
@@ -108,7 +108,7 @@
                                                 <div class="container max-w-5xl py-6 sm:py-12">                            
                             <div class="grid gap-2 sm:grid-cols-2 text-left">
                                                                 <div>                                    
-                                    <div class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400">                                        
+                                    <div class="text-left mt-4 mb-10 sm:mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:bg-violet-600 dark:before:bg-violet-400 **px-4 sm:px-0**">                                        
                                         <h3 id="article-author" class="rise context font-bold">                                            
                                             </h3>                                        
                                             <span id="article-date" class="context text-gray-500 font-theme">                                            
@@ -125,8 +125,8 @@
                                 </div>
                             </div>                       
                         </div>
-            
-                                                <div class="block sm:hidden max-w-5xl mx-auto **pb-6**">
+            
+                                                <div class="block sm:hidden max-w-5xl mx-auto **px-0** pb-6">
                             <p id="mobile-article-context" class="left-in-slow context font-theme text-justify"></p>
                         </div>
 
@@ -247,13 +247,13 @@
                         document.getElementById('article-author').textContent = articleData.author || 'SK Lepaga';                        
                         document.getElementById('article-date').textContent = dateFormatted;
                         document.getElementById('article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
-                        // --- END: POPULATE ORIGINAL (SM+) CONTAINERS ---
+                        // --- END: POPULATE ORIGINAL (SM+) CONTAINERS ---
 
 
-                        // --- START: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
-                        // Only the context needs to be populated here, as Author/Date are handled by the main elements.
+                        // --- START: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
+                        // Only the context needs to be populated here, as Author/Date are handled by the main elements.
                         document.getElementById('mobile-article-context').innerHTML = articleData.context?.replace(/\n/g, '<br>') || 'Article content is missing.';
-                        // --- END: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
+                        // --- END: POPULATE NEW MOBILE-ONLY CONTEXT CONTAINER ---
 
                         // Hide loading message and show content                        
                         document.getElementById('loading-message').classList.add('hidden');                        
