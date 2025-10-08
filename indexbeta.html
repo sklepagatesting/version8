@@ -587,6 +587,15 @@
 
   // Run the function when the DOM content is fully loaded
   document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
+
+  // 🔥 CRITICAL FIX: Call the global transition setup function
+// This attaches the click listener to all the new [data-transition] links.
+if (typeof window.setupPageTransition === 'function') {
+    window.setupPageTransition();
+    console.log("Carousel links processed for data-transition.");
+} else {
+    console.warn("setupPageTransition function not found. Ensure page-transition.js is loaded correctly.");
+}
 </script>
   </body>
 </html>
