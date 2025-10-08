@@ -44,36 +44,34 @@
             white-space: pre-wrap; /* Allows breaking for long lines */
         } 
 
-        /* START: MOBILE PADDING FIX */
-@media (max-width: 639px) { 
-    /* 1. The container with the grid layout */
-    .container.max-w-5xl {
-        /* Set to a reasonable mobile padding (e.g., px-4 = 1rem) to match surrounding content */
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-    }
+        /* START: REFINED MOBILE PADDING FIX */
+@media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px */
     
-    /* 2. The outer wrapper for the context that has a redundant px-4 on mobile */
+    /* 1. Target the main content area container. Set it to standard mobile padding (1rem). */
+    .container.max-w-5xl {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* 2. Target the inner wrapper that still has px-4 on mobile. Reset this. */
     .relative.px-4.space-y-6 {
         padding-left: 0rem !important;
         padding-right: 0rem !important;
     }
-
-    /* 3. The timeline dot/line wrapper, which is causing the unwanted offset. */
+    
+    /* 3. Target the timeline-specific wrapper that has both px-4 and the sm:before logic. Reset padding. */
     .space-y-10.sm\:space-y-4.relative.px-4.sm\:before\:absolute {
-        /* This div has 'px-4' which is 1rem padding, but is also inside another container that might be pushing it. */
         padding-left: 0rem !important;
         padding-right: 0rem !important;
     }
 
-    /* 4. The main article context wrapper, forcing alignment */
-    #article-context-wrapper {
-        /* This removes any unintended padding or negative margin that shifts the content left/right on small screens. */
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
+    /* 4. Target the innermost context container to ensure no additional offsets exist. */
+    #article-context-wrapper {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
-        /* END: MOBILE PADDING FIX */
+        /* END: REFINED MOBILE PADDING FIX */
 </style>
 
 </head>
