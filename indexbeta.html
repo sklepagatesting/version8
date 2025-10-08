@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,6 +19,7 @@
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
+
     <link rel="prefetch" href="home.html" as="document" />
     <link rel="stylesheet" href="navbar\navbar.css" />
     <link rel="stylesheet" href="font\font.css" />
@@ -425,145 +427,177 @@
       });
     </script>
 
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-      import {
-        getFirestore,
-        doc,
-        getDoc,
-        enableIndexedDbPersistence, // <-- Key for Caching
-      } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    enableIndexedDbPersistence, // <-- Key for Caching
+  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-      // NOTE: resolveContentLoaded is declared globally in the main script block
-      // and is accessible here because module scripts share the global scope.
+  // NOTE: resolveContentLoaded is declared globally in the main script block
+  // and is accessible here because module scripts share the global scope.
 
-      // 1. Firebase Configuration (unchanged)
-      const firebaseConfig = {
-        apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
-        authDomain: "sklepaga-8790e.firebaseapp.com",
-        projectId: "sklepaga-8790e",
-        storageBucket: "sklepaga-8790e.appspot.com",
-        messagingSenderId: "815409129057",
-        appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
-        measurementId: "G-9GH707G2WZ",
-      };
+  // 1. Firebase Configuration (unchanged)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+    authDomain: "sklepaga-8790e.firebaseapp.com",
+    projectId: "sklepaga-8790e",
+    storageBucket: "sklepaga-8790e.appspot.com",
+    messagingSenderId: "815409129057",
+    appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+    measurementId: "G-9GH707G2WZ",
+  };
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-      // 2. Enable Firestore Caching (unchanged)
-      try {
-        await enableIndexedDbPersistence(db);
-        console.log("Firestore offline persistence enabled.");
-      } catch (err) {
-        if (err.code === 'failed-precondition') {
-          console.warn("Persistence failed: multiple tabs open, or browser doesn't support it.");
-        } else if (err.code === 'unimplemented') {
-          console.warn("Persistence not supported on this device.");
-        }
+  // 2. Enable Firestore Caching (unchanged)
+  try {
+    await enableIndexedDbPersistence(db);
+    console.log("Firestore offline persistence enabled.");
+  } catch (err) {
+    if (err.code === 'failed-precondition') {
+      console.warn("Persistence failed: multiple tabs open, or browser doesn't support it.");
+    } else if (err.code === 'unimplemented') {
+      console.warn("Persistence not supported on this device.");
+    }
+  }
+
+  // *** UPDATED FUNCTION: Title Truncation Logic ***
+  function truncateTitle(title) {
+    // Define the maximum length for desktop and mobile
+    const desktopMaxLength = 35;
+    const mobileMaxLength = 25;
+    
+    // Determine the current max length based on screen width.
+    // Assuming a 'sm' (small) breakpoint of 640px, or similar mobile size.
+    // If you need a different breakpoint, change the number here.
+    const isMobile = window.innerWidth < 640;
+    const maxLength = isMobile ? mobileMaxLength : desktopMaxLength;
+    
+    if (title.length > maxLength) {
+      // Find the last space before the limit
+      let truncated = title.substring(0, maxLength);
+      const lastSpace = truncated.lastIndexOf(' ');
+            
+      // If a space is found, cut there and add '...'
+      if (lastSpace !== -1) {
+        truncated = truncated.substring(0, lastSpace);
+      }
+      return truncated.trim() + '...';
+    }
+    return title;
+  }
+
+  // 3. Main Fetch and Render Function
+  async function fetchAndRenderProjects() {
+    const scroller = document.getElementById('scroller');
+    if (!scroller) {
+        // Still resolve the promise even if the element is missing, 
+        // to avoid infinite loading.
+        resolveContentLoaded();
+        return;
+    }
+
+    scroller.innerHTML = '<p class="text-gray-500 p-4">Loading projects...</p>';
+
+    try {
+      const docRef = doc(db, "contentJson", "data");
+      const docSnap = await getDoc(docRef);
+
+      let contentArray = [];
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        contentArray = data.content || [];
+      } else {
+         scroller.innerHTML = "<p class='text-gray-500 p-4'>No content document found in Firestore.</p>";
+      }
+                  const projectContent = contentArray.filter(
+        (item) => item.category === 'projects'
+      );
+
+      if (projectContent.length === 0) {
+        scroller.innerHTML =
+          "<p class='text-gray-500 p-4'>No projects found in the database. Add content via Admin Panel.</p>";
       }
 
-      // *** NEW FUNCTION: Title Truncation Logic *** function truncateTitle(title, maxLength = 35) {    
-        if (title.length > maxLength) {      
-          // Find the last space before the limit      
-          let truncated = title.substring(0, maxLength);      
-          const lastSpace = truncated.lastIndexOf(' ');            
-          // If a space is found, cut there and add '...'      
-          if (lastSpace !== -1) {        
-            truncated = truncated.substring(0, lastSpace);      
-          }      
-          return truncated.trim() + '...';    
-        }    
-        return title;  
-      }
+      // Sort by timestamp (newest first)
+      const sortedProjects = projectContent.sort(
+        (a, b) => (b.timestamp || 0) - (a.timestamp || 0)
+      );
 
-      // 3. Main Fetch and Render Function
-      async function fetchAndRenderProjects() {
-        const scroller = document.getElementById('scroller');
-        if (!scroller) {
-          // Still resolve the promise even if the element is missing, 
-          // to avoid infinite loading.
-          resolveContentLoaded();
-          return;
-        }
+      // Generate HTML
+      const projectHTML = sortedProjects
+        .map((item) => {
+          // Link to article.html using a query parameter for the slug.
+          const linkHref = item.slug
+            ? `article.html?slug=${item.slug}`
+            : `article.html?id=${item.id}`;
 
-        scroller.innerHTML = '<p class="text-gray-500 p-4">Loading projects...</p>';
+          // *** APPLICATION OF TRUNCATION (NO LENGTH PASSED) ***
+          // The function now determines the length internally.
+          const truncatedTitle = truncateTitle(item.title);
 
-        try {
-          const docRef = doc(db, "contentJson", "data");
-          const docSnap = await getDoc(docRef);
+          return `
+            <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
+                <div class="zoom overflow-hidden relative carousel-image">
+                    <img
+                        src="${item.image}"
+                        alt="${item.title}"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+                <div class="w-full pt-2 overflow-hidden">
+                    <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                        ${truncatedTitle}
+                    </p>
+                </div>
+            </a>
+          `;
+        })
+        .join('');
 
-          let contentArray = [];
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            contentArray = data.content || [];
-          } else {
-            scroller.innerHTML = "<p class='text-gray-500 p-4'>No content document found in Firestore.</p>";
-          }
+      // Insert the new HTML into the scroller
+      scroller.innerHTML = projectHTML;
+      
+      // Also, re-run the render on resize to handle device rotation or window resizing
+      // This is a good practice for dynamic, responsive content.
+      window.addEventListener('resize', fetchAndRenderProjectsDebounced);
 
-          const projectContent = contentArray.filter(
-            (item) => item.category === 'projects'
-          );
+      } catch (error) {
+      console.error('Failed to load and render content from Firestore:', error);
+      scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check Console for details.</p>`;
+    } finally {
+        // *** CRITICAL CHANGE: RESOLVE THE PROMISE HERE ***
+        // This tells the loader that the dynamic content is ready.
+        resolveContentLoaded();
+    }
+  }
+  
+  // Simple Debounce function to limit how often fetchAndRenderProjects runs on resize
+  function debounce(func, timeout = 300) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
 
-          if (projectContent.length === 0) {
-            scroller.innerHTML =
-              "<p class='text-gray-500 p-4'>No projects found in the database. Add content via Admin Panel.</p>";
-          }
+  const fetchAndRenderProjectsDebounced = debounce(fetchAndRenderProjects);
 
-          // Sort by timestamp (newest first)
-          const sortedProjects = projectContent.sort(
-            (a, b) => (b.timestamp || 0) - (a.timestamp || 0)
-          );
-
-          // Generate HTML
-          const projectHTML = sortedProjects
-            .map((item) => {
-              // Link to article.html using a query parameter for the slug.
-              const linkHref = item.slug
-                ? `article.html?slug=${item.slug}`
-                : `article.html?id=${item.id}`;
-
-              const displayedTitle = truncateTitle(item.title, 35);
-              
-              /*
-                CORRECTED HOVER EFFECT LOGIC:
-                The inner div provides `overflow-hidden` to clip the title.
-                The <p> element uses `sm:translate-y-full` for the default (hidden) state 
-                and `sm:group-hover:translate-y-0` for the hover (visible) state.
-              */
-              return `
-                <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
-                    <div class="zoom overflow-hidden relative carousel-image">
-                        <img
-                            src="${item.image}"
-                            alt="${item.title}"
-                            class="w-full h-full object-cover"
-                        />
-                    </div>
-                    <div class="w-full pt-2 overflow-hidden">
-                        <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
-                            ${displayedTitle}
-                        </p>
-                    </div>
-                </a>
-              `;
-            })
-            .join('');
-
-          // Insert the new HTML into the scroller
-          scroller.innerHTML = projectHTML;
-        } catch (error) {
-          console.error('Failed to load and render content from Firestore:', error);
-          scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check Console for details.</p>`;
-        } finally {
-          // *** CRITICAL CHANGE: RESOLVE THE PROMISE HERE ***
-          // This tells the loader that the dynamic content is ready.
-          resolveContentLoaded();
-        }
-      }
-
-      // Run the function when the DOM content is fully loaded
-      document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
-    </script>
+  // Run the function when the DOM content is fully loaded
+  document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
+</script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
