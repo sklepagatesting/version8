@@ -434,7 +434,7 @@
     getDoc,
     enableIndexedDbPersistence, // <-- Key for Caching
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-  
+
   // NOTE: resolveContentLoaded is declared globally in the main script block
   // and is accessible here because module scripts share the global scope.
 
@@ -464,6 +464,22 @@
     }
   }
 
+  // *** NEW FUNCTION: Title Truncation Logic ***
+  function truncateTitle(title, maxLength = 35) {
+    if (title.length > maxLength) {
+      // Find the last space before the limit
+      let truncated = title.substring(0, maxLength);
+      const lastSpace = truncated.lastIndexOf(' ');
+      
+      // If a space is found, cut there and add '...'
+      if (lastSpace !== -1) {
+        truncated = truncated.substring(0, lastSpace);
+      }
+      return truncated.trim() + '...';
+    }
+    return title;
+  }
+
   // 3. Main Fetch and Render Function
   async function fetchAndRenderProjects() {
     const scroller = document.getElementById('scroller');
@@ -487,7 +503,7 @@
       } else {
          scroller.innerHTML = "<p class='text-gray-500 p-4'>No content document found in Firestore.</p>";
       }
-      
+            
       const projectContent = contentArray.filter(
         (item) => item.category === 'projects'
       );
@@ -510,6 +526,9 @@
             ? `article.html?slug=${item.slug}`
             : `article.html?id=${item.id}`;
 
+          // *** APPLICATION OF TRUNCATION ***
+          const truncatedTitle = truncateTitle(item.title, 35);
+
           return `
             <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                 <div class="zoom overflow-hidden relative carousel-image">
@@ -521,7 +540,7 @@
                 </div>
                 <div class="w-full pt-2 overflow-hidden">
                     <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
-                        ${item.title}
+                        ${truncatedTitle}
                     </p>
                 </div>
             </a>
@@ -530,8 +549,7 @@
         .join('');
 
       // Insert the new HTML into the scroller
-      scroller.innerHTML = projectHTML;
-      
+      scroller.innerHTML = projectHTML;          
     } catch (error) {
       console.error('Failed to load and render content from Firestore:', error);
       scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check Console for details.</p>`;
@@ -544,9 +562,11 @@
 
   // Run the function when the DOM content is fully loaded
   document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
+</script>entListener('DOMContentLoaded', fetchAndRenderProjects);
 </script>
   </body>
 </html>
+
 
 
 
