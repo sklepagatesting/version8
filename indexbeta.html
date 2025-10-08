@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Update</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,7 +18,6 @@
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-
     <link rel="prefetch" href="home.html" as="document" />
     <link rel="stylesheet" href="navbar\navbar.css" />
     <link rel="stylesheet" href="font\font.css" />
@@ -28,7 +26,6 @@
     <link rel="stylesheet" href="controlers\scroll.css" />
     <link rel="stylesheet" href="sections/hero.css" />
     <link rel="stylesheet" href="sections\carousel.css" />
-
     <style>
       :root {
         --nav-height: 3rem;
@@ -53,7 +50,7 @@
       }
       /* Main content container fills the entire viewport. */
       .main-content {
-        position: relative;
+        position: relative; /* important for absolute positioning of its children */
         height: 100vh;
         width: 100%;
         display: flex;
@@ -63,40 +60,45 @@
 
       .images-container {
         flex-grow: 1;
-        padding-top: calc(var(--nav-height) + 1.5rem);
         z-index: 10;
         width: 100%;
         position: relative;
+
+        display: flex;
+        align-items: center; /* vertical center */
+        justify-content: center; /* horizontal center */
+
+        padding-top: calc(var(--nav-height) + 2rem); /* give breathing room */
       }
 
       .video-titles-container {
-        z-index: 20;
+        z-index: 20; /* Places this section on top */
         background: transparent;
         padding: 2rem;
         width: 100%;
+        /* New positioning to anchor it to the bottom */
         position: absolute;
         bottom: 0;
         left: 0;
       }
       .carousel-image {
-        width: clamp(200px, 40vw, 400px);
-        aspect-ratio: 16 / 9;
-        max-width: 500px;
-        height: auto;
-        max-height: 350px;
-        object-fit: cover;
+        width: clamp(250px, 40vw, 600px); /* responsive width */
+        aspect-ratio: 16 / 9; /* keeps ratio */
+        height: auto; /* auto-calculated from width */
+        max-height: 40vh; /* cap based on viewport height */
+        object-fit: cover; /* avoids stretching */
       }
 
       .video-reel {
-        width: clamp(100px, 30vw, 300px);
+        width: clamp(200px, 40vw, 300px);
       }
-
       /* Ensure nav and aside are always on top */
       #navbar,
       #sidebar-multi-level-sidebar {
         z-index: 30 !important;
       }
 
+      /* Prevent any potential overflow */
       * {
         box-sizing: border-box;
       }
@@ -335,15 +337,11 @@
           </div>
         </section>
 
-        <section
-          class="video-titles-container w-full bg-white dark:bg-[#242424] mt-0 pt-0"
-        >
+        <section class="video-titles-container w-full bg-transparent mt-0 pt-0">
           <div class="w-full flex flex-col-reverse md:flex-row">
-            <div
-              class="hero w-full md:w-3/8 mb-8 md:mb-0 flex items-end relative"
-            >
+            <div class="hero w-full md:w-3/8 mb-20 md:mb-0 flex items-end relative">
               <div class="flex flex-col justify-end">
-                <p class="mb-4 text-sm font-theme">Play Reel ▶</p>
+                <p class="mb-4 sm:mt-8 context font-theme">Play Reel ▶</p>
                 <div class="w-full max-w-sm">
                   <video
                     id="playReel"
@@ -382,7 +380,7 @@
                 <div class="text-container mb-4">
                   <p class="text-line subtext font-theme"></p>
                 </div>
-                <div class="text-container">
+                <div class="text-container mb-8 md:mb-0">
                   <a
                     href="home.html"
                     class="text-line context inline-block w-fit font-theme border-b border-black hover:opacity-75 transition"
@@ -398,7 +396,6 @@
         </section>
       </div>
     </main>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
 
@@ -406,96 +403,90 @@
     <script src="pages/index.js"></script>
     <script src="animations\globalindex.js"></script>
     <script src="font\font.js"></script>
-    <script src="loader\loaders.js"></script>
+    <script src="loader\loader.js"></script>
     <script src="loader\others.js"></script>
 
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap-core.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/EasePack.min.js"></script>
-    <script src="https://unpkg.com/gsap@3/dist/ModifiersPlugin.min.js"></script>
-    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
     <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
 
     <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        gsap.utils.toArray(".clipp-section").forEach((section, index) => {
+      // On DOM load
+      window.addEventListener('DOMContentLoaded', () => {
+        gsap.utils.toArray('.clipp-section').forEach((section, index) => {
           gsap.to(section, {
-            clipPath: "inset(0% 0% 0% 0%)",
+            clipPath: 'inset(0% 0% 0% 0%)', // Reveal fully
             duration: 0.7,
-            ease: "power2.out",
+            ease: 'power2.out',
           });
         });
       });
     </script>
 
-    <script>
-      // Helper function to extract a simple value from the complex Firestore REST API response structure
-      const extractValue = (field) => {
-        if (!field) return null;
-        if (field.stringValue) return field.stringValue;
-        if (field.integerValue) return parseInt(field.integerValue);
-        return null;
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        enableIndexedDbPersistence, // <-- Key for Caching
+      } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+      // NOTE: resolveContentLoaded is declared globally in the main script block
+      // and is accessible here because module scripts share the global scope.
+
+      // 1. Firebase Configuration (unchanged)
+      const firebaseConfig = {
+        apiKey: "AIzaSyDZUVChTTWtGm4R40wMWGrTYwyUk0FDahs",
+        authDomain: "sklepaga-8790e.firebaseapp.com",
+        projectId: "sklepaga-8790e",
+        storageBucket: "sklepaga-8790e.appspot.com",
+        messagingSenderId: "815409129057",
+        appId: "1:815409129057:web:9f6342be47e28c1f69ec20",
+        measurementId: "G-9GH707G2WZ",
       };
 
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // 2. Enable Firestore Caching (unchanged)
+      try {
+        await enableIndexedDbPersistence(db);
+        console.log("Firestore offline persistence enabled.");
+      } catch (err) {
+        if (err.code === 'failed-precondition') {
+          console.warn("Persistence failed: multiple tabs open, or browser doesn't support it.");
+        } else if (err.code === 'unimplemented') {
+          console.warn("Persistence not supported on this device.");
+        }
+      }
+
+      // 3. Main Fetch and Render Function
       async function fetchAndRenderProjects() {
-        // ⭐️ CORRECTED JSON_URL using your Project ID ⭐️
-        const JSON_URL =
-          'https://firestore.googleapis.com/v1/projects/sklepaga-8790e/databases/(default)/documents/contentJson/data';
         const scroller = document.getElementById('scroller');
-        if (!scroller) return;
+        if (!scroller) {
+          // Still resolve the promise even if the element is missing, 
+          // to avoid infinite loading.
+          resolveContentLoaded();
+          return;
+        }
 
         scroller.innerHTML = '<p class="text-gray-500 p-4">Loading projects...</p>';
 
         try {
-          // To help with perceived "hard reload," we append a random query param to the URL.
-          const cacheBustingURL = `${JSON_URL}?t=${Date.now()}`;
+          const docRef = doc(db, "contentJson", "data");
+          const docSnap = await getDoc(docRef);
 
-          const response = await fetch(cacheBustingURL, {
-            // Setting 'cache: "no-cache"' for a client-side fetch is a strong hint
-            // to the browser not to use the local cache.
-            cache: 'no-cache',
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP status ${response.status}`);
-          }
-
-          let data = await response.json();
           let contentArray = [];
-
-          // --- Parsing Logic for Raw Firestore REST API Output ---
-          const rawContentValues = data.fields?.content?.arrayValue?.values;
-
-          if (rawContentValues && Array.isArray(rawContentValues)) {
-            contentArray = rawContentValues
-              .map((item) => {
-                const fields = item.mapValue?.fields;
-                if (!fields) return null;
-
-                return {
-                  id: extractValue(fields.id) || 'default',
-                  title: extractValue(fields.title),
-                  // 🌟 MODIFIED: Extract the new slug field
-                  slug: extractValue(fields.slug),
-                  context: extractValue(fields.context),
-                  image: extractValue(fields.image),
-                  category: extractValue(fields.category),
-                  timestamp: extractValue(fields.timestamp),
-                };
-              })
-              .filter((item) => item !== null);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            contentArray = data.content || [];
           } else {
-            throw new Error('Invalid content format from server or no data found.');
+            scroller.innerHTML = "<p class='text-gray-500 p-4'>No content document found in Firestore.</p>";
           }
 
-          // 2. Filter for 'projects' only
           const projectContent = contentArray.filter(
             (item) => item.category === 'projects'
           );
@@ -503,19 +494,28 @@
           if (projectContent.length === 0) {
             scroller.innerHTML =
               "<p class='text-gray-500 p-4'>No projects found in the database. Add content via Admin Panel.</p>";
-            return;
           }
 
-          // 3. Sort (newest first) and Generate HTML
-          const projectHTML = projectContent
-            .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+          // Sort by timestamp (newest first)
+          const sortedProjects = projectContent.sort(
+            (a, b) => (b.timestamp || 0) - (a.timestamp || 0)
+          );
+
+          // Generate HTML
+          const projectHTML = sortedProjects
             .map((item) => {
-              // 💥 CRITICAL UPDATE HERE 💥
               // Link to article.html using a query parameter for the slug.
               const linkHref = item.slug
                 ? `article.html?slug=${item.slug}`
                 : `article.html?id=${item.id}`;
 
+              /*
+                IMPORTANT: The 'truncate' class is added to the <p> tag below.
+                Tailwind's 'truncate' utility combines:
+                - overflow: hidden;
+                - text-overflow: ellipsis;
+                - white-space: nowrap; (This prevents wrapping and fixes the layout)
+              */
               return `
                 <a href="${linkHref}" class="group relative flex-shrink-0 mr-8" data-transition rel="nofollow noopener">
                     <div class="zoom overflow-hidden relative carousel-image">
@@ -526,24 +526,29 @@
                         />
                     </div>
                     <div class="w-full pt-2 overflow-hidden">
-                        <p class="context font-theme sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                        <p class="context font-theme truncate sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
                             ${item.title}
                         </p>
                     </div>
                 </a>
-            `;
+              `;
             })
             .join('');
 
-          // 4. Insert the new HTML into the scroller
+          // Insert the new HTML into the scroller
           scroller.innerHTML = projectHTML;
         } catch (error) {
-          console.error('Failed to load and render content from JSON:', error);
-          scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check **Firebase Security Rules** for 'contentJson' collection. (${error.message})</p>`;
+          console.error('Failed to load and render content from Firestore:', error);
+          scroller.innerHTML = `<p class='text-red-500 p-4'>Error loading content. Check Console for details.</p>`;
+        } finally {
+          // *** CRITICAL CHANGE: RESOLVE THE PROMISE HERE ***
+          // This tells the loader that the dynamic content is ready.
+          resolveContentLoaded();
         }
       }
+
       // Run the function when the DOM content is fully loaded
-      window.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
+      document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
     </script>
   </body>
 </html>
