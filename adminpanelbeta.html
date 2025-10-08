@@ -178,50 +178,60 @@
 
 <body class="bg-slate-900 text-white min-h-screen flex flex-col">
   <header class="sticky top-0 z-30 floating-header">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" class="w-5 h-5">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-5.5-2.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zM10 12a5.99 5.99 0 00-4.793 2.39A6.483 6.483 0 0010 16.5a6.483 6.483 0 004.793-2.11A5.99 5.99 0 0010 12z" clip-rule="evenodd" />
-          </svg>
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center justify-between sm:justify-start w-full sm:w-auto mb-3 sm:mb-0">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-5.5-2.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zM10 12a5.99 5.99 0 00-4.793 2.39A6.483 6.483 0 0010 16.5a6.483 6.483 0 004.793-2.11A5.99 5.99 0 0010 12z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="subtext-title bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Dashboard</h1>
+                    <p class="context text-gray-400 -mt-1">Administrator Panel</p>
+                </div>
+            </div>
+            <button id="outBtnMobile" class="sm:hidden px-3 py-1 subtext rounded-xl btn-danger text-white flex items-center gap-1 font-medium" onclick="window.location.href='authentication.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M16.72 9.22a.75.75 0 011.06 0l2.25 2.25a.75.75 0 010 1.06l-2.25 2.25a.75.75 0 11-1.06-1.06L17.94 12l-1.22-1.22a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                </svg>
+                <span class="hidden xs:inline">Sign out</span>
+            </button>
         </div>
-        <div>
-          <h1 class="subtext-title bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Dashboard</h1>
-          <p class="context text-gray-400 -mt-1">Administrator Panel</p>
+        
+        <div class="flex items-center gap-3 overflow-x-auto pb-1 sm:pb-0 sm:overflow-x-visible">
+            <a href="adminmessage.html" id="adminMessagesLink" class="flex-shrink-0 px-4 py-2 subtext rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-800/80 flex items-center gap-2 transition-all duration-200 text-white">
+                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                </svg>
+                <span class="font-medium">Messages</span>
+            </a>
+
+            <a href="adminletters.html" class="flex-shrink-0 px-4 py-2 subtext rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-800/80 flex items-center gap-2 transition-all duration-200 text-white">
+                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
+                </svg>
+                <span class="font-medium">Letters</span>
+            </a>
+
+            <a href="adminupload.html" id="adminUploadLink" class="flex-shrink-0 px-4 py-2 subtext rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-800/80 flex items-center gap-2 transition-all duration-200 text-white">
+                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v9m-5 0H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2M8 9l4-5 4 5m1 8h.01"/>
+                </svg>
+                <span class="font-medium">Upload</span>
+            </a>
+
+            <button id="outBtn" class="hidden sm:flex flex-shrink-0 px-4 py-2 subtext rounded-xl btn-danger text-white items-center gap-2 font-medium" onclick="window.location.href='authentication.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M16.72 9.22a.75.75 0 011.06 0l2.25 2.25a.75.75 0 010 1.06l-2.25 2.25a.75.75 0 11-1.06-1.06L17.94 12l-1.22-1.22a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                </svg>
+                <span>Sign out</span>
+            </button>
         </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <a href="adminmessage.html" id="adminMessagesLink" class="px-4 py-2 subtext rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-800/80 flex items-center gap-2 transition-all duration-200 text-white">
-          <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
-          </svg>
-          <span class="hidden sm:inline font-medium">Messages</span>
-        </a>
-
-        <a href="adminletters.html" class="px-4 py-2 subtext rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-800/80 flex items-center gap-2 transition-all duration-200 text-white">
-          <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
-          </svg>
-          <span class="hidden sm:inline font-medium">Letters</span>
-        </a>
-
-        <a href="adminupload.html" id="adminUploadLink" class="px-4 py-2 subtext rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-800/80 flex items-center gap-2 transition-all duration-200 text-white">
-          <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v9m-5 0H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2M8 9l4-5 4 5m1 8h.01"/>
-          </svg>
-          <span class="hidden sm:inline font-medium">Upload</span>
-        </a>
-
-        <button id="outBtn" class="px-4 py-2 subtext rounded-xl btn-danger text-white flex items-center gap-2 font-medium" onclick="window.location.href='authentication.html'">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd" />
-            <path fill-rule="evenodd" d="M16.72 9.22a.75.75 0 011.06 0l2.25 2.25a.75.75 0 010 1.06l-2.25 2.25a.75.75 0 11-1.06-1.06L17.94 12l-1.22-1.22a.75.75 0 010-1.06z" clip-rule="evenodd" />
-          </svg>
-          <span class="hidden sm:inline">Sign out</span>
-        </button>
-      </div>
     </div>
-  </header>
+</header>
   <main class="flex-1 max-w-7xl mx-auto w-full px-6 py-8">
     <section class="mb-8 fade-in">
       <div class="flex items-center gap-2 mb-4">
