@@ -22,45 +22,59 @@
     <link rel="stylesheet" href="sections/hero.css">    
     <link rel="stylesheet" href="sections\carousel.css">
 
-    <style>        
-        body.preload {            
-            visibility: hidden;            
-            opacity: 0;        
-        }
-        body {            
-            transition: opacity 0.2s ease-in;        
-        }
-        /* Specific style for the article container to show load failure/success */        
-        #article-content-container {            
-            min-height: 50vh;            
-            display: flex;            
-            flex-direction: column;            
-            align-items: center;            
-            justify-content: center;            
-            text-align: center;        
-        }        
-        /* Ensure the body text wraps correctly */        
-        #article-context {            
-            white-space: pre-wrap; /* Allows breaking for long lines */
-        } 
+   <style>        
+        body.preload {            
+            visibility: hidden;            
+            opacity: 0;        
+        }
+        body {            
+            transition: opacity 0.2s ease-in;        
+        }
+        /* Specific style for the article container to show load failure/success */        
+        #article-content-container {            
+            min-height: 50vh;            
+            display: flex;            
+            flex-direction: column;            
+            align-items: center;            
+            justify-content: center;            
+            text-align: center;        
+        }        
+        /* Ensure the body text wraps correctly */        
+        #article-context {            
+            white-space: pre-wrap; /* Allows breaking for long lines */
+        } 
 
-        /* New style block to reduce excessive padding on small screens for the main content area */
-@media (max-width: 639px) { /* Tailwinds's 'sm' breakpoint is 640px */
-    /* Target the container holding the author/date and the main context columns */
-    .container.max-w-5xl {
-        /* Reset or reduce horizontal padding for small screens */
-        padding-left: 1rem; /* Equivalent to px-4 in Tailwinds, which is a standard comfortable mobile padding */
-        padding-right: 1rem; /* Equivalent to px-4 in Tailwinds */
+        /* START: MOBILE PADDING FIX */
+@media (max-width: 639px) { 
+    /* 1. The container with the grid layout */
+    .container.max-w-5xl {
+        /* Set to a reasonable mobile padding (e.g., px-4 = 1rem) to match surrounding content */
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* 2. The outer wrapper for the context that has a redundant px-4 on mobile */
+    .relative.px-4.space-y-6 {
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
+    }
+
+    /* 3. The timeline dot/line wrapper, which is causing the unwanted offset. */
+    .space-y-10.sm\:space-y-4.relative.px-4.sm\:before\:absolute {
+        /* This div has 'px-4' which is 1rem padding, but is also inside another container that might be pushing it. */
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
     }
 
-    /* Target the direct parent of the article context, which has a default px-4 */
-    .relative.px-4.space-y-6 {
-        /* Remove the extra left/right padding added by this div on mobile. */
-        padding-left: 0rem;
-        padding-right: 0rem;
-    }
+    /* 4. The main article context wrapper, forcing alignment */
+    #article-context-wrapper {
+        /* This removes any unintended padding or negative margin that shifts the content left/right on small screens. */
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
-    </style>
+        /* END: MOBILE PADDING FIX */
+</style>
 
 </head>
 <body class="preload">    
